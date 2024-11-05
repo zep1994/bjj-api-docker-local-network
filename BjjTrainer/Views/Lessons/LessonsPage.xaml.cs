@@ -1,5 +1,3 @@
-using Microsoft.Extensions.DependencyInjection; // For IServiceCollection
-using Microsoft.Maui.Controls; // For ContentPage
 using BjjTrainer.ViewModels;
 
 namespace BjjTrainer.Views.Lessons
@@ -20,5 +18,27 @@ namespace BjjTrainer.Views.Lessons
             base.OnAppearing();
             await _viewModel.LoadLessonsAsync();
         }
+
+        private void OnReadMoreClicked(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                var label = button.Parent.FindByName<Label>("Description");
+                if (label != null)
+                {
+                    if (label.MaxLines == 3)
+                    {
+                        label.MaxLines = 0; // Expand to show all text
+                        button.Text = "Read Less";
+                    }
+                    else
+                    {
+                        label.MaxLines = 3; // Collapse to show truncated text
+                        button.Text = "Read More";
+                    }
+                }
+            }
+        }
+
     }
 }
