@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using BjjTrainer_API.Data;
 using BjjTrainer_API.Models.Lessons;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System;
-using BjjTrainer_API.Data;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BjjTrainer_API.Controllers
 {
@@ -21,18 +18,23 @@ namespace BjjTrainer_API.Controllers
 
         // GET: api/Lessons
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Lesson>>> GetLessons()
+        public async Task<ActionResult<List<Lesson>>> GetAllLessons()
         {
             try
             {
                 var lessons = await _context.Lessons.ToListAsync();
+                if (lessons == null || lessons.Count == 0)
+                {
+                    return NotFound("No lessons found.");
+                }
                 return Ok(lessons);
             }
-            catch
+            catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while retrieving lessons.");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
 
         // GET: api/Lessons/{id}
         [HttpGet("{id}")]

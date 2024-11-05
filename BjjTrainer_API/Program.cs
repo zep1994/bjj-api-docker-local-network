@@ -11,15 +11,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
+
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
 //app.UseHttpsRedirection();
-
+app.UseRouting();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    _ = endpoints.MapControllers();
+});
 
 app.Run();

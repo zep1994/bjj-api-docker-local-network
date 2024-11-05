@@ -1,0 +1,22 @@
+﻿<!-- MainPage.xaml -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BjjTrainer.Views.MainPage"
+             Title="Main Page">
+    <ContentPage.Content>
+        <StackLayout Spacing="20" Padding="20">
+            <Label Text="JuJitsu Techniques"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center" />
+            <!-- Learn New Techniques Button -->
+            <Button Text="Learn New Techniques"
+                        FontSize="18"
+                        BackgroundColor="#4CAF50"
+                        TextColor="White"
+                        Clicked="OnViewLessonsClicked"
+                        CornerRadius="10"
+                        Margin="0,20,0,0" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

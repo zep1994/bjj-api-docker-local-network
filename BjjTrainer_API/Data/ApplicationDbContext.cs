@@ -9,5 +9,11 @@ namespace BjjTrainer_API.Data
 
         public DbSet<Lesson> Lessons { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Model configurations can be added here
+            base.OnModelCreating(modelBuilder);
+        }
+
     }
 }
