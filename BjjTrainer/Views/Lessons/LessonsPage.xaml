@@ -1,0 +1,63 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BjjTrainer.Views.Lessons.LessonsPage">
+
+    <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="TextColor" Value="Black"/>
+        </Style>
+        <Style TargetType="StackLayout">
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BackgroundColor" Value="White"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+        <x:Double x:Key="boxSize">50</x:Double>
+        <x:Int32 x:Key="rowHeight">150</x:Int32>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <ListView x:Name="LessonsListView"
+                  ItemsSource="{Binding Lessons}"
+                  SelectionMode="None"
+                  RowHeight="{StaticResource rowHeight}"
+                  VerticalOptions="FillAndExpand">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Padding="10"
+                                     Orientation="Vertical"
+                                     Spacing="5"
+                                     BackgroundColor="#F9F9F9">
+                            <!-- Lesson Title -->
+                            <Label Text="{Binding Title}"
+                                   FontAttributes="Bold"
+                                   FontSize="20"
+                                   TextColor="#333"/>
+
+                            <!-- Lesson Description -->
+                            <Label Text="{Binding Description}"
+                                   FontSize="14"
+                                   TextColor="#555"
+                                   LineBreakMode="TailTruncation"
+                                   MaxLines="3"
+                                   x:Name="Description"/>
+                            <Button Text="Read More"
+                                    IsVisible="{Binding Source={x:Reference Description}, Path=MaxLines, Converter={StaticResource MaxLinesToVisibilityConverter}}"
+                                    Clicked="OnReadMoreClicked" 
+                                    BackgroundColor="#007AFF" 
+                                    TextColor="White"/>
+
+                            <!-- Lesson Details -->
+                            <StackLayout Orientation="Horizontal" Spacing="15">
+                                <Label Text="{Binding Belt}" FontSize="14" TextColor="#007AFF"/>
+                                <Label Text="{Binding Category}" FontSize="14" TextColor="#007AFF"/>
+                                <Label Text="{Binding Difficulty}" FontSize="14" TextColor="#007AFF"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentPage.Content>
+</ContentPage>

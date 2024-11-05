@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using BjjTrainer.Lessons.Services;
+using BjjTrainer.ViewModels;
+using BjjTrainer.Views.Lessons;
 
 namespace BjjTrainer
 {
@@ -15,9 +17,11 @@ namespace BjjTrainer
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-#if DEBUG
-    		builder.Logging.AddDebug();
-#endif
+            // Register services and view models for DI
+            builder.Services.AddSingleton<LessonService>();
+            builder.Services.AddTransient<LessonsViewModel>();
+            builder.Services.AddTransient<LessonsPage>();
+
 
             return builder.Build();
         }
