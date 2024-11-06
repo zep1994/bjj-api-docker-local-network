@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using BjjTrainer.ViewModels;
-using BjjTrainer.Views.Lessons;
+﻿using BjjTrainer.Views.Lessons;
 
 namespace BjjTrainer.Views
 {

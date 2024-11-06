@@ -1,5 +1,5 @@
 using BjjTrainer.Models.Lessons;
-using BjjTrainer.Services;
+using BjjTrainer.Services.Lessons;
 using BjjTrainer.ViewModels;
 
 namespace BjjTrainer.Views.Lessons
@@ -11,13 +11,8 @@ namespace BjjTrainer.Views.Lessons
         public LessonsPage()
         {
             InitializeComponent();
-            // Initialize the HttpClient
-            var httpClient = new HttpClient
-            {
-                BaseAddress = GetApiBaseUrl()
-            };
-            var apiService = new ApiService();
-            _viewModel = new LessonsViewModel(apiService);
+            var lessonService = new LessonService();
+            _viewModel = new LessonsViewModel(lessonService);
             BindingContext = _viewModel;
         }
 
@@ -35,18 +30,6 @@ namespace BjjTrainer.Views.Lessons
             if (selectedLesson != null)
             {
                 await Navigation.PushAsync(new LessonSectionPage(selectedLesson.Id));
-            }
-        }
-
-        private Uri GetApiBaseUrl()
-        {
-            if (DeviceInfo.Platform == DevicePlatform.Android)
-            {
-                return new Uri("http://10.0.2.2:5057/api/"); // Android Emulator
-            }
-            else
-            {
-                return new Uri("http://localhost:5057/api/"); 
             }
         }
     }

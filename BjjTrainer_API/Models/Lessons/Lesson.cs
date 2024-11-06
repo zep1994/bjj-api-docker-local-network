@@ -14,7 +14,7 @@ namespace BjjTrainer_API.Models.Lessons
         public string Description { get; set; } = string.Empty;
 
         // Navigation property for LessonSections
-        public ICollection<LessonSection> LessonSections { get; set; } = new List<LessonSection>();
+        public ICollection<LessonSection> LessonSections { get; set; } = [];
 
     }
 }
