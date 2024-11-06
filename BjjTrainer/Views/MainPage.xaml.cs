@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using BjjTrainer.ViewModels;
-using BjjTrainer.Views.Lessons;
+﻿using BjjTrainer.Views.Lessons;
 
 namespace BjjTrainer.Views
 {
@@ -13,7 +11,7 @@ namespace BjjTrainer.Views
 
         private async void OnViewLessonsClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new Lessons.LessonsPage());
+            await Navigation.PushAsync(new LessonsPage());
         }
     }
 }

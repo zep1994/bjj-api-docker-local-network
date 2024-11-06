@@ -1,4 +1,6 @@
-﻿using BjjTrainer.Lessons.Services;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
+using BjjTrainer.Services;
 using BjjTrainer.ViewModels;
 using BjjTrainer.Views.Lessons;
 
@@ -17,10 +19,20 @@ namespace BjjTrainer
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            // Register services and view models for DI
-            builder.Services.AddSingleton<LessonService>();
+            // Configure HttpClient with a base URL
+            builder.Services.AddHttpClient<ApiService>(client =>
+            {
+                client.BaseAddress = DeviceInfo.Platform == DevicePlatform.Android
+                    ? new Uri("http://10.0.2.2:5057/api/") // Android Emulator base URL
+                    : new Uri("http://localhost:5057/api/"); // Localhost URL for other platforms
+            });
+
+            // Register services and view models
+            builder.Services.AddSingleton<ApiService>();
             builder.Services.AddTransient<LessonsViewModel>();
+            builder.Services.AddTransient<LessonSectionViewModel>();
             builder.Services.AddTransient<LessonsPage>();
+            builder.Services.AddTransient<LessonSectionPage>();
 
 
             return builder.Build();

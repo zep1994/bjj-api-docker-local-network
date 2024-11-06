@@ -1,137 +1,62 @@
-﻿using BjjTrainer_API.Data;
-using BjjTrainer_API.Models.Lessons;
+﻿using BjjTrainer_API.Models.Lessons;
+using BjjTrainer_API.Services_API;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BjjTrainer_API.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class LessonsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ILessonService _lessonService;
 
-        public LessonsController(ApplicationDbContext context)
+        public LessonsController(ILessonService lessonService)
         {
-            _context = context;
+            _lessonService = lessonService;
         }
 
-        // GET: api/Lessons
         [HttpGet]
-        public async Task<ActionResult<List<Lesson>>> GetAllLessons()
+        public async Task<IActionResult> GetAllLessons()
         {
-            try
-            {
-                var lessons = await _context.Lessons.ToListAsync();
-                if (lessons == null || lessons.Count == 0)
-                {
-                    return NotFound("No lessons found.");
-                }
-                return Ok(lessons);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            var lessons = await _lessonService.GetAllLessonsAsync();
+            return Ok(lessons);
         }
 
-
-        // GET: api/Lessons/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Lesson>> GetLesson(int id)
+        public async Task<IActionResult> GetLessonById(int id)
         {
-            try
-            {
-                var lesson = await _context.Lessons.FindAsync(id);
-
-                if (lesson == null)
-                {
-                    return NotFound("Lesson not found.");
-                }
-
-                return Ok(lesson);
-            }
-            catch
-            {
-                return StatusCode(500, "An error occurred while retrieving the lesson.");
-            }
+            var lesson = await _lessonService.GetLessonByIdAsync(id);
+            if (lesson == null) return NotFound();
+            return Ok(lesson);
         }
 
-        // POST: api/Lessons
         [HttpPost]
-        public async Task<ActionResult<Lesson>> CreateLesson(Lesson lesson)
+        public async Task<IActionResult> CreateLesson([FromBody] Lesson lesson)
         {
-            try
-            {
-                _context.Lessons.Add(lesson);
-                await _context.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetLesson), new { id = lesson.Id }, lesson);
-            }
-            catch (DbUpdateException)
-            {
-                return StatusCode(500, "An error occurred while saving the lesson. Please try again.");
-            }
-            catch
-            {
-                return StatusCode(500, "An unexpected error occurred.");
-            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var createdLesson = await _lessonService.CreateLessonAsync(lesson);
+            return CreatedAtAction(nameof(GetLessonById), new { id = createdLesson.Id }, createdLesson);
         }
 
-        // PUT: api/Lessons/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateLesson(int id, Lesson lesson)
+        public async Task<IActionResult> UpdateLesson(int id, [FromBody] Lesson lesson)
         {
-            if (id != lesson.Id)
-            {
-                return BadRequest("Lesson ID mismatch.");
-            }
+            if (id != lesson.Id) return BadRequest();
 
-            _context.Entry(lesson).State = EntityState.Modified;
+            var result = await _lessonService.UpdateLessonAsync(lesson);
+            if (!result) return NotFound();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-                return Ok("Lesson updated successfully.");
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!LessonExists(id))
-                {
-                    return NotFound("Lesson not found.");
-                }
-                return StatusCode(500, "A concurrency error occurred while updating the lesson.");
-            }
-            catch
-            {
-                return StatusCode(500, "An error occurred while updating the lesson.");
-            }
+            return NoContent();
         }
 
-        // DELETE: api/Lessons/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLesson(int id)
         {
-            try
-            {
-                var lesson = await _context.Lessons.FindAsync(id);
-                if (lesson == null)
-                {
-                    return NotFound("Lesson not found.");
-                }
+            var result = await _lessonService.DeleteLessonAsync(id);
+            if (!result) return NotFound();
 
-                _context.Lessons.Remove(lesson);
-                await _context.SaveChangesAsync();
-                return Ok("Lesson deleted successfully.");
-            }
-            catch
-            {
-                return StatusCode(500, "An error occurred while deleting the lesson.");
-            }
-        }
-
-        private bool LessonExists(int id)
-        {
-            return _context.Lessons.Any(e => e.Id == id);
+            return NoContent();
         }
     }
 }

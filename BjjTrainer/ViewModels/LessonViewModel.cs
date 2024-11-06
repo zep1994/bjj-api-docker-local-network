@@ -1,38 +1,24 @@
-﻿using MvvmHelpers;
-using BjjTrainer.Models.Lessons;
+﻿using BjjTrainer.Models.Lessons;
+using BjjTrainer.Services.Lessons;
+using MvvmHelpers;
 using System.Collections.ObjectModel;
-using BjjTrainer.Lessons.Services;
 
 namespace BjjTrainer.ViewModels
 {
     public class LessonsViewModel : BaseViewModel
     {
-        private readonly LessonService _lessonService = new();
+        private readonly LessonService _lessonService;
 
-        private ObservableCollection<Lesson> _lessons;
-        public ObservableCollection<Lesson> Lessons
-        {
-            get => _lessons;
-            set => SetProperty(ref _lessons, value);
-        }
+        public ObservableCollection<Lesson> Lessons { get; } = [];
 
-        // Property to store the selected lesson
-        private Lesson? _selectedLesson;
-        public Lesson? SelectedLesson
+        public LessonsViewModel(LessonService lessonService)
         {
-            get => _selectedLesson;
-            set => SetProperty(ref _selectedLesson, value);
-        }
-
-        public LessonsViewModel()
-        {
-            Lessons = [];
+            _lessonService = lessonService;
         }
 
         public async Task LoadLessonsAsync()
         {
             var lessons = await _lessonService.GetAllLessons();
-            Lessons.Clear();
             foreach (var lesson in lessons)
             {
                 Lessons.Add(lesson);

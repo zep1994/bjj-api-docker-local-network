@@ -1,4 +1,5 @@
 using BjjTrainer_API.Data;
+using BjjTrainer_API.Services_API;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ILessonService, LessonService>();
+builder.Services.AddScoped<ILessonSectionService, LessonSectionService>();
 
 
 var app = builder.Build();

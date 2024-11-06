@@ -12,5 +12,9 @@ namespace BjjTrainer_API.Models.Lessons
         public string Category { get; set; } = string.Empty;
         public string Difficulty { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+
+        // Navigation property for LessonSections
+        public ICollection<LessonSection> LessonSections { get; set; } = [];
+
     }
 }
