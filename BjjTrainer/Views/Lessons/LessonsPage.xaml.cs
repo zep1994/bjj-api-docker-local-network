@@ -1,3 +1,5 @@
+using BjjTrainer.Models.Lessons;
+using BjjTrainer.Services;
 using BjjTrainer.ViewModels;
 
 namespace BjjTrainer.Views.Lessons
@@ -9,7 +11,13 @@ namespace BjjTrainer.Views.Lessons
         public LessonsPage()
         {
             InitializeComponent();
-            _viewModel = new LessonsViewModel();
+            // Initialize the HttpClient
+            var httpClient = new HttpClient
+            {
+                BaseAddress = GetApiBaseUrl()
+            };
+            var apiService = new ApiService();
+            _viewModel = new LessonsViewModel(apiService);
             BindingContext = _viewModel;
         }
 
@@ -19,26 +27,27 @@ namespace BjjTrainer.Views.Lessons
             await _viewModel.LoadLessonsAsync();
         }
 
-        private void OnReadMoreClicked(object sender, EventArgs e)
+        public async void OnViewLessonSectionsClicked(object sender, EventArgs e)
         {
-            if (sender is Button button)
+            Button button = (Button)sender;
+            var selectedLesson = (Lesson)button.BindingContext;
+
+            if (selectedLesson != null)
             {
-                var label = button.Parent.FindByName<Label>("Description");
-                if (label != null)
-                {
-                    if (label.MaxLines == 3)
-                    {
-                        label.MaxLines = 0; // Expand to show all text
-                        button.Text = "Read Less";
-                    }
-                    else
-                    {
-                        label.MaxLines = 3; // Collapse to show truncated text
-                        button.Text = "Read More";
-                    }
-                }
+                await Navigation.PushAsync(new LessonSectionPage(selectedLesson.Id));
             }
         }
 
+        private Uri GetApiBaseUrl()
+        {
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                return new Uri("http://10.0.2.2:5057/api/"); // Android Emulator
+            }
+            else
+            {
+                return new Uri("http://localhost:5057/api/"); 
+            }
+        }
     }
 }

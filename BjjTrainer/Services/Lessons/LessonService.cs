@@ -1,7 +1,7 @@
 ﻿using BjjTrainer.Models.Lessons;
 using System.Net.Http.Json;
 
-namespace BjjTrainer.Lessons.Services
+namespace BjjTrainer.Services.Lessons
 {
     public class LessonService
     {

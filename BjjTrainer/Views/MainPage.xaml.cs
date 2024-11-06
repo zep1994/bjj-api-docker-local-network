@@ -13,7 +13,7 @@ namespace BjjTrainer.Views
 
         private async void OnViewLessonsClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new Lessons.LessonsPage());
+            await Navigation.PushAsync(new LessonsPage());
         }
     }
 }

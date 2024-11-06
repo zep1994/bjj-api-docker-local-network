@@ -1,0 +1,42 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BjjTrainer.Views.Lessons.LessonSectionPage">
+
+    <ContentPage.Content>
+        <StackLayout Padding="10">
+            <ListView x:Name="LessonSectionsListView"
+                      ItemsSource="{Binding LessonSections}"
+                      VerticalOptions="FillAndExpand">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Padding="10"
+                                         Orientation="Vertical"
+                                         Spacing="5"
+                                         BackgroundColor="#F9F9F9">
+                                <!-- Lesson Section Title -->
+                                <Label Text="{Binding Title}"
+                                       FontAttributes="Bold"
+                                       FontSize="20"
+                                       TextColor="#333"/>
+
+                                <!-- Lesson Section Description -->
+                                <Label Text="{Binding Description}"
+                                       FontSize="14"
+                                       TextColor="#555"
+                                       LineBreakMode="TailTruncation"
+                                       MaxLines="3"/>
+
+                                <!-- Lesson Section Content -->
+                                <StackLayout Orientation="Horizontal" Spacing="15">
+                                    <Label Text="{Binding Duration}" FontSize="14" TextColor="#007AFF"/>
+                                    <Label Text="{Binding Difficulty}" FontSize="14" TextColor="#007AFF"/>
+                                </StackLayout>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
