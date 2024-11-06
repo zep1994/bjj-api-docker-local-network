@@ -24,12 +24,12 @@ namespace BjjTrainer.Views.Lessons
 
         public async void OnViewLessonSectionsClicked(object sender, EventArgs e)
         {
-            Button button = (Button)sender;
+            var button = (Button)sender;
             var selectedLesson = (Lesson)button.BindingContext;
 
             if (selectedLesson != null)
             {
-                await Navigation.PushAsync(new LessonSectionPage(selectedLesson.Id));
+                await Navigation.PushAsync(new LessonSectionPage(selectedLesson.Id, selectedLesson.Title));
             }
         }
     }

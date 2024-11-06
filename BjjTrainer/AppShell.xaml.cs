@@ -4,8 +4,6 @@ namespace BjjTrainer
 {
     public partial class AppShell : Shell
     {
-        private readonly string _url = "http://10.0.2.2:5057";
-
         public AppShell()
         {
             InitializeComponent();

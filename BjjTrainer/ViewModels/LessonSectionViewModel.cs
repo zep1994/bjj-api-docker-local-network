@@ -1,29 +1,35 @@
-﻿using BjjTrainer.Services;
-using BjjTrainer.Models.Lessons;
+﻿using BjjTrainer.Models.Lessons;
+using BjjTrainer.Services.Lessons;
 using MvvmHelpers;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 
 namespace BjjTrainer.ViewModels
 {
     public class LessonSectionViewModel : BaseViewModel
     {
-        private readonly ApiService _apiService;
-        public ObservableCollection<LessonSection> LessonSections { get; private set; }
+        private readonly int _lessonId;
+        private readonly LessonService _lessonService;
 
-        public LessonSectionViewModel(ApiService apiService)
+        public ObservableCollection<LessonSection> LessonSections { get; set; } = [];
+        public string LessonTitle { get; }
+
+        public LessonSectionViewModel(int lessonId, string lessonTitle)
         {
-            _apiService = apiService;
-            LessonSections = new ObservableCollection<LessonSection>();
+            _lessonId = lessonId;
+            LessonTitle = lessonTitle;
+            _lessonService = new LessonService();
         }
 
-        public async Task LoadLessonSectionsAsync(int lessonId)
+        public async Task LoadLessonSectionsAsync()
         {
-            var sections = await _apiService.GetLessonSectionsAsync(lessonId);
-            LessonSections.Clear();
-            foreach (var section in sections)
+            var lessonSections = await _lessonService.GetLessonSectionsAsync(_lessonId);
+            if (lessonSections != null)
             {
-                LessonSections.Add(section);
+                LessonSections.Clear();
+                foreach (var section in lessonSections)
+                {
+                    LessonSections.Add(section);
+                }
             }
         }
     }

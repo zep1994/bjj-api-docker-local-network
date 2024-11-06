@@ -1,24 +1,28 @@
 using BjjTrainer.ViewModels;
-using Microsoft.Maui.Controls;
+using BjjTrainer.Models.Lessons;
 
 namespace BjjTrainer.Views.Lessons
 {
     public partial class LessonSectionPage : ContentPage
     {
-        private LessonSectionViewModel _viewModel;
+        private readonly LessonSectionViewModel _viewModel;
 
-        public LessonSectionPage(int lessonId)
+        public LessonSectionPage(int lessonId, string lessonTitle)
         {
             InitializeComponent();
-            // Retrieve the LessonSectionViewModel from the service provider
-            _viewModel = Handler.MauiContext.Services.GetService<LessonSectionViewModel>();
+            _viewModel = new LessonSectionViewModel(lessonId, lessonTitle);
             BindingContext = _viewModel;
-            LoadSections(lessonId);
         }
 
-        private async void LoadSections(int lessonId)
+        protected override async void OnAppearing()
         {
-            await _viewModel.LoadLessonSectionsAsync(lessonId);
+            base.OnAppearing();
+            await _viewModel.LoadLessonSectionsAsync();
+        }
+
+        public async void OnViewSubLessonClicked(object sender, EventArgs e)
+        {
+           
         }
     }
 }
