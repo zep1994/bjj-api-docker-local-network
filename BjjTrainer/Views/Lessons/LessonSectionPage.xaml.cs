@@ -22,7 +22,12 @@ namespace BjjTrainer.Views.Lessons
 
         public async void OnViewSubLessonClicked(object sender, EventArgs e)
         {
-           
+            // Check if sender is Button and get binding context as LessonSection
+            if (sender is Button button && button.BindingContext is LessonSection lessonSection)
+            {
+                // Navigate to SubLessonDetailsPage, passing LessonSectionId and Title
+                await Navigation.PushAsync(new SubLessonPage(lessonSection.Id));
+            }
         }
     }
 }

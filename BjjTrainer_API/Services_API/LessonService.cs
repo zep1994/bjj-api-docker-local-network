@@ -1,7 +1,6 @@
 ﻿using BjjTrainer_API.Data;
 using BjjTrainer_API.Models.Lessons;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace BjjTrainer_API.Services_API
 {
@@ -33,9 +32,24 @@ namespace BjjTrainer_API.Services_API
 
         public async Task<bool> UpdateLessonAsync(Lesson lesson)
         {
-            _context.Entry(lesson).State = EntityState.Modified;
+            // Retrieve the existing lesson from the database
+            var existingLesson = await _context.Lessons.FindAsync(lesson.Id);
+            if (existingLesson == null)
+            {
+                return false; // Lesson not found
+            }
+
+            // Update the properties of the existing lesson
+            existingLesson.Title = lesson.Title;
+            existingLesson.Description = lesson.Description;
+            existingLesson.Belt = lesson.Belt;
+            existingLesson.Category = lesson.Category;
+            existingLesson.Difficulty = lesson.Difficulty;
+
+            // Save changes to the database
             return await _context.SaveChangesAsync() > 0;
         }
+
 
         public async Task<bool> DeleteLessonAsync(int id)
         {

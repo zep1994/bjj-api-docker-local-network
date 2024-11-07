@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using BjjTrainer.Services;
+﻿using BjjTrainer.Services;
+using BjjTrainer.Services.Lessons;
 using BjjTrainer.ViewModels;
+using BjjTrainer.ViewModels.Lessons;
 using BjjTrainer.Views.Lessons;
 
 namespace BjjTrainer
@@ -33,6 +33,16 @@ namespace BjjTrainer
             builder.Services.AddTransient<LessonSectionViewModel>();
             builder.Services.AddTransient<LessonsPage>();
             builder.Services.AddTransient<LessonSectionPage>();
+            // Register Services
+            builder.Services.AddSingleton<SubLessonService>();
+
+            // Register ViewModels
+            builder.Services.AddTransient<SubLessonViewModel>();
+
+            // Register Pages
+            builder.Services.AddTransient<SubLessonPage>();
+            builder.Services.AddTransient<SubLessonDetailsPage>();
+
 
 
             return builder.Build();

@@ -40,14 +40,14 @@ namespace BjjTrainer_API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateLesson(int id, [FromBody] Lesson lesson)
+        public async Task<IActionResult> UpdateLesson(int id, Lesson lesson)
         {
             if (id != lesson.Id) return BadRequest();
 
             var result = await _lessonService.UpdateLessonAsync(lesson);
             if (!result) return NotFound();
 
-            return NoContent();
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]

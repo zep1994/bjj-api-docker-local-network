@@ -15,6 +15,8 @@ builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ILessonService, LessonService>();
 builder.Services.AddScoped<ILessonSectionService, LessonSectionService>();
+builder.Services.AddScoped<ISubLessonService, SubLessonService>();
+
 
 
 var app = builder.Build();

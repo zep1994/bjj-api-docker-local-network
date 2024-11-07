@@ -9,6 +9,8 @@ namespace BjjTrainer_API.Data
 
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<LessonSection> LessonSections { get; set; }
+        public DbSet<SubLesson> SubLessons { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,7 +27,7 @@ namespace BjjTrainer_API.Data
 
             modelBuilder.Entity<Lesson>()
                 .HasMany(l => l.LessonSections)
-                .WithOne() // No navigation property in LessonSection
+                .WithOne(s => s.Lesson)
                 .HasForeignKey(ls => ls.LessonId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -44,6 +46,17 @@ namespace BjjTrainer_API.Data
             modelBuilder.Entity<LessonSection>()
                 .Property(ls => ls.Difficulty)
                 .IsRequired();
+
+            modelBuilder.Entity<LessonSection>()
+                .Property(s => s.Id)
+                .ValueGeneratedOnAdd();
+
+            // One-to-many relationship: One LessonSection has many SubLessons
+            modelBuilder.Entity<LessonSection>()
+                .HasMany(ls => ls.SubLessons)
+                .WithOne(sl => sl.LessonSection)
+                .HasForeignKey(sl => sl.LessonSectionId)
+                .OnDelete(DeleteBehavior.Cascade); // Optional: cascade delete behavior
         }
 
     }
