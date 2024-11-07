@@ -1,5 +1,5 @@
-using BjjTrainer.ViewModels;
 using BjjTrainer.Models.Lessons;
+using BjjTrainer.ViewModels;
 
 namespace BjjTrainer.Views.Lessons
 {

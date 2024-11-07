@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-
-namespace BjjTrainer
+﻿namespace BjjTrainer
 {
     public partial class AppShell : Shell
     {

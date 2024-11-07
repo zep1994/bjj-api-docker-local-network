@@ -1,7 +1,6 @@
-﻿using ObjCRuntime;
-using UIKit;
+﻿using UIKit;
 
-namespace BjjTrainer
+namespace BjjTrainer.Platforms.iOS
 {
     public class Program
     {

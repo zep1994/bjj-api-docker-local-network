@@ -1,6 +1,5 @@
 ﻿using BjjTrainer.Models.Lessons;
 using System.Diagnostics;
-using System.Net.Http;
 using System.Net.Http.Json;
 
 namespace BjjTrainer.Services.Lessons

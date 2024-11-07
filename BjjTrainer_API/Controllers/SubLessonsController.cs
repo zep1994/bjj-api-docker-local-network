@@ -1,10 +1,11 @@
-﻿using BjjTrainer_API.Models.Lessons;
+﻿using BjjTrainer_API.Models.DTO;
+using BjjTrainer_API.Models.Lessons;
 using BjjTrainer_API.Services_API;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BjjTrainer_API.Controllers
 {
-    [Route("api/[controller]/")]
+    [Route("api/[controller]")]
     [ApiController]
     public class SubLessonsController : ControllerBase
     {
@@ -22,20 +23,23 @@ namespace BjjTrainer_API.Controllers
 
             if (subLessons == null || subLessons.Count == 0)
             {
-                return NotFound("No sublessons found for the provided section.");
+                return NotFound("No sub-lessons found for the provided section.");
             }
 
-            return Ok(subLessons);
+            return Ok(subLessons); // Return the actual list of sub-lessons
         }
-
 
         // Get a specific SubLesson by ID
         [HttpGet("{id}")]
         public async Task<ActionResult<SubLesson>> GetSubLesson(int id)
         {
             var subLesson = await _subLessonService.GetSubLessonByIdAsync(id);
-            if (subLesson == null) return NotFound();
-            return Ok(subLesson);
+            if (subLesson == null)
+            {
+                return NotFound();
+            }
+
+            return Ok();
         }
 
         // Create a new SubLesson
@@ -67,6 +71,19 @@ namespace BjjTrainer_API.Controllers
             var deleted = await _subLessonService.DeleteSubLessonAsync(id);
             if (!deleted) return NotFound();
             return NoContent();
+        }
+
+        [HttpGet("{id}/details")]
+        public async Task<ActionResult<SubLessonDetailsDto>> GetSubLessonDetails(int id)
+        {
+            var subLessonDetails = await _subLessonService.GetSubLessonDetailsByIdAsync(id);
+
+            if (subLessonDetails == null)
+            {
+                return NotFound("SubLesson details not found.");
+            }
+
+            return Ok(subLessonDetails); // Returning the DTO with the sub-lesson details
         }
     }
 }

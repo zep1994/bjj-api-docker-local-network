@@ -11,25 +11,25 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection"));
 });
 
-builder.Services.AddControllers();
-builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ILessonService, LessonService>();
 builder.Services.AddScoped<ILessonSectionService, LessonSectionService>();
 builder.Services.AddScoped<ISubLessonService, SubLessonService>();
 
-
+builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+// Other middleware and app configuration
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
 
 //app.UseHttpsRedirection();
-app.UseRouting();
 app.UseAuthorization();
-
-app.UseEndpoints(endpoints =>
-{
-    _ = endpoints.MapControllers();
-});
+app.MapControllers();
 
 app.Run();
