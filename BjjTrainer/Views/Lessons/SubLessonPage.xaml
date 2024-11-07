@@ -1,7 +1,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BjjTrainer.Views.Lessons.SubLessonPage"
-             Title="{Binding SectionTitle}">
+             Title="{Binding Title}">
 
     <ContentPage.Resources>
         <Style TargetType="Label">
@@ -18,24 +18,49 @@
     </ContentPage.Resources>
 
     <ContentPage.Content>
+        <!-- SubLessons List -->
         <ListView x:Name="SubLessonsListView"
-          ItemsSource="{Binding SubLessons}"
-          RowHeight="{StaticResource rowHeight}"
-          VerticalOptions="FillAndExpand">
+                  ItemsSource="{Binding SubLessons}"
+                  RowHeight="{StaticResource rowHeight}"
+                  VerticalOptions="FillAndExpand">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         <StackLayout Padding="10"
-                             Orientation="Vertical"
-                             Spacing="5"
-                             BackgroundColor="#F9F9F9">
-                            <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="20" TextColor="#333"/>
-                            <Label Text="{Binding Content}" FontSize="14" TextColor="#555" LineBreakMode="TailTruncation" MaxLines="3"/>
+                                     Orientation="Vertical"
+                                     Spacing="5"
+                                     BackgroundColor="#F9F9F9">
+                            <!-- SubLesson Title -->
+                            <Label Text="{Binding Title}"
+                                   FontAttributes="Bold"
+                                   FontSize="20"
+                                   TextColor="#333"/>
+
+                            <!-- SubLesson Content -->
+                            <Label Text="{Binding Content}"
+                                   FontSize="14"
+                                   TextColor="#555"
+                                   LineBreakMode="TailTruncation"
+                                   MaxLines="3"/>
+
+                            <!-- SubLesson Skill Level and Duration -->
                             <StackLayout Orientation="Horizontal" Spacing="15">
-                                <Label Text="{Binding SkillLevel}" FontSize="14" TextColor="#007AFF"/>
-                                <Label Text="Duration: " FontSize="14" TextColor="#333"/>
-                                <Label Text="{Binding Duration}" FontSize="14" TextColor="#007AFF"/>
+                                <Label Text="{Binding SkillLevel}" 
+                                       FontSize="14" 
+                                       TextColor="#007AFF"/>
+                                <Label Text="Duration: "
+                                       FontSize="14"
+                                       TextColor="#333"/>
+                                <Label Text="{Binding Duration}"
+                                       FontSize="14"
+                                       TextColor="#007AFF"/>
                             </StackLayout>
+
+                            <!-- View Details Button -->
+                            <Button Text="View Details"
+                                    BackgroundColor="{AppThemeBinding Light=#007AFF, Dark=#007AFF}"
+                                    CommandParameter="{Binding .}"
+                                    Clicked="OnViewSubLessonClicked" />
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>

@@ -57,6 +57,10 @@ namespace BjjTrainer_API.Data
                 .WithOne(sl => sl.LessonSection)
                 .HasForeignKey(sl => sl.LessonSectionId)
                 .OnDelete(DeleteBehavior.Cascade); // Optional: cascade delete behavior
+
+            modelBuilder.Entity<SubLesson>()
+                .ToTable("SubLessons"); 
+
         }
 
     }

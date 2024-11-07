@@ -1,6 +1,4 @@
-﻿using BjjTrainer.Models.Lessons;
-
-namespace BjjTrainer.Models
+﻿namespace BjjTrainer.Models.Lessons
 {
     public class SubLesson
     {

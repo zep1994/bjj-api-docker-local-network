@@ -1,6 +1,5 @@
 ﻿using BjjTrainer_API.Data;
 using BjjTrainer_API.Models.Lessons;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace BjjTrainer_API.Services_API

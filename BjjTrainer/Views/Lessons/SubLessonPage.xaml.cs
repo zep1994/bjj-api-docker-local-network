@@ -1,4 +1,5 @@
-using BjjTrainer.ViewModels.Lessons;
+using BjjTrainer.Models.Lessons;
+using BjjTrainer.ViewModels;
 
 namespace BjjTrainer.Views.Lessons
 {
@@ -13,10 +14,15 @@ namespace BjjTrainer.Views.Lessons
             BindingContext = _viewModel;
         }
 
-        protected override async void OnAppearing()
+        // Event handler for when the View Details button is clicked
+        private async void OnViewSubLessonClicked(object sender, EventArgs e)
         {
-            base.OnAppearing();
-            await _viewModel.LoadSubLessonsAsync(); // Ensure data is loaded when the page appears
+            // Get the SubLesson object from the CommandParameter
+            var button = (Button)sender;
+            var selectedSubLesson = (SubLesson)button.CommandParameter;
+
+            // Navigate to SubLessonDetailsPage
+            await Navigation.PushAsync(new SubLessonDetailsPage(selectedSubLesson.Id));
         }
     }
 }

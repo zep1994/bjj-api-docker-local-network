@@ -1,7 +1,4 @@
-﻿using BjjTrainer.Models.Lessons;
-using System.Net.Http.Json;
-
-namespace BjjTrainer.Services
+﻿namespace BjjTrainer.Services
 {
     public class ApiService
     {

@@ -1,11 +1,11 @@
-﻿using BjjTrainer.Models;
+﻿using BjjTrainer.Models.Lessons;
 using BjjTrainer.Services.Lessons;
 using MvvmHelpers;
 using System.Collections.ObjectModel;
 
-namespace BjjTrainer.ViewModels.Lessons
+namespace BjjTrainer.ViewModels
 {
-    public class SubLessonViewModel : BaseViewModel
+    public partial class SubLessonViewModel : BaseViewModel
     {
         private readonly SubLessonService _subLessonService;
         private ObservableCollection<SubLesson> _subLessons;
@@ -20,20 +20,21 @@ namespace BjjTrainer.ViewModels.Lessons
 
         public SubLessonViewModel(int lessonSectionId)
         {
-            _subLessonService = new SubLessonService(lessonSectionId);
-            _ = LoadSubLessonsAsync();
+            _subLessonService = new SubLessonService();
+            _ = LoadSubLessonsAsync(lessonSectionId);
         }
 
-        public async Task LoadSubLessonsAsync()
+        public async Task LoadSubLessonsAsync(int lessonSectionId)
         {
             try
             {
-                var subLessons = await _subLessonService.GetSubLessonsBySectionAsync();
+                var subLessons = await _subLessonService.GetSubLessonsBySectionAsync(lessonSectionId);
                 SubLessons = new ObservableCollection<SubLesson>(subLessons);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                // You can add logging here
+                await Application.Current.MainPage.DisplayAlert("Error", "Failed to load sublessons.", "OK");
             }
         }
     }

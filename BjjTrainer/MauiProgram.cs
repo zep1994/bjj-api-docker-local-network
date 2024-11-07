@@ -1,7 +1,6 @@
 ﻿using BjjTrainer.Services;
 using BjjTrainer.Services.Lessons;
 using BjjTrainer.ViewModels;
-using BjjTrainer.ViewModels.Lessons;
 using BjjTrainer.Views.Lessons;
 
 namespace BjjTrainer
@@ -38,6 +37,8 @@ namespace BjjTrainer
 
             // Register ViewModels
             builder.Services.AddTransient<SubLessonViewModel>();
+            builder.Services.AddTransient<SubLessonDetailsViewModel>();
+
 
             // Register Pages
             builder.Services.AddTransient<SubLessonPage>();

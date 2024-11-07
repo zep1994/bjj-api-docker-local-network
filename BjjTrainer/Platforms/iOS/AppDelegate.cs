@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace BjjTrainer
+namespace BjjTrainer.Platforms.iOS
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate

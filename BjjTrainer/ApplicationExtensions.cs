@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui.Controls;
-
-namespace BjjTrainer
+﻿namespace BjjTrainer
 {
     public static class ApplicationExtensions
     {
