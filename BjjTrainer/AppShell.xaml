@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:BjjTrainer"
     xmlns:controls="clr-namespace:BjjTrainer.Controls"
     xmlns:views="clr-namespace:BjjTrainer.Views"
+    xmlns:users="clr-namespace:BjjTrainer.Views.Users"
     xmlns:viewModels="clr-namespace:BjjTrainer.ViewModels"
     x:DataType="viewModels:MainPageViewModel"
     Shell.FlyoutBehavior="Flyout"
@@ -65,10 +66,9 @@
 
     <!-- Home Page -->
     <FlyoutItem Title="Home">
-        <ShellContent Route="Home"
-                Style="{StaticResource DomesticShell}"
-                Title="Home"
-                ContentTemplate="{DataTemplate views:MainPage}" />
+        <ShellContent Route="Home" Style="{StaticResource DomesticShell}" Title="Home" ContentTemplate="{DataTemplate views:MainPage}" />
+        <ShellContent Title="Login" ContentTemplate="{DataTemplate users:LoginPage}" />
+        <ShellContent Title="Signup" ContentTemplate="{DataTemplate users:SignupPage}" />
+        <ShellContent Title="Logout" ContentTemplate="{DataTemplate users:LogoutPage}" />
     </FlyoutItem>
-
 </Shell>

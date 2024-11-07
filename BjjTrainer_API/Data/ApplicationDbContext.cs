@@ -1,4 +1,5 @@
 ﻿using BjjTrainer_API.Models.Lessons;
+using BjjTrainer_API.Models.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace BjjTrainer_API.Data
@@ -10,11 +11,10 @@ namespace BjjTrainer_API.Data
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<LessonSection> LessonSections { get; set; }
         public DbSet<SubLesson> SubLessons { get; set; }
-
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Model configurations can be added here
             base.OnModelCreating(modelBuilder);
 
             // Configure the Lesson entity
@@ -48,20 +48,21 @@ namespace BjjTrainer_API.Data
                 .IsRequired();
 
             modelBuilder.Entity<LessonSection>()
-                .Property(s => s.Id)
-                .ValueGeneratedOnAdd();
-
-            // One-to-many relationship: One LessonSection has many SubLessons
-            modelBuilder.Entity<LessonSection>()
                 .HasMany(ls => ls.SubLessons)
                 .WithOne(sl => sl.LessonSection)
                 .HasForeignKey(sl => sl.LessonSectionId)
-                .OnDelete(DeleteBehavior.Cascade); // Optional: cascade delete behavior
+                .OnDelete(DeleteBehavior.Cascade);
 
+            // Configure the relationship between ApplicationUser and Lesson (many-to-many)
+            modelBuilder.Entity<Lesson>()
+                .HasMany(l => l.ApplicationUsers) // Correct property name
+                .WithMany(u => u.Lessons) // Correct property name
+                .UsingEntity(j => j.ToTable("LessonApplicationUser")); // Join table
+
+            modelBuilder.Entity<Lesson>()
+                .ToTable("Lessons");
             modelBuilder.Entity<SubLesson>()
-                .ToTable("SubLessons"); 
-
+                .ToTable("SubLessons");
         }
-
     }
 }

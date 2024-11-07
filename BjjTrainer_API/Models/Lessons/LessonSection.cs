@@ -23,7 +23,7 @@ namespace BjjTrainer_API.Models.Lessons
         public int LessonId { get; set; }
 
         // Navigation property to represent the one-to-many relationship
-        public ICollection<SubLesson> SubLessons { get; set; } = [];
+        public ICollection<SubLesson>? SubLessons { get; set; } = [];
   
 
     }
