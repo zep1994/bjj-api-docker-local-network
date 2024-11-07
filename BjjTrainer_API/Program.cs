@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,13 +21,17 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+    }); 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddScoped<ILessonService, LessonService>();
-builder.Services.AddScoped<ILessonSectionService, LessonSectionService>();
-builder.Services.AddScoped<ISubLessonService, SubLessonService>();
+builder.Services.AddScoped<LessonService>();
+builder.Services.AddScoped<LessonSectionService>();
+builder.Services.AddScoped<SubLessonService>();
 builder.Services.AddTransient<JwtTokenService>();
 
 // Configure JWT authentication

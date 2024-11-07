@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BjjTrainer_API.Services_API
 {
-    public class SubLessonService : ISubLessonService
+    public class SubLessonService
     {
         private readonly ApplicationDbContext _context;
 
