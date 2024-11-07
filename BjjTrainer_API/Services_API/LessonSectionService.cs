@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BjjTrainer_API.Services_API
 {
-    public class LessonSectionService : ILessonSectionService
+    public class LessonSectionService
     {
         private readonly ApplicationDbContext _context;
 
