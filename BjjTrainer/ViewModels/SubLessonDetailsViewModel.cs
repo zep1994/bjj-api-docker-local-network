@@ -1,14 +1,18 @@
 ﻿using BjjTrainer.Models.DTO;
 using BjjTrainer.Services.Lessons;
 using MvvmHelpers;
+using System.Windows.Input;
 
 namespace BjjTrainer.ViewModels
 {
     public partial class SubLessonDetailsViewModel : BaseViewModel
     {
         private readonly SubLessonService _subLessonService;
-
         private SubLessonDetailsDto _subLessonDetails;
+
+        public ICommand BackToLessonsCommand { get; }
+
+
         public SubLessonDetailsDto SubLessonDetails
         {
             get => _subLessonDetails;
@@ -23,6 +27,7 @@ namespace BjjTrainer.ViewModels
         {
             _subLessonService = new SubLessonService();
             SubLessonDetails = new SubLessonDetailsDto(); // Default value to avoid null bindings
+            BackToLessonsCommand = new Command(OnBackToLessons);
             _ = LoadSubLessonDetailsAsync(subLessonId);
         }
 
@@ -38,6 +43,12 @@ namespace BjjTrainer.ViewModels
             {
                 await Application.Current.MainPage.DisplayAlert("Error", "Failed to load sublesson details.", "OK");
             }
+        }
+
+        private async void OnBackToLessons()
+        {
+            // Logic for navigating back to the lessons page (can use Navigation.PopAsync() or other means depending on app structure)
+            await Application.Current.MainPage.Navigation.PopAsync();
         }
     }
 }
