@@ -1,4 +1,5 @@
-﻿using BjjTrainer.Models.DTO;
+﻿using BjjTrainer.Models;
+using BjjTrainer.Models.DTO;
 using BjjTrainer.Models.Lessons;
 using System.Net.Http.Json;
 using System.Text.Json;
