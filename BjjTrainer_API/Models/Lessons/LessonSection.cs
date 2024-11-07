@@ -16,9 +16,15 @@ namespace BjjTrainer_API.Models.Lessons
         [Required]
         public int Order { get; set; } // Order within the lesson
 
+        public Lesson? Lesson { get; set; }
+
         // Foreign key to the Lesson
         [ForeignKey("Lesson")]
         public int LessonId { get; set; }
+
+        // Navigation property to represent the one-to-many relationship
+        public ICollection<SubLesson> SubLessons { get; set; } = [];
+  
 
     }
 }
