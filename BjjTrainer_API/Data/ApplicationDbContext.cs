@@ -1,4 +1,5 @@
 ﻿using BjjTrainer_API.Models.Lessons;
+using BjjTrainer_API.Models.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace BjjTrainer_API.Data
@@ -10,6 +11,7 @@ namespace BjjTrainer_API.Data
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<LessonSection> LessonSections { get; set; }
         public DbSet<SubLesson> SubLessons { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -59,7 +61,9 @@ namespace BjjTrainer_API.Data
                 .OnDelete(DeleteBehavior.Cascade); // Optional: cascade delete behavior
 
             modelBuilder.Entity<SubLesson>()
-                .ToTable("SubLessons"); 
+                .ToTable("SubLessons");
+            modelBuilder.Entity<SubLesson>()
+                 .ToTable("Lessons");
 
         }
 

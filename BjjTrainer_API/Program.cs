@@ -1,6 +1,9 @@
 using BjjTrainer_API.Data;
+using BjjTrainer_API.Models.User;
 using BjjTrainer_API.Services_API;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Principal;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,9 +14,17 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection"));
 });
 
-builder.Services.AddScoped<ILessonService, LessonService>();
-builder.Services.AddScoped<ILessonSectionService, LessonSectionService>();
-builder.Services.AddScoped<ISubLessonService, SubLessonService>();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+
+
+builder.Services.AddScoped<LessonService>();
+builder.Services.AddScoped<LessonSectionService>();
+builder.Services.AddScoped<SubLessonService>();
+builder.Services.AddTransient<JwtTokenService>();
+
 
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BjjTrainer_API.Models.User;
+using System.ComponentModel.DataAnnotations;
 
 namespace BjjTrainer_API.Models.Lessons
 {
@@ -15,6 +16,9 @@ namespace BjjTrainer_API.Models.Lessons
 
         // Navigation property for LessonSections
         public ICollection<LessonSection>? LessonSections { get; set; } = [];
+        public ICollection<ApplicationUser> ApplicationUsers { get; set; } = new List<ApplicationUser>();
+
+
     }
 
 }

@@ -9,9 +9,9 @@ namespace BjjTrainer_API.Controllers
     [ApiController]
     public class SubLessonsController : ControllerBase
     {
-        private readonly ISubLessonService _subLessonService;
+        private readonly SubLessonService _subLessonService;
 
-        public SubLessonsController(ISubLessonService subLessonService)
+        public SubLessonsController(SubLessonService subLessonService)
         {
             _subLessonService = subLessonService;
         }
