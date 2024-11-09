@@ -3,6 +3,7 @@ using System;
 using BjjTrainer_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BjjTrainer_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241107113742_FixManyToManyRelationship")]
+    partial class FixManyToManyRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,19 +25,19 @@ namespace BjjTrainer_API.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("ApplicationUserLessonJoin", b =>
+            modelBuilder.Entity("ApplicationUserLesson", b =>
                 {
-                    b.Property<string>("ApplicationUserId")
+                    b.Property<string>("ApplicationUsersId")
                         .HasColumnType("text");
 
-                    b.Property<int>("LessonId")
+                    b.Property<int>("LessonsId")
                         .HasColumnType("integer");
 
-                    b.HasKey("ApplicationUserId", "LessonId");
+                    b.HasKey("ApplicationUsersId", "LessonsId");
 
-                    b.HasIndex("LessonId");
+                    b.HasIndex("LessonsId");
 
-                    b.ToTable("ApplicationUserLessonJoin");
+                    b.ToTable("LessonApplicationUser", (string)null);
                 });
 
             modelBuilder.Entity("BjjTrainer_API.Models.Lessons.Lesson", b =>
@@ -204,17 +207,17 @@ namespace BjjTrainer_API.Migrations
                     b.ToTable("ApplicationUsers");
                 });
 
-            modelBuilder.Entity("ApplicationUserLessonJoin", b =>
+            modelBuilder.Entity("ApplicationUserLesson", b =>
                 {
                     b.HasOne("BjjTrainer_API.Models.User.ApplicationUser", null)
                         .WithMany()
-                        .HasForeignKey("ApplicationUserId")
+                        .HasForeignKey("ApplicationUsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BjjTrainer_API.Models.Lessons.Lesson", null)
                         .WithMany()
-                        .HasForeignKey("LessonId")
+                        .HasForeignKey("LessonsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

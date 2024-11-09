@@ -13,10 +13,8 @@ namespace BjjTrainer_API.Data
         public DbSet<SubLesson> SubLessons { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Model configurations can be added here
             base.OnModelCreating(modelBuilder);
 
             // Configure the Lesson entity
@@ -50,22 +48,15 @@ namespace BjjTrainer_API.Data
                 .IsRequired();
 
             modelBuilder.Entity<LessonSection>()
-                .Property(s => s.Id)
-                .ValueGeneratedOnAdd();
-
-            // One-to-many relationship: One LessonSection has many SubLessons
-            modelBuilder.Entity<LessonSection>()
                 .HasMany(ls => ls.SubLessons)
                 .WithOne(sl => sl.LessonSection)
                 .HasForeignKey(sl => sl.LessonSectionId)
-                .OnDelete(DeleteBehavior.Cascade); // Optional: cascade delete behavior
+                .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Lesson>()
+                .ToTable("Lessons");
             modelBuilder.Entity<SubLesson>()
                 .ToTable("SubLessons");
-            modelBuilder.Entity<SubLesson>()
-                 .ToTable("Lessons");
-
         }
-
     }
 }

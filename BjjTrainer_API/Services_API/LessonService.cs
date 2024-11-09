@@ -13,14 +13,49 @@ namespace BjjTrainer_API.Services_API
             _context = context;
         }
 
-        public async Task<IEnumerable<Lesson>> GetAllLessonsAsync()
+        // Method to get all lessons
+        public async Task<List<Lesson>> GetAllLessonsAsync()
         {
             return await _context.Lessons.ToListAsync();
         }
 
-        public async Task<Lesson> GetLessonByIdAsync(int id)
+
+        // Method to get lessons by user (many-to-many relationship)
+        public async Task<List<Lesson>> GetLessonsByUserAsync(string userId)
         {
-            return await _context.Lessons.FindAsync(id);
+            var user = await _context.ApplicationUsers
+                                      .Include(u => u.Lessons)
+                                      .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            return user.Lessons.ToList();
+        }
+
+        // Method to add a lesson to a user's list
+        public async Task AddLessonToUserAsync(string userId, int lessonId)
+        {
+            var user = await _context.ApplicationUsers
+                                      .Include(u => u.Lessons)
+                                      .FirstOrDefaultAsync(u => u.Id == userId);
+
+            var lesson = await _context.Lessons
+                                       .FirstOrDefaultAsync(l => l.Id == lessonId);
+
+            if (user == null || lesson == null)
+            {
+                throw new Exception("User or Lesson not found");
+            }
+
+            // Add the lesson to the user's list (many-to-many relationship)
+            if (!user.Lessons.Contains(lesson))
+            {
+                user.Lessons.Add(lesson);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<Lesson> CreateLessonAsync(Lesson lesson)
