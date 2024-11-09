@@ -15,59 +15,29 @@ namespace BjjTrainer_API.Controllers
             _lessonService = lessonService;
         }
 
-        // GET: api/lessons
         [HttpGet]
-        public async Task<ActionResult<List<Lesson>>> GetAllLessons()
+        public async Task<IActionResult> GetAllLessons()
         {
-            try
-            {
-                var lessons = await _lessonService.GetAllLessonsAsync();
-                return Ok(lessons);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            var lessons = await _lessonService.GetAllLessonsAsync();
+            return Ok(lessons);
         }
 
-        // GET: api/lessons/user/{userId}
-        [HttpGet("user/{userId}")]
-        public async Task<ActionResult<List<Lesson>>> GetLessonsByUser(string userId)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetLessonById(int id)
         {
-            try
-            {
-                var lessons = await _lessonService.GetLessonsByUserAsync(userId);
-                return Ok(lessons);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            var lesson = await _lessonService.GetLessonByIdAsync(id);
+            if (lesson == null) return NotFound();
+            return Ok(lesson);
         }
 
-        // POST: api/lessons/user/{userId}/add/{lessonId}
-        [HttpPost("user/{userId}/add/{lessonId}")]
-        public async Task<ActionResult> AddLessonToUser(string userId, int lessonId)
+        [HttpPost]
+        public async Task<IActionResult> CreateLesson([FromBody] Lesson lesson)
         {
-            try
-            {
-                await _lessonService.AddLessonToUserAsync(userId, lessonId);
-                return Ok($"Lesson {lessonId} added to user {userId}");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var createdLesson = await _lessonService.CreateLessonAsync(lesson);
+            return CreatedAtAction(nameof(GetLessonById), new { id = createdLesson.Id }, createdLesson);
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> CreateLesson([FromBody] Lesson lesson)
-        //{
-        //    if (!ModelState.IsValid) return BadRequest(ModelState);
-
-        //    var createdLesson = await _lessonService.CreateLessonAsync(lesson);
-        //    return CreatedAtAction(nameof(GetLessonById), new { id = createdLesson.Id }, createdLesson);
-        //}
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateLesson(int id, Lesson lesson)
