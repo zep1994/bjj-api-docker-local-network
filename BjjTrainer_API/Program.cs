@@ -18,8 +18,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
+
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+builder.Services.AddScoped<LessonService>();
+builder.Services.AddScoped<LessonSectionService>();
+builder.Services.AddScoped<SubLessonService>();
+builder.Services.AddTransient<JwtTokenService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

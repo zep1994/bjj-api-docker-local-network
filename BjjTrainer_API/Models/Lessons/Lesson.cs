@@ -1,6 +1,5 @@
 ﻿using BjjTrainer_API.Models.User;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BjjTrainer_API.Models.Lessons
 {
@@ -17,7 +16,6 @@ namespace BjjTrainer_API.Models.Lessons
         public string Difficulty { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
 
-        // Navigation property for LessonSections
         public ICollection<LessonSection>? LessonSections { get; set; } = new List<LessonSection>();
 
         // Many-to-many relationship with ApplicationUser
