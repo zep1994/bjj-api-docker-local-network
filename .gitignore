@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/BjjTrainer.sln
+/BjjTrainer_API/appsettings.json

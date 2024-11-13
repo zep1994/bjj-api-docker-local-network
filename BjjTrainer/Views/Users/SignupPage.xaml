@@ -8,5 +8,14 @@
         <Entry x:Name="EmailEntry" Placeholder="Email" />
         <Entry x:Name="PasswordEntry" Placeholder="Password" IsPassword="True" />
         <Button Text="Login" Clicked="OnSignupClicked" />
+
+        <!-- Link to the Login Page -->
+        <Label Text="Already have an account? Login"
+               TextColor="Blue"
+               HorizontalOptions="Center">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnLoginLabelTapped" />
+            </Label.GestureRecognizers>
+        </Label>
     </StackLayout>
 </ContentPage>

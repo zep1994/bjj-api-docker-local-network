@@ -12,17 +12,25 @@ public partial class SignupPage : ContentPage
         _userService = new UserService();
     }
 
+
+    private async void OnLoginLabelTapped(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new LoginPage());
+    }
+
+
     private async void OnSignupClicked(object sender, EventArgs e)
     {
-        bool success = await _userService.SignupAsync(UsernameEntry.Text, EmailEntry.Text, PasswordEntry.Text);
-        if (success)
+        try
         {
+            string token = await _userService.SignupAsync(UsernameEntry.Text, EmailEntry.Text, PasswordEntry.Text);
             await DisplayAlert("Success", "Signup Successful", "OK");
-            await Navigation.PopAsync();
+            Application.Current.MainPage = new AppShell();
         }
-        else
+        catch (Exception ex)
         {
-            await DisplayAlert("Error", "Signup Failed", "OK");
+            await DisplayAlert("Signup Failed", ex.Message, "OK");
         }
     }
+
 }

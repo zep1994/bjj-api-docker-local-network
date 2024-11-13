@@ -12,13 +12,19 @@ public partial class LoginPage : ContentPage
         _userService = new UserService();
     }
 
+    private async void OnSignupLabelTapped(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new SignupPage());
+    }
+
+
     private async void OnLoginClicked(object sender, EventArgs e)
     {
         string token = await _userService.LoginAsync(UsernameEntry.Text, PasswordEntry.Text);
         if (!string.IsNullOrEmpty(token))
         {
             await DisplayAlert("Success", "Login Successful", "OK");
-            // Navigate to a main app page if desired
+            Application.Current.MainPage = new AppShell();
         }
         else
         {
