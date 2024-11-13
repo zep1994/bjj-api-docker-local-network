@@ -1,7 +1,9 @@
 ﻿using BjjTrainer.Services;
 using BjjTrainer.Services.Lessons;
+using BjjTrainer.Services.Users;
 using BjjTrainer.ViewModels;
 using BjjTrainer.Views.Lessons;
+using BjjTrainer.Views.Users;
 
 namespace BjjTrainer
 {
@@ -28,10 +30,15 @@ namespace BjjTrainer
 
             // Register services and view models
             builder.Services.AddSingleton<ApiService>();
+            builder.Services.AddSingleton<UserService>();
             builder.Services.AddTransient<LessonsViewModel>();
             builder.Services.AddTransient<LessonSectionViewModel>();
             builder.Services.AddTransient<LessonsPage>();
             builder.Services.AddTransient<LessonSectionPage>();
+
+            builder.Services.AddTransient<FavoritesViewModel>();
+            builder.Services.AddTransient<FavoritesPage>();
+
             // Register Services
             builder.Services.AddSingleton<SubLessonService>();
 

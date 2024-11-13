@@ -23,9 +23,15 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 builder.Services.AddScoped<LessonService>();
 builder.Services.AddScoped< LessonSectionService>();
 builder.Services.AddScoped<SubLessonService>();
-builder.Services.AddScoped<JwtTokenService>(); 
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<JwtTokenService>();
 
-builder.Services.AddControllers();
+// In Program.cs or wherever you configure JSON serialization
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 

@@ -1,20 +1,21 @@
 ﻿using BjjTrainer.Models.Lessons;
 using BjjTrainer.Services.Lessons;
+using BjjTrainer.Services.Users;
 using MvvmHelpers;
+using MvvmHelpers.Commands;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace BjjTrainer.ViewModels
 {
-    public class LessonsViewModel : BaseViewModel
+    public partial class LessonsViewModel(LessonService lessonService) : BaseViewModel
     {
-        private readonly LessonService _lessonService;
+        private readonly LessonService _lessonService = lessonService;
+        private static readonly UserService userService = new();
+        private readonly UserService _userService = userService;
+
 
         public ObservableCollection<Lesson> Lessons { get; } = [];
-
-        public LessonsViewModel(LessonService lessonService)
-        {
-            _lessonService = lessonService;
-        }
 
         public async Task LoadLessonsAsync()
         {
@@ -23,6 +24,18 @@ namespace BjjTrainer.ViewModels
             {
                 Lessons.Add(lesson);
             }
+        }
+
+        public async Task<bool> AddToFavoritesAsync(int lessonId)
+        {
+            var token = Preferences.Get("AuthToken", string.Empty);
+            var userId = Preferences.Get("UserId", string.Empty);
+
+            if (!string.IsNullOrEmpty(token) && !string.IsNullOrEmpty(userId))
+            {
+                    return await _userService.AddLessonToFavoritesAsync(userId, lessonId);
+            }
+            return false;
         }
     }
 }

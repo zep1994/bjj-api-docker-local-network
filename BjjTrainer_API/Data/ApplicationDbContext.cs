@@ -53,6 +53,24 @@ namespace BjjTrainer_API.Data
                 .HasForeignKey(sl => sl.LessonSectionId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(u => u.Lessons)
+                .WithMany(l => l.ApplicationUsers)
+                .UsingEntity<Dictionary<string, object>>(
+                    "ApplicationUserLessonJoin",
+                    j => j
+                        .HasOne<Lesson>()
+                        .WithMany()
+                        .HasForeignKey("LessonId")
+                        .OnDelete(DeleteBehavior.Cascade),
+                    j => j
+                        .HasOne<ApplicationUser>()
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                );
+
+
             modelBuilder.Entity<Lesson>()
                 .ToTable("Lessons");
             modelBuilder.Entity<SubLesson>()

@@ -1,5 +1,6 @@
 ﻿using BjjTrainer.Models.Lessons;
 using BjjTrainer.Models.Users;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Json;
 
 namespace BjjTrainer.Services.Users
@@ -19,7 +20,8 @@ namespace BjjTrainer.Services.Users
                 var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
                 if (result != null)
                 {
-                    Preferences.Set("AuthToken", result.Token); // Store token in secure storage
+                    SetAuthToken(result.Token);
+
                     return result.Token;
                 }
             }
@@ -44,6 +46,91 @@ namespace BjjTrainer.Services.Users
                     : "Signup failed for unknown reasons.";
                 throw new Exception(errorMessage);
             }
+        }
+
+        //GET FAVORITES
+        public async Task<List<Lesson>> GetUserFavoritesAsync(string userId)
+        {
+            // Make a GET request to retrieve the user's favorite lessons
+            var response = await HttpClient.GetAsync($"users/{userId}/favorites");
+
+            // If the request is successful, deserialize and return the list of lessons
+            if (response.IsSuccessStatusCode)
+            {
+                var favoriteLessons = await response.Content.ReadFromJsonAsync<List<Lesson>>();
+                return favoriteLessons ?? new List<Lesson>();
+            }
+            else
+            {
+                // Handle error response
+                throw new Exception("Failed to retrieve user favorites.");
+            }
+        }
+
+        //ADD LESSON TO FAVORITES
+        public async Task<bool> AddLessonToFavoritesAsync(string userId, int lessonId)
+        {
+            var response = await HttpClient.PostAsync($"users/{userId}/favorites/{lessonId}", null);
+            return response.IsSuccessStatusCode;
+        }
+
+
+        //SET AUTH
+        public void SetAuthToken(string token)
+        {
+            Preferences.Set("AuthToken", token);
+
+            // Extract user ID once from the token and store it
+            var userId = GetUserIdFromToken(token);
+            if (!string.IsNullOrEmpty(userId))
+            {
+                Preferences.Set("UserId", userId);
+            }
+        }
+
+        public async Task<User> GetUserByIdAsync(string userId)
+        {
+            try
+            {
+                var response = await HttpClient.GetAsync($"users/{userId}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var user = await response.Content.ReadFromJsonAsync<User>();
+                    return user;
+                }
+                else
+                {
+                    // Optionally handle different response statuses
+                    System.Diagnostics.Debug.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions (e.g., log them or show alerts)
+                System.Diagnostics.Debug.WriteLine($"Exception in GetUserByIdAsync: {ex.Message}");
+                return null;
+            }
+        }
+
+        public static string GetUserIdFromToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
+
+            // Log all claims to inspect the available claim types
+            foreach (var claim in jsonToken.Claims)
+            {
+                Console.WriteLine($"Claim Type: {claim.Type}, Value: {claim.Value}");
+            }
+
+            // Look for the "nameidentifier" claim with the URI, which holds the user ID
+            var userId = jsonToken.Claims
+                .FirstOrDefault(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
+
+            return userId ?? string.Empty;
+
         }
 
         public class ErrorResponse

@@ -23,6 +23,9 @@ namespace BjjTrainer.Services.Lessons
                 if (lessons != null)
                 {
                     return lessons;
+                } else
+                {
+                    return [];
                 }
             }
             catch (Exception ex)
@@ -34,7 +37,6 @@ namespace BjjTrainer.Services.Lessons
             Console.WriteLine("There was No Found Error");
             return [];
         }
-
 
         public async Task<List<LessonSection>> GetLessonSectionsAsync(int lessonId)
         {
@@ -58,6 +60,23 @@ namespace BjjTrainer.Services.Lessons
             {
                 Debug.WriteLine($"Exception in GetLessonSectionsAsync: {ex.Message}");
                 return [];
+            }
+        }
+
+        public async Task<bool> AddLessonToFavoritesAsync(string userId, int lessonId)
+        {
+            var url = $"api/users/{userId}/favorites/{lessonId}";
+
+            try
+            {
+                var response = await HttpClient.PostAsync(url, null);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions and potentially log them for debugging
+                Console.WriteLine($"Error adding lesson to favorites: {ex.Message}");
+                return false;
             }
         }
     }
