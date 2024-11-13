@@ -1,4 +1,5 @@
-﻿
+﻿using BjjTrainer.Views.Users;
+
 namespace BjjTrainer
 {
     public partial class App : Application
@@ -6,7 +7,15 @@ namespace BjjTrainer
         public App()
         {
             InitializeComponent();
-            MainPage = new AppShell(); // Set the main page to your AppShell
+            // Check if token is stored and navigate accordingly
+            if (Preferences.ContainsKey("AuthToken"))
+            {
+                MainPage = new AppShell(); // Main app page
+            }
+            else
+            {
+                MainPage = new NavigationPage(new LoginPage()); // Navigate to login
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ using BjjTrainer_API.Services_API;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace BjjTrainer_API.Controllers
 {
     [Route("api/auth/")]
@@ -12,14 +13,19 @@ namespace BjjTrainer_API.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly JwtTokenService _jwtTokenService;
+        private readonly ILogger<AuthController> _logger;
+
 
         public AuthController(UserManager<ApplicationUser> userManager,
                               SignInManager<ApplicationUser> signInManager,
-                              JwtTokenService jwtTokenService)
+                              JwtTokenService jwtTokenService,
+                              ILogger<AuthController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _jwtTokenService = jwtTokenService;
+            _logger = logger;
+
         }
 
         [HttpPost("signup")]
@@ -27,13 +33,30 @@ namespace BjjTrainer_API.Controllers
         {
             var user = new ApplicationUser { UserName = model.Username, Email = model.Email };
             var result = await _userManager.CreateAsync(user, model.Password);
+
             if (!result.Succeeded)
             {
-                return BadRequest(result.Errors);
+                var errorMessages = result.Errors.Select(e => e.Description).ToList();
+                // Log each error with more context
+                foreach (var error in errorMessages)
+                {
+                    // Use warning level for signup failures and include user information
+                    _logger.LogWarning("Signup failed for user: {Username}. Error: {Error}", model.Username, error);
+                }
+                return BadRequest(new { Errors = errorMessages });
             }
 
-            var token = _jwtTokenService.GenerateToken(user.Id, user.UserName);
-            return Ok(new { Token = token });
+            try
+            {
+                var token = _jwtTokenService.GenerateToken(user.Id, user.UserName);
+                _logger.LogInformation("User signed up successfully: {Username}", model.Username);
+                return Ok(new { Token = token });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error generating token for user: {Username}", model.Username);
+                return StatusCode(500, "An error occurred during token generation.");
+            }
         }
 
         [HttpPost("login")]
@@ -42,10 +65,12 @@ namespace BjjTrainer_API.Controllers
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
             {
+                _logger.LogWarning("Invalid login attempt for user: {Username}", model.Username);
                 return Unauthorized("Invalid login attempt");
             }
 
             var token = _jwtTokenService.GenerateToken(user.Id, user.UserName);
+            _logger.LogInformation("User logged in successfully: {Username}", model.Username);
             return Ok(new { Token = token });
         }
 

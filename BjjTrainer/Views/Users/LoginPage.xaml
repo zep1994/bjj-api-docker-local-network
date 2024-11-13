@@ -7,5 +7,14 @@
         <Entry x:Name="UsernameEntry" Placeholder="Username" />
         <Entry x:Name="PasswordEntry" Placeholder="Password" IsPassword="True" />
         <Button Text="Login" Clicked="OnLoginClicked" />
+
+        <!-- Link to the Signup Page -->
+        <Label Text="Don't have an account? Sign up"
+               TextColor="Blue"
+               HorizontalOptions="Center">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnSignupLabelTapped" />
+            </Label.GestureRecognizers>
+        </Label>
     </StackLayout>
 </ContentPage>

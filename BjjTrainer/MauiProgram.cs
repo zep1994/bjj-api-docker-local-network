@@ -39,6 +39,7 @@ namespace BjjTrainer
             builder.Services.AddTransient<SubLessonViewModel>();
             builder.Services.AddTransient<SubLessonDetailsViewModel>();
 
+            builder.Services.AddTransient<MainPageViewModel>();
 
             // Register Pages
             builder.Services.AddTransient<SubLessonPage>();

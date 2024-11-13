@@ -19,7 +19,7 @@ namespace BjjTrainer.Views.Lessons
         private async void OnBackToLessonsClicked(object sender, EventArgs e)
         {
             // Navigate back to the previous page (usually the SubLessonPage)
-            await Navigation.PopAsync();
+            await Shell.Current.GoToAsync("..");
         }
     }
 }

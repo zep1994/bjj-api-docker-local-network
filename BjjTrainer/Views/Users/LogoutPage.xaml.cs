@@ -11,14 +11,22 @@ public partial class LogoutPage : ContentPage
         InitializeComponent();
         _userService = new UserService();
     }
-
     private async void OnLogoutClicked(object sender, EventArgs e)
     {
         bool success = await _userService.LogoutAsync();
         if (success)
         {
             await DisplayAlert("Success", "Logged out", "OK");
-            // Return to login page if needed
+
+            await Shell.Current.GoToAsync("MainPage"); // Navigate to MainPage
+
+            await Shell.Current.GoToAsync("LoginPage"); // Relative route
+        }
+        else
+        {
+            await DisplayAlert("Error", "Logout failed. Please try again.", "OK");
         }
     }
+
+
 }

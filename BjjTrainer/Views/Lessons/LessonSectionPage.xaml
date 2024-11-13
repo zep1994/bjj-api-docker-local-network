@@ -55,7 +55,7 @@
                                            FontSize="14"
                                            TextColor="#007AFF"/>
                                 <!-- Navigate to Lesson Sections Button -->
-                                <Button Text="View Lesson Sections"
+                                <Button Text="View SubLessons"
                                     Clicked="OnViewSubLessonClicked"
                                     BackgroundColor="#007AFF"
                                     TextColor="White"/>

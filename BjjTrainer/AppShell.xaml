@@ -6,12 +6,12 @@
     xmlns:local="clr-namespace:BjjTrainer"
     xmlns:controls="clr-namespace:BjjTrainer.Controls"
     xmlns:views="clr-namespace:BjjTrainer.Views"
+    xmlns:lessons="clr-namespace:BjjTrainer.Views.Lessons"
     xmlns:users="clr-namespace:BjjTrainer.Views.Users"
     xmlns:viewModels="clr-namespace:BjjTrainer.ViewModels"
-    x:DataType="viewModels:MainPageViewModel"
     Shell.FlyoutBehavior="Flyout"
     Title="BjjTrainer">
-
+    
     <Shell.Resources>
         <Style x:Key="BaseStyle"
                TargetType="Element">
@@ -59,16 +59,16 @@
                     Value="#96d1ff" />
         </Style>
     </Shell.Resources>
-
+    
     <Shell.FlyoutHeader>
         <controls:FlyoutHeader />
     </Shell.FlyoutHeader>
 
-    <!-- Home Page -->
-    <FlyoutItem Title="Home">
-        <ShellContent Route="Home" Style="{StaticResource DomesticShell}" Title="Home" ContentTemplate="{DataTemplate views:MainPage}" />
-        <ShellContent Title="Login" ContentTemplate="{DataTemplate users:LoginPage}" />
-        <ShellContent Title="Signup" ContentTemplate="{DataTemplate users:SignupPage}" />
-        <ShellContent Title="Logout" ContentTemplate="{DataTemplate users:LogoutPage}" />
-    </FlyoutItem>
+    <!-- Unique routes for each page -->
+    <ShellContent Route="MainPage" ContentTemplate="{DataTemplate views:MainPage}" />
+    <ShellContent Route="LessonsPage" ContentTemplate="{DataTemplate lessons:LessonsPage}" />
+    <ShellContent Route="SubLessonPage" ContentTemplate="{DataTemplate lessons:SubLessonPage}" />
+    <ShellContent Route="SubLessonDetailsPage" ContentTemplate="{DataTemplate lessons:SubLessonDetailsPage}" />
+    <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate users:LoginPage}" />
+
 </Shell>

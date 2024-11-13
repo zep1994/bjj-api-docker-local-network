@@ -98,4 +98,6 @@
 	  </MauiXaml>
 	</ItemGroup>
 
+	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionBjjTrainerHideInfoBar="True" /></VisualStudio></ProjectExtensions>
+
 </Project>
