@@ -70,5 +70,8 @@
     <ShellContent Route="SubLessonPage" ContentTemplate="{DataTemplate lessons:SubLessonPage}" />
     <ShellContent Route="SubLessonDetailsPage" ContentTemplate="{DataTemplate lessons:SubLessonDetailsPage}" />
     <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate users:LoginPage}" />
+    <ShellContent Route="FavoritesPage" ContentTemplate="{DataTemplate users:FavoritesPage}" />
+    <ShellContent Route="UserProfilePage" ContentTemplate="{DataTemplate users:UserProfilePage}" />
+
 
 </Shell>

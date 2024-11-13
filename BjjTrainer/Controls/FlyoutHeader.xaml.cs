@@ -19,5 +19,15 @@ namespace BjjTrainer.Controls
             Preferences.Remove("AuthToken"); // Clear the token for logout
             await Shell.Current.GoToAsync("///LoginPage");
         }
+
+        private async void OnFavoriteLessonsClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//FavoritesPage");
+        }
+
+        private async void OnAccountClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//UserProfilePage");
+        }
     }
 }

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BjjTrainer.Views.Users.FavoritesPage"
+             xmlns:vm="clr-namespace:BjjTrainer.ViewModels"
+             Title="FavoritesPage">
+    <ContentPage.BindingContext>
+        <vm:FavoritesViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <StackLayout Padding="20" Spacing="15" BackgroundColor="White">
+            <!-- Header Label -->
+            <Label Text="My Favorite Lessons" 
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   TextColor="#333"
+                   Margin="0,10,0,10"/>
+
+            <!-- ListView to display favorite lessons -->
+            <ListView x:Name="FavoritesListView"
+                      ItemsSource="{Binding FavoriteLessons}"
+                      IsPullToRefreshEnabled="True"
+                      RefreshCommand="{Binding LoadFavoritesCommand}"
+                      IsRefreshing="{Binding IsRefreshing}"
+                      SelectionMode="None"
+                      RowHeight="100"
+                      VerticalOptions="FillAndExpand"
+                      SeparatorColor="#CCCCCC">
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Frame CornerRadius="8"
+                                   HasShadow="True"
+                                   Padding="10"
+                                   Margin="0,5"
+                                   BackgroundColor="#F0F0F0">
+                                <StackLayout>
+                                    <Label Text="{Binding Title}"
+                                           FontAttributes="Bold"
+                                           FontSize="18"
+                                           TextColor="#222" />
+                                    <Label Text="{Binding Description}"
+                                           FontSize="14"
+                                           TextColor="#555" />
+                                </StackLayout>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <!-- Back Button -->
+            <Button Text="Back to Lessons"
+                    FontSize="Medium"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    CornerRadius="8"
+                    Padding="10"
+                    HorizontalOptions="Center"
+                    Clicked="OnBackToLessonsClicked" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

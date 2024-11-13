@@ -9,7 +9,7 @@
             <Label Text="Menu" 
                    TextColor="White" 
                    FontAttributes="Bold" 
-                   HorizontalTextAlignment="Center"
+                   HorizontalTextAlignment="Start"
                    VerticalTextAlignment="Center" 
                    FontSize="24" />
 
@@ -17,12 +17,28 @@
             <Button Text="Home"
                     BackgroundColor="Transparent"
                     TextColor="White"
+                    HorizontalOptions="Start"
                     Clicked="OnHomeButtonClicked" />
 
+            <!-- Account Button -->
+            <Button Text="Account"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    HorizontalOptions="Start"
+                    Clicked="OnAccountClicked" />
+
+            <!-- Favorite Lessons Button -->
+            <Button Text="Favorite Lessons"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    HorizontalOptions="Start"
+                    Clicked="OnFavoriteLessonsClicked" />
+            
             <!-- Logout Button -->
             <Button Text="Logout"
                     BackgroundColor="Transparent"
                     TextColor="White"
+                    HorizontalOptions="Start"
                     Clicked="OnLogoutButtonClicked" />
         </StackLayout>
     </Grid>

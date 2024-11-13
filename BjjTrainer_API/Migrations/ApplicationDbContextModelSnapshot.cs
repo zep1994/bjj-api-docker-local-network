@@ -34,7 +34,7 @@ namespace BjjTrainer_API.Migrations
 
                     b.HasIndex("LessonId");
 
-                    b.ToTable("ApplicationUserLessonJoin");
+                    b.ToTable("ApplicationUserLessonJoin", (string)null);
                 });
 
             modelBuilder.Entity("BjjTrainer_API.Models.Lessons.Lesson", b =>
@@ -100,7 +100,7 @@ namespace BjjTrainer_API.Migrations
 
                     b.HasIndex("LessonId");
 
-                    b.ToTable("LessonSections");
+                    b.ToTable("LessonSections", (string)null);
                 });
 
             modelBuilder.Entity("BjjTrainer_API.Models.Lessons.SubLesson", b =>
@@ -201,7 +201,7 @@ namespace BjjTrainer_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ApplicationUsers");
+                    b.ToTable("ApplicationUsers", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationUserLessonJoin", b =>

@@ -32,5 +32,24 @@ namespace BjjTrainer.Views.Lessons
                 await Navigation.PushAsync(new LessonSectionPage(selectedLesson.Id, selectedLesson.Title));
             }
         }
+
+        private async void OnAddToFavoritesClicked(object sender, EventArgs e)
+        {
+            var button = (Button)sender;
+            var lessonId = (int)button.CommandParameter;
+
+            bool isAddedToFavorites = await _viewModel.AddToFavoritesAsync(lessonId);
+
+            if (isAddedToFavorites)
+            {
+                await DisplayAlert("Success", "Lesson added to favorites!", "OK");
+                await Shell.Current.GoToAsync("//FavoritesPage"); // Navigate to FavoritesPage
+            }
+            else
+            {
+                await DisplayAlert("Error", "Failed to add lesson to favorites.", "OK");
+            }
+        }
+
     }
 }

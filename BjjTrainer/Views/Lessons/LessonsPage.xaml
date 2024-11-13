@@ -14,7 +14,7 @@
             <Setter Property="Margin" Value="10"/>
         </Style>
         <x:Double x:Key="boxSize">50</x:Double>
-        <x:Int32 x:Key="rowHeight">225</x:Int32>
+        <x:Int32 x:Key="rowHeight">260</x:Int32>
     </ContentPage.Resources>
 
     <ContentPage.Content>
@@ -49,9 +49,13 @@
                             </StackLayout>
 
                             <!-- Navigate to Lesson Sections Button -->
-                            <Button Text="View Lesson Sections"
-                                    Clicked="OnViewLessonSectionsClicked"
-                                    BackgroundColor="#007AFF"
+                            <Button Text="View Lesson Sections" Clicked="OnViewLessonSectionsClicked" BackgroundColor="#007AFF" TextColor="White"/>
+
+                            <!-- Add to Favorites Button -->
+                            <Button Text="Add to Favorites"
+                                    Clicked="OnAddToFavoritesClicked"
+                                    CommandParameter="{Binding Id}"
+                                    BackgroundColor="#FF6347"
                                     TextColor="White"/>
                         </StackLayout>
                     </ViewCell>
