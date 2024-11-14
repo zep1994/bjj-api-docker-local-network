@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using BjjTrainer_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BjjTrainer_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241114154816_AddTrainingSessions")]
+    partial class AddTrainingSessions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,8 +168,8 @@ namespace BjjTrainer_API.Migrations
                         .IsRequired()
                         .HasColumnType("text[]");
 
-                    b.Property<DateOnly?>("Date")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<TimeSpan?>("Duration")
                         .HasColumnType("interval");
@@ -174,9 +177,9 @@ namespace BjjTrainer_API.Migrations
                     b.Property<int?>("IntensityLevel")
                         .HasColumnType("integer");
 
-                    b.Property<List<string>>("LessonMoves")
+                    b.Property<List<int>>("LessonMoves")
                         .IsRequired()
-                        .HasColumnType("text[]");
+                        .HasColumnType("integer[]");
 
                     b.Property<string>("Location")
                         .HasColumnType("text");
@@ -305,11 +308,13 @@ namespace BjjTrainer_API.Migrations
 
             modelBuilder.Entity("BjjTrainer_API.Models.Training_Sessions.TrainingSession", b =>
                 {
-                    b.HasOne("BjjTrainer_API.Models.User.ApplicationUser", null)
+                    b.HasOne("BjjTrainer_API.Models.User.ApplicationUser", "User")
                         .WithMany("TrainingSessions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BjjTrainer_API.Models.Lessons.Lesson", b =>

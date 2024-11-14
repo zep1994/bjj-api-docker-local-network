@@ -10,37 +10,34 @@ namespace BjjTrainer_API.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "LessonApplicationUser");
+            //migrationBuilder.CreateTable(
+            //    name: "ApplicationUserLessonJoin",
+            //    columns: table => new
+            //    {
+            //        ApplicationUserId = table.Column<string>(type: "text", nullable: false),
+            //        LessonId = table.Column<int>(type: "integer", nullable: false)
+            //    },
+            //    constraints: table =>
+            //    {
+            //        table.PrimaryKey("PK_ApplicationUserLessonJoin", x => new { x.ApplicationUserId, x.LessonId });
+            //        table.ForeignKey(
+            //            name: "FK_ApplicationUserLessonJoin_ApplicationUsers_ApplicationUserId",
+            //            column: x => x.ApplicationUserId,
+            //            principalTable: "ApplicationUsers",
+            //            principalColumn: "Id",
+            //            onDelete: ReferentialAction.Cascade);
+            //        table.ForeignKey(
+            //            name: "FK_ApplicationUserLessonJoin_Lessons_LessonId",
+            //            column: x => x.LessonId,
+            //            principalTable: "Lessons",
+            //            principalColumn: "Id",
+            //            onDelete: ReferentialAction.Cascade);
+            //    });
 
-            migrationBuilder.CreateTable(
-                name: "ApplicationUserLessonJoin",
-                columns: table => new
-                {
-                    ApplicationUserId = table.Column<string>(type: "text", nullable: false),
-                    LessonId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApplicationUserLessonJoin", x => new { x.ApplicationUserId, x.LessonId });
-                    table.ForeignKey(
-                        name: "FK_ApplicationUserLessonJoin_ApplicationUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "ApplicationUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ApplicationUserLessonJoin_Lessons_LessonId",
-                        column: x => x.LessonId,
-                        principalTable: "Lessons",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ApplicationUserLessonJoin_LessonId",
-                table: "ApplicationUserLessonJoin",
-                column: "LessonId");
+            //migrationBuilder.CreateIndex(
+            //    name: "IX_ApplicationUserLessonJoin_LessonId",
+            //    table: "ApplicationUserLessonJoin",
+            //    column: "LessonId");
         }
 
         /// <inheritdoc />

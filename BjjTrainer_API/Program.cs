@@ -1,5 +1,6 @@
 using BjjTrainer_API.Data;
 using BjjTrainer_API.Models.User;
+using BjjTrainer_API.Services;
 using BjjTrainer_API.Services_API;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -20,6 +21,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddScoped<TrainingSessionService>();
 builder.Services.AddScoped<LessonService>();
 builder.Services.AddScoped< LessonSectionService>();
 builder.Services.AddScoped<SubLessonService>();
@@ -36,7 +38,11 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 
 // Configure JWT authentication
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -60,7 +66,8 @@ if (app.Environment.IsDevelopment())
 }
 
 //app.UseHttpsRedirection();
-app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization(); 
 app.MapControllers();
 
 app.Run();
