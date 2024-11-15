@@ -7,9 +7,12 @@ namespace BjjTrainer.Services.Users
 {
     public class UserService : ApiService
     {
+        private string accessToken;
+        private string refreshToken;
+
         public async Task<string> LoginAsync(string username, string password)
         {
-            username = "newuser";
+            username = "newuser2";
             password = "securePassword1!";
             var loginModel = new { Username = username, Password = password };
             //var loginModel = new { Username = username, Password = password };
@@ -144,6 +147,37 @@ namespace BjjTrainer.Services.Users
             Preferences.Remove("AuthToken"); // Remove token from storage
             var response = await HttpClient.PostAsync("auth/logout", null);
             return response.IsSuccessStatusCode;
+        }
+
+        public async Task<string> GetAccessTokenAsync()
+        {
+            if (IsTokenExpired(accessToken))
+            {
+                var newTokens = await RefreshTokenAsync();
+                accessToken = newTokens.AccessToken;
+                refreshToken = newTokens.RefreshToken;
+            }
+            return accessToken;
+        }
+
+        private bool IsTokenExpired(string token)
+        {
+            var jwtHandler = new JwtSecurityTokenHandler();
+            var jwtToken = jwtHandler.ReadToken(token) as JwtSecurityToken;
+            return jwtToken?.ValidTo < DateTime.UtcNow;
+        }
+
+        private async Task<(string AccessToken, string RefreshToken)> RefreshTokenAsync()
+        {
+            var response = await HttpClient.PostAsJsonAsync("api/users/refresh-token", refreshToken);
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<(string AccessToken, string RefreshToken)>();
+            }
+            else
+            {
+                throw new Exception("Failed to refresh token");
+            }
         }
     }
 }

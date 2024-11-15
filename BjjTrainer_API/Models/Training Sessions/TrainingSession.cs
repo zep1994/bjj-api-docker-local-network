@@ -1,6 +1,4 @@
-﻿using BjjTrainer_API.Models.User;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BjjTrainer_API.Models.Training_Sessions
 {
@@ -13,7 +11,7 @@ namespace BjjTrainer_API.Models.Training_Sessions
 
         public TimeSpan? Duration { get; set; }
 
-        public DateOnly? Date { get; set; }
+        public DateOnly? Date { get; set; } = DateOnly.MinValue;
 
         [StringLength(500)]
         public string? Notes { get; set; }  
@@ -22,15 +20,15 @@ namespace BjjTrainer_API.Models.Training_Sessions
 
         public List<string>? Tags { get; set; }
 
-        public required string UserId { get; set; } 
+        public string UserId { get; set; } 
 
-        public List<string> AreasTrained { get; set; } = new List<string>();
+        public List<string>? AreasTrained { get; set; } = new List<string>();
 
-        public List<string> MovesTrained { get; set; } = new List<string>();
+        public List<string>? MovesTrained { get; set; } = new List<string>();
 
-        public string TypeOfTraining { get; set; } = "Class";
+        public string? TypeOfTraining { get; set; } = "Class";
 
-        public List<string> LessonMoves { get; set; }  = new List<string>();  
+        public List<string>? LessonMoves { get; set; }  = new List<string>();  
 
         public int? IntensityLevel { get; set; } 
 

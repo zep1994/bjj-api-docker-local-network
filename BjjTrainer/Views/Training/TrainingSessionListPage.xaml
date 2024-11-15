@@ -5,6 +5,10 @@
              x:Class="BjjTrainer.Views.Training.TrainingSessionListPage"
              Title="Training Log">
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="+" Command="{Binding AddTrainingSessionCommand}" />
+    </ContentPage.ToolbarItems>
+
     <StackLayout Padding="10">
         <ListView ItemsSource="{Binding TrainingSessions}"
                   SelectedItem="{Binding SelectedSession}"

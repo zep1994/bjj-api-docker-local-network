@@ -8,34 +8,21 @@ namespace BjjTrainer.ViewModels.Training
     public partial class TrainingSessionDetailViewModel : BaseViewModel
     {
         private readonly TrainingSessionService _trainingSessionService;
-        private TrainingSession _trainingSession;
 
-        public TrainingSession TrainingSession
-        {
-            get => _trainingSession;
-            set => SetProperty(ref _trainingSession, value);
-        }
-
-        private int _sessionId;
-        public int SessionId
-        {
-            get => _sessionId;
-            set
-            {
-                _sessionId = value;
-                LoadTrainingSession(_sessionId);
-            }
-        }
-
+        public int SessionId { get; set; }
+        public TrainingSession Session { get; private set; }
 
         public TrainingSessionDetailViewModel(TrainingSessionService trainingSessionService)
         {
             _trainingSessionService = trainingSessionService;
         }
 
-        public async Task LoadTrainingSession(int sessionId)
+        public async Task LoadSessionAsync()
         {
-            TrainingSession = await _trainingSessionService.GetTrainingSessionByIdAsync(sessionId);
+            Session = await _trainingSessionService.GetTrainingSessionByIdAsync(SessionId);
+            OnPropertyChanged(nameof(Session));
         }
     }
+
+
 }

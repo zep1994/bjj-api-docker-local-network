@@ -6,16 +6,20 @@ namespace BjjTrainer_API.Controllers
     public class BaseController : Controller
     {
         protected string GetCurrentUserId()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            // If the userId is null or empty, it means the user is not authenticated
-            if (string.IsNullOrEmpty(userId))
+{
+            if (!User.Identity.IsAuthenticated)
             {
                 throw new UnauthorizedAccessException("User is not authenticated.");
             }
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new UnauthorizedAccessException("User ID claim is missing.");
+            }
+
             return userId;
         }
+
     }
 }

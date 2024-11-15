@@ -23,14 +23,6 @@ namespace BjjTrainer
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            // Configure HttpClient with a base URL
-            builder.Services.AddHttpClient<ApiService>(client =>
-            {
-                client.BaseAddress = DeviceInfo.Platform == DevicePlatform.Android
-                    ? new Uri("http://10.0.2.2:5057/api/") // Android Emulator base URL
-                    : new Uri("http://localhost:5057/api/"); // Localhost URL for other platforms
-            });
-
             // Register services and view models
             builder.Services.AddSingleton<ApiService>();
             builder.Services.AddSingleton<UserService>();
@@ -61,6 +53,9 @@ namespace BjjTrainer
             builder.Services.AddTransient<TrainingSessionDetailViewModel>();
             builder.Services.AddTransient<TrainingSessionListPage>();
             builder.Services.AddTransient<TrainingSessionDetailPage>();
+            builder.Services.AddTransient<TrainingSessionCreatePage>();
+            builder.Services.AddTransient<TrainingSessionCreateViewModel>();
+
 
 
             return builder.Build();

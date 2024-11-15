@@ -21,8 +21,8 @@ namespace BjjTrainer_API.Controllers
         [HttpPost]
         public async Task<ActionResult<TrainingSession>> CreateTrainingSession(TrainingSession session)
         {
-            var userId = GetCurrentUserId();  
-            session.UserId = userId;
+            //var userId = GetCurrentUserId();  
+            //session.UserId = userId;
 
             var createdSession = await _trainingSessionService.CreateTrainingSessionAsync(session);
             return CreatedAtAction(nameof(GetTrainingSession), new { id = createdSession.Id }, createdSession);

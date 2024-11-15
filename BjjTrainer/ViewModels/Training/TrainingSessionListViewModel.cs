@@ -18,6 +18,8 @@ namespace BjjTrainer.ViewModels.Training
             _trainingSessionService = trainingSessionService;
             TrainingSessions = new ObservableCollection<TrainingSession>();
             LoadTrainingSessionsCommand = new Command(async () => await LoadTrainingSessions());
+            AddTrainingSessionCommand = new Command(async () => await GoToAddTrainingSession());
+
 
             // Load sessions immediately on initialization
             LoadTrainingSessionsCommand.Execute(null);
@@ -40,6 +42,12 @@ namespace BjjTrainer.ViewModels.Training
         }
 
         public Command LoadTrainingSessionsCommand { get; }
+        public Command AddTrainingSessionCommand { get; }
+
+        private async Task GoToAddTrainingSession()
+        {
+            await Shell.Current.GoToAsync("///TrainingSessionCreatePage");
+        }
 
         private async Task LoadTrainingSessions()
         {

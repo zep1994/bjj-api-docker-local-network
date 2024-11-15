@@ -1,6 +1,7 @@
 ﻿using BjjTrainer_API.Models.Lessons;
 using BjjTrainer_API.Models.Training_Sessions;
 using BjjTrainer_API.Models.User;
+using BjjTrainer_API.Models.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace BjjTrainer_API.Data
@@ -14,6 +15,7 @@ namespace BjjTrainer_API.Data
         public DbSet<SubLesson> SubLessons { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<TrainingSession> TrainingSessions { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

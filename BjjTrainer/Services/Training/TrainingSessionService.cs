@@ -1,4 +1,6 @@
 ﻿using BjjTrainer.Models.Training;
+using System.Diagnostics;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
@@ -39,11 +41,61 @@ namespace BjjTrainer.Services.Training
             return new List<TrainingSession>();
         }
 
-        public async Task<TrainingSession> CreateTrainingSessionAsync(TrainingSession session)
+        public async Task<TrainingSession> CreateTrainingSessionAsync(TrainingSession trainingSession)
         {
-            var response = await HttpClient.PostAsJsonAsync("trainingsessions", session);
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync<TrainingSession>();
+            try
+            {
+                // Retrieve the stored token
+                var authToken = Preferences.Get("AuthToken", string.Empty);
+
+                if (string.IsNullOrEmpty(authToken))
+                {
+                    Debug.WriteLine("Authorization token is missing.");
+                    throw new UnauthorizedAccessException("User is not authenticated. Authorization token is missing.");
+                }
+
+                // Set the Authorization header
+                HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+
+//_________________________________________________________________________DEBUGGGING___________________________________________________________________________________________________
+                // Log the request details
+                Debug.WriteLine("Sending Create Training Session request...");
+                Debug.WriteLine("Request URL: " + HttpClient.BaseAddress + "trainingsessions");
+                Debug.WriteLine("Headers: ");
+                foreach (var header in HttpClient.DefaultRequestHeaders)
+                {
+                    Debug.WriteLine($"{header.Key}: {string.Join(", ", header.Value)}");
+                }
+
+                // Convert the request payload to JSON for logging
+                var trainingSessionJson = System.Text.Json.JsonSerializer.Serialize(trainingSession);
+                Debug.WriteLine("Request Payload: " + trainingSessionJson);
+//_________________________________________________________________________DEBUGGGING___________________________________________________________________________________________________
+
+                // Send the POST request
+                var response = await HttpClient.PostAsJsonAsync("trainingsessions", trainingSession);
+
+                // Log the response
+                var responseContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Response Status: {response.StatusCode}");
+                Debug.WriteLine("Response Content: " + responseContent);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var createdSession = await response.Content.ReadFromJsonAsync<TrainingSession>();
+                    return createdSession;
+                }
+                else
+                {
+                    throw new Exception($"Failed to create session. Status: {response.StatusCode}");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Unexpected error: {ex.Message}");
+            }
+            return trainingSession;
         }
 
         public async Task<TrainingSession> GetTrainingSessionByIdAsync(int id)

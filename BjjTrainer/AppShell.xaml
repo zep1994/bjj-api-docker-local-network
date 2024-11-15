@@ -75,5 +75,6 @@
     <ShellContent Route="UserProfilePage" ContentTemplate="{DataTemplate users:UserProfilePage}" />
     <ShellContent Route="TrainingSessionListPage" ContentTemplate="{DataTemplate train:TrainingSessionListPage}" />
     <ShellContent Route="TrainingSessionDetailPage" ContentTemplate="{DataTemplate train:TrainingSessionDetailPage}" />
+    <ShellContent Route="TrainingSessionCreatePage" ContentTemplate="{DataTemplate train:TrainingSessionCreatePage}" />
 
 </Shell>
