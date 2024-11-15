@@ -1,5 +1,7 @@
 ﻿using BjjTrainer_API.Models.Lessons;
+using BjjTrainer_API.Models.Training_Sessions;
 using BjjTrainer_API.Models.User;
+using BjjTrainer_API.Models.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace BjjTrainer_API.Data
@@ -12,6 +14,8 @@ namespace BjjTrainer_API.Data
         public DbSet<LessonSection> LessonSections { get; set; }
         public DbSet<SubLesson> SubLessons { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<TrainingSession> TrainingSessions { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -52,6 +56,11 @@ namespace BjjTrainer_API.Data
                 .WithOne(sl => sl.LessonSection)
                 .HasForeignKey(sl => sl.LessonSectionId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TrainingSession>()
+                .HasOne<ApplicationUser>() 
+                .WithMany(u => u.TrainingSessions) 
+                .HasForeignKey(ts => ts.UserId);
 
             modelBuilder.Entity<ApplicationUser>()
                 .HasMany(u => u.Lessons)

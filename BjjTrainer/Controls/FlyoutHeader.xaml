@@ -33,7 +33,14 @@
                     TextColor="White"
                     HorizontalOptions="Start"
                     Clicked="OnFavoriteLessonsClicked" />
-            
+
+            <!-- Favorite Lessons Button -->
+            <Button Text="Training Log"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    HorizontalOptions="Start"
+                    Clicked="OnTrainingLogClicked" />
+
             <!-- Logout Button -->
             <Button Text="Logout"
                     BackgroundColor="Transparent"

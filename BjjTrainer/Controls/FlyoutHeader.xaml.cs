@@ -25,9 +25,14 @@ namespace BjjTrainer.Controls
             await Shell.Current.GoToAsync("//FavoritesPage");
         }
 
+        private async void OnTrainingLogClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//TrainingSessionListPage");
+        }
+
         private async void OnAccountClicked(object sender, EventArgs e)
         {
             await Shell.Current.GoToAsync("//UserProfilePage");
-        }
+        }        
     }
 }

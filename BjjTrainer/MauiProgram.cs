@@ -1,8 +1,11 @@
 ﻿using BjjTrainer.Services;
 using BjjTrainer.Services.Lessons;
+using BjjTrainer.Services.Training;
 using BjjTrainer.Services.Users;
 using BjjTrainer.ViewModels;
+using BjjTrainer.ViewModels.Training;
 using BjjTrainer.Views.Lessons;
+using BjjTrainer.Views.Training;
 using BjjTrainer.Views.Users;
 
 namespace BjjTrainer
@@ -19,14 +22,6 @@ namespace BjjTrainer
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
-
-            // Configure HttpClient with a base URL
-            builder.Services.AddHttpClient<ApiService>(client =>
-            {
-                client.BaseAddress = DeviceInfo.Platform == DevicePlatform.Android
-                    ? new Uri("http://10.0.2.2:5057/api/") // Android Emulator base URL
-                    : new Uri("http://localhost:5057/api/"); // Localhost URL for other platforms
-            });
 
             // Register services and view models
             builder.Services.AddSingleton<ApiService>();
@@ -51,6 +46,15 @@ namespace BjjTrainer
             // Register Pages
             builder.Services.AddTransient<SubLessonPage>();
             builder.Services.AddTransient<SubLessonDetailsPage>();
+
+            //Register Training
+            builder.Services.AddSingleton<TrainingSessionService>();
+            builder.Services.AddTransient<TrainingSessionListViewModel>();
+            builder.Services.AddTransient<TrainingSessionDetailViewModel>();
+            builder.Services.AddTransient<TrainingSessionListPage>();
+            builder.Services.AddTransient<TrainingSessionDetailPage>();
+            builder.Services.AddTransient<TrainingSessionCreatePage>();
+            builder.Services.AddTransient<TrainingSessionCreateViewModel>();
 
 
 

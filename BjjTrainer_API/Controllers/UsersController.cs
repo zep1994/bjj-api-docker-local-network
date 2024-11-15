@@ -15,6 +15,18 @@ namespace BjjTrainer_API.Controllers
             _userService = userService;
         }
 
+        // POST: api/users/refresh-token
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
+        {
+            var tokens = await _userService.RefreshTokensAsync(refreshToken);
+
+            if (tokens == null)
+                return Unauthorized(new { message = "Invalid or expired refresh token." });
+
+            return Ok(tokens);
+        }
+
         // Get all favorite lessons for a specific user
         [HttpGet("{userId}/favorites")]
         public async Task<ActionResult<List<Lesson>>> GetUserFavorites(string userId)

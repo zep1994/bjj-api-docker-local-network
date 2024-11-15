@@ -1,4 +1,5 @@
-﻿using BjjTrainer_API.Models.User;
+﻿using BjjTrainer_API.Models.DTO;
+using BjjTrainer_API.Models.User;
 using BjjTrainer_API.Services_API;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -72,6 +73,16 @@ namespace BjjTrainer_API.Controllers
             var token = _jwtTokenService.GenerateToken(user.Id, user.UserName);
             _logger.LogInformation("User logged in successfully: {Username}", model.Username);
             return Ok(new { Token = token });
+        }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> Refresh([FromBody] RefreshTokenDto refreshTokenDto)
+        {
+            var newTokens = await _jwtTokenService.RefreshTokenAsync(refreshTokenDto.Token);
+            if (newTokens == null)
+                return Unauthorized("Invalid or expired refresh token.");
+
+            return Ok(newTokens);
         }
 
         [HttpPost("logout")]

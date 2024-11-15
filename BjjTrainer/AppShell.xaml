@@ -8,6 +8,7 @@
     xmlns:views="clr-namespace:BjjTrainer.Views"
     xmlns:lessons="clr-namespace:BjjTrainer.Views.Lessons"
     xmlns:users="clr-namespace:BjjTrainer.Views.Users"
+    xmlns:train="clr-namespace:BjjTrainer.Views.Training"
     xmlns:viewModels="clr-namespace:BjjTrainer.ViewModels"
     Shell.FlyoutBehavior="Flyout"
     Title="BjjTrainer">
@@ -72,6 +73,8 @@
     <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate users:LoginPage}" />
     <ShellContent Route="FavoritesPage" ContentTemplate="{DataTemplate users:FavoritesPage}" />
     <ShellContent Route="UserProfilePage" ContentTemplate="{DataTemplate users:UserProfilePage}" />
-
+    <ShellContent Route="TrainingSessionListPage" ContentTemplate="{DataTemplate train:TrainingSessionListPage}" />
+    <ShellContent Route="TrainingSessionDetailPage" ContentTemplate="{DataTemplate train:TrainingSessionDetailPage}" />
+    <ShellContent Route="TrainingSessionCreatePage" ContentTemplate="{DataTemplate train:TrainingSessionCreatePage}" />
 
 </Shell>
