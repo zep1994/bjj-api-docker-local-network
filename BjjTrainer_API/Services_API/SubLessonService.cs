@@ -1,5 +1,6 @@
 ﻿using BjjTrainer_API.Data;
 using BjjTrainer_API.Models.DTO;
+using BjjTrainer_API.Models.Joins;
 using BjjTrainer_API.Models.Lessons;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -37,18 +38,32 @@ namespace BjjTrainer_API.Services_API
         {
             try
             {
-                var subLesson = await _context.SubLessons.FindAsync(id);
-                if (subLesson == null)
-                {
-                    return null; // If no sub-lesson found, return null
-                }
+                var subLesson = await _context.SubLessons
+                    .Include(sl => sl.SubLessonMoves)
+                    .ThenInclude(slm => slm.Move)
+                    .FirstOrDefaultAsync(sl => sl.Id == id);
+
+                if (subLesson == null) return null;
 
                 return new SubLessonDetailsDto
                 {
                     Id = subLesson.Id,
                     Title = subLesson.Title,
-                    Content = subLesson.Content,
-                    Notes = subLesson.Notes
+                    Moves = subLesson.SubLessonMoves.Select(m => new MoveDto
+                    {
+                        Id = m.Move.Id,
+                        Name = m.Move.Name,
+                        Description = m.Move.Description,
+                        Content = m.Move.Content,
+                        SkillLevel = m.Move.SkillLevel,
+                        Category = m.Move.Category,
+                        StartingPosition = m.Move.StartingPosition,
+                        History = m.Move.History,
+                        Scenarios = m.Move.Scenarios,
+                        LegalInCompetitions = m.Move.LegalInCompetitions,
+                        CounterStrategies = m.Move.CounterStrategies,
+                        Tags = m.Move.Tags
+                    }).ToList()
                 };
             }
             catch (Exception ex)
@@ -56,6 +71,35 @@ namespace BjjTrainer_API.Services_API
                 // Handle and log error here
                 throw new InvalidOperationException("Error fetching sub-lesson details.", ex);
             }
+        }
+
+        public async Task<bool> AddMoveToSubLessonAsync(int subLessonId, int moveId)
+        {
+            var subLesson = await _context.SubLessons.FindAsync(subLessonId);
+            var move = await _context.Moves.FindAsync(moveId);
+
+            if (subLesson == null || move == null) return false;
+
+            if (!_context.SubLessonMoves.Any(slm => slm.SubLessonId == subLessonId && slm.MoveId == moveId))
+            {
+                _context.SubLessonMoves.Add(new SubLessonMove { SubLessonId = subLessonId, MoveId = moveId });
+                await _context.SaveChangesAsync();
+            }
+
+            return true;
+        }
+
+        public async Task<bool> RemoveMoveFromSubLessonAsync(int subLessonId, int moveId)
+        {
+            var subLessonMove = await _context.SubLessonMoves
+                .FirstOrDefaultAsync(slm => slm.SubLessonId == subLessonId && slm.MoveId == moveId);
+
+            if (subLessonMove == null) return false;
+
+            _context.SubLessonMoves.Remove(subLessonMove);
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
         // Get a specific SubLesson by ID

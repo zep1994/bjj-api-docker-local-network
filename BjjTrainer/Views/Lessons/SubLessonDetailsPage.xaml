@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BjjTrainer.Views.Lessons.SubLessonDetailsPage"
@@ -40,39 +39,133 @@
                        TextColor="#333" 
                        HorizontalOptions="Center" />
 
-                <!-- Content Section -->
-                <Frame>
+                <!-- Move Selection Section (Only show if more than one move) -->
+                <Frame IsVisible="{Binding SubLessonDetails.Moves.Count, Converter={StaticResource GreaterThanZeroConverter}}">
                     <StackLayout Padding="15">
-                        <Label Text="Content" 
+                        <Label Text="Select a Move" 
                                FontSize="20" 
                                FontAttributes="Bold" 
                                TextColor="#333"/>
-                        <Label Text="{Binding SubLessonDetails.Content}" 
-                               FontSize="16" 
-                               TextColor="#555" 
-                               LineBreakMode="WordWrap"/>
+
+                        <!-- Dropdown for selecting a Move -->
+                        <Picker SelectedItem="{Binding SelectedMove}" 
+                                ItemsSource="{Binding SubLessonDetails.Moves}" 
+                                ItemDisplayBinding="{Binding Name}">
+                        </Picker>
                     </StackLayout>
                 </Frame>
 
-                <!-- Notes Section -->
-                <Frame>
+                <!-- Move Information Section (Always show) -->
+                <Frame IsVisible="{Binding SelectedMove, Converter={StaticResource NullToBoolConverter}}">
                     <StackLayout Padding="15">
-                        <Label Text="Notes" 
+                        <Label Text="Move Information" 
                                FontSize="20" 
                                FontAttributes="Bold" 
                                TextColor="#333"/>
-                        <Label Text="{Binding SubLessonDetails.Notes}" 
+
+                        <!-- Move Name -->
+                        <Label Text="{Binding SelectedMove.Name}" 
+                               FontSize="18" 
+                               FontAttributes="Bold" 
+                               TextColor="#000"/>
+
+                        <!-- Move Description -->
+                        <Label Text="{Binding SelectedMove.Description}" 
                                FontSize="16" 
                                TextColor="#555" 
                                LineBreakMode="WordWrap"/>
+
+                        <!-- Move Content -->
+                        <Label Text="How to Perform:" 
+                               FontSize="18" 
+                               FontAttributes="Bold" 
+                               TextColor="#333"/>
+                        <Label Text="{Binding SelectedMove.Content}" 
+                               FontSize="16" 
+                               TextColor="#555" 
+                               LineBreakMode="WordWrap"/>
+
+                        <!-- Skill Level -->
+                        <Label Text="Skill Level:" 
+                               FontSize="16" 
+                               FontAttributes="Bold" 
+                               TextColor="#333"/>
+                        <Label Text="{Binding SelectedMove.SkillLevel}" 
+                               FontSize="16" 
+                               TextColor="#555"/>
+
+                        <!-- Category -->
+                        <Label Text="Category:" 
+                               FontSize="16" 
+                               FontAttributes="Bold" 
+                               TextColor="#333"/>
+                        <Label Text="{Binding SelectedMove.Category}" 
+                               FontSize="16" 
+                               TextColor="#555"/>
+
+                        <!-- Starting Position -->
+                        <Label Text="Starting Position:" 
+                               FontSize="16" 
+                               FontAttributes="Bold" 
+                               TextColor="#333"/>
+                        <Label Text="{Binding SelectedMove.StartingPosition}" 
+                               FontSize="16" 
+                               TextColor="#555"/>
+
+                        <!-- History -->
+                        <Label Text="History:" 
+                               FontSize="16" 
+                               FontAttributes="Bold" 
+                               TextColor="#333"/>
+                        <Label Text="{Binding SelectedMove.History}" 
+                               FontSize="16" 
+                               TextColor="#555" 
+                               LineBreakMode="WordWrap"/>
+
+                        <!-- Scenarios -->
+                        <Label Text="When to Use:" 
+                               FontSize="16" 
+                               FontAttributes="Bold" 
+                               TextColor="#333"/>
+                        <Label Text="{Binding SelectedMove.Scenarios}" 
+                               FontSize="16" 
+                               TextColor="#555" 
+                               LineBreakMode="WordWrap"/>
+
+                        <!-- Counter Strategies -->
+                        <Label Text="Counter Strategies:" 
+                               FontSize="16" 
+                               FontAttributes="Bold" 
+                               TextColor="#333"/>
+                        <Label Text="{Binding SelectedMove.CounterStrategies}" 
+                               FontSize="16" 
+                               TextColor="#555" 
+                               LineBreakMode="WordWrap"/>
+
+                        <!-- Tags -->
+                        <Label Text="Tags:" 
+                               FontSize="16" 
+                               FontAttributes="Bold" 
+                               TextColor="#333"/>
+                        <Label Text="{Binding SelectedMove.TagsString}" 
+                               FontSize="16" 
+                               TextColor="#555"/>
+
+                        <!-- Legal in Competitions -->
+                        <Label Text="Legal in Competitions:" 
+                               FontSize="16" 
+                               FontAttributes="Bold" 
+                               TextColor="#333"/>
+                        <Label Text="{Binding SelectedMove.LegalInCompetitions}" 
+                               FontSize="16" 
+                               TextColor="#555"/>
                     </StackLayout>
                 </Frame>
 
-                <!-- View Button -->
+                <!-- Back Button -->
                 <Button Text="Back to Lessons" 
                         Command="{Binding BackToLessonsCommand}" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>
-
 </ContentPage>
