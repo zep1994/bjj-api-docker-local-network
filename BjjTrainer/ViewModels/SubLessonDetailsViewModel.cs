@@ -9,6 +9,8 @@ namespace BjjTrainer.ViewModels
     {
         private readonly SubLessonService _subLessonService;
         private SubLessonDetailsDto _subLessonDetails;
+        private MoveDto _selectedMove;
+
 
         public ICommand BackToLessonsCommand { get; }
 
@@ -20,6 +22,16 @@ namespace BjjTrainer.ViewModels
             {
                 _subLessonDetails = value;
                 OnPropertyChanged(nameof(SubLessonDetails)); // Trigger UI update
+            }
+        }
+
+        public MoveDto SelectedMove
+        {
+            get => _selectedMove;
+            set
+            {
+                _selectedMove = value;
+                OnPropertyChanged(nameof(SelectedMove)); // Trigger UI update
             }
         }
 
@@ -38,6 +50,12 @@ namespace BjjTrainer.ViewModels
             {
                 SubLessonDetails = await _subLessonService.GetSubLessonDetailsByIdAsync(subLessonId);
                 OnPropertyChanged(nameof(SubLessonDetails));
+
+                // If no moves are selected, set the first move as default
+                if (SubLessonDetails.Moves.Any())
+                {
+                    SelectedMove = SubLessonDetails.Moves.First();
+                }
             }
             catch (Exception ex)
             {

@@ -1,6 +1,5 @@
 using BjjTrainer_API.Data;
 using BjjTrainer_API.Models.User;
-using BjjTrainer_API.Services;
 using BjjTrainer_API.Services_API;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -20,12 +19,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddScoped<TrainingSessionService>();
 builder.Services.AddScoped<LessonService>();
 builder.Services.AddScoped< LessonSectionService>();
 builder.Services.AddScoped<SubLessonService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<JwtTokenService>();
+builder.Services.AddScoped<MoveService>();
+
 
 // In Program.cs or wherever you configure JSON serialization
 builder.Services.AddControllers()

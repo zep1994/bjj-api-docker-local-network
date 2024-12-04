@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using BjjTrainer_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BjjTrainer_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241204141759_CreateMovesTableAndRelations")]
+    partial class CreateMovesTableAndRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -223,6 +226,63 @@ namespace BjjTrainer_API.Migrations
                     b.ToTable("Moves");
                 });
 
+            modelBuilder.Entity("BjjTrainer_API.Models.Training_Sessions.TrainingSession", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<List<string>>("AreasTrained")
+                        .HasColumnType("text[]");
+
+                    b.Property<DateOnly?>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<TimeSpan?>("Duration")
+                        .HasColumnType("interval");
+
+                    b.Property<int?>("IntensityLevel")
+                        .HasColumnType("integer");
+
+                    b.Property<List<string>>("LessonMoves")
+                        .HasColumnType("text[]");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("text");
+
+                    b.Property<List<string>>("MovesTrained")
+                        .HasColumnType("text[]");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<int?>("Rating")
+                        .HasColumnType("integer");
+
+                    b.Property<List<string>>("Tags")
+                        .HasColumnType("text[]");
+
+                    b.Property<string>("TypeOfTraining")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TrainingSessions");
+                });
+
             modelBuilder.Entity("BjjTrainer_API.Models.User.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -363,6 +423,15 @@ namespace BjjTrainer_API.Migrations
                     b.Navigation("LessonSection");
                 });
 
+            modelBuilder.Entity("BjjTrainer_API.Models.Training_Sessions.TrainingSession", b =>
+                {
+                    b.HasOne("BjjTrainer_API.Models.User.ApplicationUser", null)
+                        .WithMany("TrainingSessions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("BjjTrainer_API.Models.Users.RefreshToken", b =>
                 {
                     b.HasOne("BjjTrainer_API.Models.User.ApplicationUser", "User")
@@ -392,6 +461,11 @@ namespace BjjTrainer_API.Migrations
             modelBuilder.Entity("BjjTrainer_API.Models.Moves.Move", b =>
                 {
                     b.Navigation("SubLessonMoves");
+                });
+
+            modelBuilder.Entity("BjjTrainer_API.Models.User.ApplicationUser", b =>
+                {
+                    b.Navigation("TrainingSessions");
                 });
 #pragma warning restore 612, 618
         }

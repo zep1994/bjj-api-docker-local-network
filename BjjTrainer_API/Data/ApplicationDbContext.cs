@@ -1,5 +1,6 @@
-﻿using BjjTrainer_API.Models.Lessons;
-using BjjTrainer_API.Models.Training_Sessions;
+﻿using BjjTrainer_API.Models.Joins;
+using BjjTrainer_API.Models.Lessons;
+using BjjTrainer_API.Models.Moves;
 using BjjTrainer_API.Models.User;
 using BjjTrainer_API.Models.Users;
 using Microsoft.EntityFrameworkCore;
@@ -14,8 +15,9 @@ namespace BjjTrainer_API.Data
         public DbSet<LessonSection> LessonSections { get; set; }
         public DbSet<SubLesson> SubLessons { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-        public DbSet<TrainingSession> TrainingSessions { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Move> Moves { get; set; }
+        public DbSet<SubLessonMove> SubLessonMoves { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -57,11 +59,6 @@ namespace BjjTrainer_API.Data
                 .HasForeignKey(sl => sl.LessonSectionId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<TrainingSession>()
-                .HasOne<ApplicationUser>() 
-                .WithMany(u => u.TrainingSessions) 
-                .HasForeignKey(ts => ts.UserId);
-
             modelBuilder.Entity<ApplicationUser>()
                 .HasMany(u => u.Lessons)
                 .WithMany(l => l.ApplicationUsers)
@@ -84,6 +81,20 @@ namespace BjjTrainer_API.Data
                 .ToTable("Lessons");
             modelBuilder.Entity<SubLesson>()
                 .ToTable("SubLessons");
+
+            // Configure many-to-many relationship between SubLesson and Move
+            modelBuilder.Entity<SubLessonMove>()
+                .HasKey(sl => new { sl.SubLessonId, sl.MoveId });
+
+            modelBuilder.Entity<SubLessonMove>()
+                .HasOne(sl => sl.SubLesson)
+                .WithMany(s => s.SubLessonMoves)
+                .HasForeignKey(sl => sl.SubLessonId);
+
+            modelBuilder.Entity<SubLessonMove>()
+                .HasOne(sl => sl.Move)
+                .WithMany(m => m.SubLessonMoves)
+                .HasForeignKey(sl => sl.MoveId);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using BjjTrainer_API.Models.Joins;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BjjTrainer_API.Models.Lessons
 {
@@ -19,7 +20,6 @@ namespace BjjTrainer_API.Models.Lessons
 
         // Navigation property for the related LessonSection
         public LessonSection? LessonSection { get; set; }
-
-
+        public ICollection<SubLessonMove> SubLessonMoves { get; set; } = new List<SubLessonMove>();
     }
 }

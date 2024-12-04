@@ -85,5 +85,31 @@ namespace BjjTrainer_API.Controllers
 
             return Ok(subLessonDetails); // Returning the DTO with the sub-lesson details
         }
+
+        // Add a Move to a SubLesson
+        [HttpPost("{subLessonId}/moves/{moveId}")]
+        public async Task<IActionResult> AddMoveToSubLesson(int subLessonId, int moveId)
+        {
+            var success = await _subLessonService.AddMoveToSubLessonAsync(subLessonId, moveId);
+            if (!success)
+            {
+                return BadRequest("Failed to associate Move with SubLesson.");
+            }
+
+            return Ok(success);
+        }
+
+        // Remove a Move from a SubLesson
+        [HttpDelete("{subLessonId}/moves/{moveId}")]
+        public async Task<IActionResult> RemoveMoveFromSubLesson(int subLessonId, int moveId)
+        {
+            var success = await _subLessonService.RemoveMoveFromSubLessonAsync(subLessonId, moveId);
+            if (!success)
+            {
+                return BadRequest("Failed to remove Move from SubLesson.");
+            }
+
+            return Ok("This was Deleted");
+        }
     }
 }

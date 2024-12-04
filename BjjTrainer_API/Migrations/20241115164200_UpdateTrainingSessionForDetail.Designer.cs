@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using BjjTrainer_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BjjTrainer_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241115164200_UpdateTrainingSessionForDetail")]
+    partial class UpdateTrainingSessionForDetail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,21 +39,6 @@ namespace BjjTrainer_API.Migrations
                     b.HasIndex("LessonId");
 
                     b.ToTable("ApplicationUserLessonJoin");
-                });
-
-            modelBuilder.Entity("BjjTrainer_API.Models.Joins.SubLessonMove", b =>
-                {
-                    b.Property<int>("SubLessonId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MoveId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("SubLessonId", "MoveId");
-
-                    b.HasIndex("MoveId");
-
-                    b.ToTable("SubLessonMoves");
                 });
 
             modelBuilder.Entity("BjjTrainer_API.Models.Lessons.Lesson", b =>
@@ -168,7 +156,7 @@ namespace BjjTrainer_API.Migrations
                     b.ToTable("SubLessons", (string)null);
                 });
 
-            modelBuilder.Entity("BjjTrainer_API.Models.Moves.Move", b =>
+            modelBuilder.Entity("BjjTrainer_API.Models.Lessons.Technique", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -176,25 +164,37 @@ namespace BjjTrainer_API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Belt")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
                     b.Property<string>("Category")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
                     b.Property<string>("Content")
-                        .HasMaxLength(5000)
-                        .HasColumnType("character varying(5000)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
-                    b.Property<string>("CounterStrategies")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
+                    b.Property<List<string>>("CounterMoves")
+                        .HasColumnType("text[]");
 
                     b.Property<string>("Description")
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<string>("History")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
+                    b.Property<List<string>>("Drills")
+                        .HasColumnType("text[]");
+
+                    b.Property<int?>("EffectivenessRating")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("EnergyExpenditure")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<bool?>("IsGi")
+                        .HasColumnType("boolean");
 
                     b.Property<bool?>("LegalInCompetitions")
                         .HasColumnType("boolean");
@@ -203,24 +203,114 @@ namespace BjjTrainer_API.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Scenarios")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
+                    b.Property<string>("Origin")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Position")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<List<string>>("References")
+                        .HasColumnType("text[]");
+
+                    b.Property<string>("SafetyTips")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<string>("SkillLevel")
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
-                    b.Property<string>("StartingPosition")
+                    b.Property<string>("SubmissionType")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
                     b.Property<List<string>>("Tags")
                         .HasColumnType("text[]");
 
+                    b.Property<string>("Type")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Moves");
+                    b.ToTable("Techniques");
+                });
+
+            modelBuilder.Entity("BjjTrainer_API.Models.Training_Sessions.TrainingSession", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<List<string>>("AreasOfImprovement")
+                        .HasColumnType("text[]");
+
+                    b.Property<List<string>>("AreasTrained")
+                        .HasColumnType("text[]");
+
+                    b.Property<string>("Belt")
+                        .HasColumnType("text");
+
+                    b.Property<DateOnly?>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<TimeSpan?>("Duration")
+                        .HasColumnType("interval");
+
+                    b.Property<int?>("IntensityLevel")
+                        .HasColumnType("integer");
+
+                    b.Property<List<string>>("LessonMoves")
+                        .HasColumnType("text[]");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("text");
+
+                    b.Property<List<string>>("MovesTrained")
+                        .HasColumnType("text[]");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<List<string>>("Prerequisites")
+                        .HasColumnType("text[]");
+
+                    b.Property<int?>("Rating")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Rounds")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Submissions")
+                        .HasColumnType("integer");
+
+                    b.Property<List<string>>("Tags")
+                        .HasColumnType("text[]");
+
+                    b.Property<int?>("Taps")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TypeOfTraining")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TrainingSessions");
                 });
 
             modelBuilder.Entity("BjjTrainer_API.Models.User.ApplicationUser", b =>
@@ -283,21 +373,19 @@ namespace BjjTrainer_API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime?>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("Expires")
+                    b.Property<DateTime?>("Expires")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("Revoked")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Token")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -322,25 +410,6 @@ namespace BjjTrainer_API.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BjjTrainer_API.Models.Joins.SubLessonMove", b =>
-                {
-                    b.HasOne("BjjTrainer_API.Models.Moves.Move", "Move")
-                        .WithMany("SubLessonMoves")
-                        .HasForeignKey("MoveId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BjjTrainer_API.Models.Lessons.SubLesson", "SubLesson")
-                        .WithMany("SubLessonMoves")
-                        .HasForeignKey("SubLessonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Move");
-
-                    b.Navigation("SubLesson");
-                });
-
             modelBuilder.Entity("BjjTrainer_API.Models.Lessons.LessonSection", b =>
                 {
                     b.HasOne("BjjTrainer_API.Models.Lessons.Lesson", "Lesson")
@@ -363,13 +432,20 @@ namespace BjjTrainer_API.Migrations
                     b.Navigation("LessonSection");
                 });
 
+            modelBuilder.Entity("BjjTrainer_API.Models.Training_Sessions.TrainingSession", b =>
+                {
+                    b.HasOne("BjjTrainer_API.Models.User.ApplicationUser", null)
+                        .WithMany("TrainingSessions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("BjjTrainer_API.Models.Users.RefreshToken", b =>
                 {
                     b.HasOne("BjjTrainer_API.Models.User.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -384,14 +460,9 @@ namespace BjjTrainer_API.Migrations
                     b.Navigation("SubLessons");
                 });
 
-            modelBuilder.Entity("BjjTrainer_API.Models.Lessons.SubLesson", b =>
+            modelBuilder.Entity("BjjTrainer_API.Models.User.ApplicationUser", b =>
                 {
-                    b.Navigation("SubLessonMoves");
-                });
-
-            modelBuilder.Entity("BjjTrainer_API.Models.Moves.Move", b =>
-                {
-                    b.Navigation("SubLessonMoves");
+                    b.Navigation("TrainingSessions");
                 });
 #pragma warning restore 612, 618
         }
