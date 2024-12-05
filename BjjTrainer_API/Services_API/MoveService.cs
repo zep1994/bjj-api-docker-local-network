@@ -22,16 +22,16 @@ namespace BjjTrainer_API.Services_API
                 {
                     Id = m.Id,
                     Name = m.Name,
-                    Description = m.Description,
-                    Content = m.Content,
-                    SkillLevel = m.SkillLevel,
-                    Category = m.Category,
-                    StartingPosition = m.StartingPosition,
-                    History = m.History,
-                    Scenarios = m.Scenarios,
-                    CounterStrategies = m.CounterStrategies,
-                    Tags = m.Tags,
-                    LegalInCompetitions = m.LegalInCompetitions
+                    //Description = m.Description,
+                    //Content = m.Content,
+                    //SkillLevel = m.SkillLevel,
+                    //Category = m.Category,
+                    //StartingPosition = m.StartingPosition,
+                    //History = m.History,
+                    //Scenarios = m.Scenarios,
+                    //CounterStrategies = m.CounterStrategies,
+                    //Tags = m.Tags,
+                    //LegalInCompetitions = m.LegalInCompetitions
                 })
                 .ToListAsync();
         }

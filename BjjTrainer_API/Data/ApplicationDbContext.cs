@@ -1,7 +1,6 @@
 ﻿using BjjTrainer_API.Models.Joins;
 using BjjTrainer_API.Models.Lessons;
 using BjjTrainer_API.Models.Moves;
-using BjjTrainer_API.Models.User;
 using BjjTrainer_API.Models.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +17,9 @@ namespace BjjTrainer_API.Data
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Move> Moves { get; set; }
         public DbSet<SubLessonMove> SubLessonMoves { get; set; }
+        public DbSet<TrainingLog> TrainingLogs { get; set; }
+        public DbSet<TrainingLogMove> TrainingLogMoves { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -95,6 +97,27 @@ namespace BjjTrainer_API.Data
                 .HasOne(sl => sl.Move)
                 .WithMany(m => m.SubLessonMoves)
                 .HasForeignKey(sl => sl.MoveId);
+
+            // Configure TrainingLogMove join table
+            modelBuilder.Entity<TrainingLogMove>()
+                .HasKey(tlm => new { tlm.TrainingLogId, tlm.MoveId });
+
+            modelBuilder.Entity<TrainingLogMove>()
+                .HasOne(tlm => tlm.TrainingLog)
+                .WithMany(tl => tl.TrainingLogMoves)
+                .HasForeignKey(tlm => tlm.TrainingLogId);
+
+            modelBuilder.Entity<TrainingLogMove>()
+                .HasOne(tlm => tlm.Move)
+                .WithMany(m => m.TrainingLogMoves)
+                .HasForeignKey(tlm => tlm.MoveId);
+
+            // TrainingLog -> ApplicationUser
+            modelBuilder.Entity<TrainingLog>()
+                .HasOne(t => t.ApplicationUser)
+                .WithMany(u => u.TrainingLogs) // Ensure ApplicationUser has a TrainingLogs collection
+                .HasForeignKey(t => t.ApplicationUserId)
+                .OnDelete(DeleteBehavior.Cascade); // Adjust deletion behavior as needed
         }
     }
 }

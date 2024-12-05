@@ -1,0 +1,64 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BjjTrainer.Views.Training.TrainingLogFormPage"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+             Title="Training Log">
+
+    <ScrollView>
+        <StackLayout Padding="10" Spacing="10">
+            <!-- Date -->
+            <Label Text="Date" />
+            <DatePicker x:Name="DatePicker" 
+                        Date="{Binding Date, Mode=TwoWay}" 
+                        MinimumDate="{x:Static sys:DateTime.Today}" />
+
+            <!-- Training Time -->
+            <Entry x:Name="TrainingTimeEntry" 
+                   Placeholder="Enter training time (e.g., HH.MM)" 
+                   Keyboard="Numeric" 
+                   Text="{Binding TrainingTime, Mode=TwoWay}" />
+
+            <!-- Rounds Rolled -->
+            <Entry x:Name="RoundsRolledEntry" 
+                   Placeholder="Enter rounds rolled" 
+                   Keyboard="Numeric" 
+                   Text="{Binding RoundsRolled, Mode=TwoWay}" />
+
+            <!-- Submissions -->
+            <Entry x:Name="SubmissionsEntry" 
+                   Placeholder="Enter submissions" 
+                   Keyboard="Numeric" 
+                   Text="{Binding Submissions, Mode=TwoWay}" />
+
+            <!-- Taps -->
+            <Entry x:Name="TapsEntry" 
+                   Placeholder="Enter taps" 
+                   Keyboard="Numeric" 
+                   Text="{Binding Taps, Mode=TwoWay}" />
+
+            <!-- Notes -->
+            <Editor x:Name="NotesEditor" 
+                    Placeholder="Enter session notes" 
+                    AutoSize="TextChanges" 
+                    Text="{Binding Notes, Mode=TwoWay}" />
+
+            <!-- Moves -->
+            <CollectionView x:Name="MovesCollectionView" 
+                            SelectionMode="Multiple" 
+                            HeightRequest="200" 
+                            ItemsSource="{Binding Moves}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Orientation="Horizontal" Padding="5">
+                            <CheckBox IsChecked="{Binding IsSelected}" />
+                            <Label Text="{Binding Name}" VerticalOptions="Center" />
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Submit Button -->
+            <Button Text="Submit" Clicked="OnSubmitButtonClicked" />
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

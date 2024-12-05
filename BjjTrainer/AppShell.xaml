@@ -72,9 +72,5 @@
     <ShellContent Route="SubLessonDetailsPage" ContentTemplate="{DataTemplate lessons:SubLessonDetailsPage}" />
     <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate users:LoginPage}" />
     <ShellContent Route="FavoritesPage" ContentTemplate="{DataTemplate users:FavoritesPage}" />
-    <ShellContent Route="UserProfilePage" ContentTemplate="{DataTemplate users:UserProfilePage}" />
-    <ShellContent Route="TrainingSessionListPage" ContentTemplate="{DataTemplate train:TrainingSessionListPage}" />
-    <ShellContent Route="TrainingSessionDetailPage" ContentTemplate="{DataTemplate train:TrainingSessionDetailPage}" />
-    <ShellContent Route="TrainingSessionCreatePage" ContentTemplate="{DataTemplate train:TrainingSessionCreatePage}" />
-
+    <ShellContent Route="TrainingLogFormPage" ContentTemplate="{DataTemplate train:TrainingLogFormPage}" />
 </Shell>

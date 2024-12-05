@@ -88,13 +88,7 @@
 	  <MauiXaml Update="Views\Lessons\SubLessonPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Training\TrainingSessionCreatePage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Training\TrainingSessionDetailPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Training\TrainingSessionListPage.xaml">
+	  <MauiXaml Update="Views\Training\TrainingLogFormPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Users\FavoritesPage.xaml">
@@ -112,6 +106,10 @@
 	  <MauiXaml Update="Views\Users\UserProfilePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Models\Training\" />
 	</ItemGroup>
 
 	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionBjjTrainerHideInfoBar="True" /></VisualStudio></ProjectExtensions>
