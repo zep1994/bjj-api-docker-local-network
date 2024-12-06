@@ -1,4 +1,7 @@
-﻿namespace BjjTrainer.Models.Lessons
+﻿using BjjTrainer.Models.DTO;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace BjjTrainer.Models.Lessons
 {
     public class SubLesson
     {
@@ -11,8 +14,13 @@
         public List<string> Tags { get; set; }
         public string SkillLevel { get; set; }
         public string Notes { get; set; }
+
+        [ForeignKey("LessonSection")]
         public int LessonSectionId { get; set; }
-        public LessonSection LessonSection { get; set; }
+        public LessonSection? LessonSection { get; set; }
+
+        public List<MoveDto> Moves { get; set; } = new List<MoveDto>();
+
     }
 
 }
