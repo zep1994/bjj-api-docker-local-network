@@ -73,4 +73,5 @@
     <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate users:LoginPage}" />
     <ShellContent Route="FavoritesPage" ContentTemplate="{DataTemplate users:FavoritesPage}" />
     <ShellContent Route="TrainingLogFormPage" ContentTemplate="{DataTemplate train:TrainingLogFormPage}" />
+    <ShellContent Route="UserProgressPage" ContentTemplate="{DataTemplate users:UserProgressPage}" />
 </Shell>

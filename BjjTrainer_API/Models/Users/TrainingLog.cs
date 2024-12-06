@@ -1,4 +1,5 @@
 ﻿using BjjTrainer_API.Models.Joins;
+using BjjTrainer_API.Models.Moves;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BjjTrainer_API.Models.Users
@@ -13,7 +14,7 @@ namespace BjjTrainer_API.Models.Users
         public ApplicationUser ApplicationUser { get; set; }
 
         [Column(TypeName = "date")] // Use 'date' type for PostgreSQL
-        public DateOnly Date { get; set; } // Change to DateOnly
+        public DateTime Date { get; set; } // Change to DateOnly
 
         // Training metrics for this session
         public double TrainingTime { get; set; } // Time in minutes

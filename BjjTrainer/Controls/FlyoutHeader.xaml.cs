@@ -33,6 +33,11 @@ namespace BjjTrainer.Controls
         private async void OnAccountClicked(object sender, EventArgs e)
         {
             await Shell.Current.GoToAsync("//UserProfilePage");
-        }        
+        }
+
+        private async void OnProgressDashClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//UserProgressPage");
+        }
     }
 }

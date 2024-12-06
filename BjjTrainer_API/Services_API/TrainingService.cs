@@ -1,6 +1,10 @@
 ﻿using BjjTrainer_API.Data;
+using BjjTrainer_API.Models.DTO;
 using BjjTrainer_API.Models.Joins;
+using BjjTrainer_API.Models.Moves;
 using BjjTrainer_API.Models.Users;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace BjjTrainer_API.Services_API
 {
@@ -50,6 +54,67 @@ namespace BjjTrainer_API.Services_API
 
             await _context.SaveChangesAsync();
         }
-    }
 
+        public async Task<UserProgressDto> GetUserProgressAsync(string applicationUserId)
+        {
+            try
+            {
+                // Fetch all necessary data in a single query
+                var userProgressData = await _context.TrainingLogs
+                    .Where(log => log.ApplicationUserId == applicationUserId)
+                    .Select(log => new
+                    {
+                        log.TrainingTime,
+                        log.RoundsRolled,
+                        log.Submissions,
+                        log.Taps,
+                        Moves = log.TrainingLogMoves
+                            .GroupBy(tlm => tlm.MoveId)
+                            .Select(g => new
+                            {
+                                MoveId = g.Key,
+                                TrainingLogCount = g.Count(),
+                                MoveDetails = g.Select(tlm => tlm.Move).FirstOrDefault()
+                            })
+                    })
+                    .ToListAsync();
+
+                // Aggregate data from the query
+                var totalTrainingTime = userProgressData.Sum(log => log.TrainingTime);
+                var totalRoundsRolled = userProgressData.Sum(log => log.RoundsRolled);
+                var totalSubmissions = userProgressData.Sum(log => log.Submissions);
+                var totalTaps = userProgressData.Sum(log => log.Taps);
+
+                var movesPerformed = userProgressData
+                    .SelectMany(log => log.Moves)
+                    .GroupBy(move => move.MoveId)
+                    .Select(group => new MoveDto
+                    {
+                        Id = group.Key,
+                        Name = group.First().MoveDetails.Name,
+                        Description = group.First().MoveDetails.Description,
+                        SkillLevel = group.First().MoveDetails.SkillLevel,
+                        TrainingLogCount = group.Sum(m => m.TrainingLogCount)
+                    })
+                    .ToList();
+
+                // Assign to the DTO
+                var userProgress = new UserProgressDto
+                {
+                    TotalTrainingTime = totalTrainingTime,
+                    TotalRoundsRolled = totalRoundsRolled,
+                    TotalSubmissions = totalSubmissions,
+                    TotalTaps = totalTaps,
+                    MovesPerformed = movesPerformed // Ensure type alignment
+                };
+
+                return userProgress;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("An error occurred while fetching user progress.", ex);
+            }
+        }
+
+    }
 }

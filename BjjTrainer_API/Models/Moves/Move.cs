@@ -1,5 +1,7 @@
 ﻿using BjjTrainer_API.Models.Joins;
+using BjjTrainer_API.Models.Users;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BjjTrainer_API.Models.Moves
 {
@@ -45,6 +47,5 @@ namespace BjjTrainer_API.Models.Moves
 
         // Relationship with TrainingLogs
         public ICollection<TrainingLogMove> TrainingLogMoves { get; set; } = new List<TrainingLogMove>();
-
     }
 }

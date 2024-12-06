@@ -25,6 +25,6 @@
         public string? CounterStrategies { get; set; }
 
         public List<string>? Tags { get; set; } = new List<string>();
-
+        public int TrainingLogCount { get; internal set; }
     }
 }

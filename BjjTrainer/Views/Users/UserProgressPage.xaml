@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BjjTrainer.Views.Users.UserProgressPage"
+             Title="UserProgressPage"
+             BackgroundColor="#F9F9F9"
+             Loaded="OnPageLoaded">
+
+    <ContentPage.Content>
+        <ScrollView>
+            <VerticalStackLayout Padding="20" Spacing="20">
+                <!-- Page Title -->
+                <Label Text="User Progress"
+                       FontSize="32"
+                       FontAttributes="Bold"
+                       TextColor="#333"
+                       HorizontalOptions="Center" />
+
+                <!-- Training Summary Section -->
+                <Frame BorderColor="#DADADA" CornerRadius="10" Padding="15" BackgroundColor="White">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Training Summary" 
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#555" />
+
+                        <!-- Individual Rows for Data -->
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="Total Training Time:" FontSize="16" TextColor="#666" />
+                            <Label Text="{Binding TotalTrainingTime}" FontSize="16" TextColor="#222" />
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="Total Rounds Rolled:" FontSize="16" TextColor="#666" />
+                            <Label Text="{Binding TotalRoundsRolled}" FontSize="16" TextColor="#222" />
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="Total Submissions:" FontSize="16" TextColor="#666" />
+                            <Label Text="{Binding TotalSubmissions}" FontSize="16" TextColor="#222" />
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="Total Taps:" FontSize="16" TextColor="#666" />
+                            <Label Text="{Binding TotalTaps}" FontSize="16" TextColor="#222" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Moves Performed Section -->
+                <Label Text="Moves Performed"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="#555"
+                       HorizontalOptions="Start" />
+
+                <CollectionView ItemsSource="{Binding MovesPerformed}"
+                                BackgroundColor="Transparent">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BorderColor="#DADADA" CornerRadius="10" Padding="15" Margin="0,5" BackgroundColor="White">
+                                <VerticalStackLayout Spacing="5">
+                                    <Label Text="{Binding Name}" 
+                                           FontSize="18" 
+                                           FontAttributes="Bold"
+                                           TextColor="#333" />
+
+                                    <Label Text="{Binding Description}" 
+                                           FontSize="14"
+                                           TextColor="#666"
+                                           LineBreakMode="WordWrap" />
+
+                                    <HorizontalStackLayout Spacing="10">
+                                        <Label Text="Skill Level:" FontSize="14" TextColor="#444" />
+                                        <Label Text="{Binding SkillLevel}" FontSize="14" TextColor="#222" />
+                                    </HorizontalStackLayout>
+
+                                    <HorizontalStackLayout Spacing="10">
+                                        <Label Text="Times Practiced:" FontSize="14" TextColor="#444" />
+                                        <Label Text="{Binding TrainingLogCount}" FontSize="14" TextColor="#222" />
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

@@ -3,7 +3,7 @@
     public class CreateTrainingLogDto
     {
         public string ApplicationUserId { get; set; }
-        public DateOnly Date { get; set; }
+        public DateTime Date { get; set; }
         public double TrainingTime { get; set; }
         public int RoundsRolled { get; set; }
         public int Submissions { get; set; }

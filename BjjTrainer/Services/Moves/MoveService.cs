@@ -12,7 +12,6 @@ namespace BjjTrainer.Services.Moves
             {
                 var response = await HttpClient.GetAsync("moves");
                 var responseContent = await response.Content.ReadAsStringAsync();
-                Console.WriteLine($"Error Response: {responseContent}");
 
                 response.EnsureSuccessStatusCode();
 
