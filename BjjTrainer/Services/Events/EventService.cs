@@ -1,5 +1,4 @@
 ﻿using BjjTrainer.Models.DTO.Events;
-using BjjTrainer.Models.Events;
 using System.Text;
 using System.Text.Json;
 
@@ -34,7 +33,7 @@ namespace BjjTrainer.Services.Events
             }
         }
 
-        public async Task<CalendarEvent> GetEventByIdAsync(int eventId)
+        public async Task<CalendarEventDto> GetEventByIdAsync(int eventId)
         {
             try
             {
@@ -44,7 +43,7 @@ namespace BjjTrainer.Services.Events
                 if (response.IsSuccessStatusCode)
                 {
                     var eventJson = await response.Content.ReadAsStringAsync();
-                    return JsonSerializer.Deserialize<CalendarEvent>(eventJson);
+                    return JsonSerializer.Deserialize<CalendarEventDto>(eventJson);
                 }
 
                 var errorMessage = await response.Content.ReadAsStringAsync();
@@ -56,7 +55,7 @@ namespace BjjTrainer.Services.Events
             }
         }
 
-        public async Task<bool> UpdateEventAsync(int eventId, CalendarEvent updatedEvent)
+        public async Task<bool> UpdateEventAsync(int eventId, CalendarEventDto updatedEvent)
         {
             try
             {
