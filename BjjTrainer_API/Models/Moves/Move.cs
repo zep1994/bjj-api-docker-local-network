@@ -1,5 +1,7 @@
 ﻿using BjjTrainer_API.Models.Joins;
+using BjjTrainer_API.Models.Users;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BjjTrainer_API.Models.Moves
 {
@@ -38,8 +40,12 @@ namespace BjjTrainer_API.Models.Moves
         public List<string>? Tags { get; set; } = new List<string>(); // Keywords for filtering
 
         public bool? LegalInCompetitions { get; set; } // Legal in Comp?
+                                                       // Track how many training logs include this move
+        public int TrainingLogCount { get; set; } = 0;
 
         public ICollection<SubLessonMove> SubLessonMoves { get; set; } = new List<SubLessonMove>();
 
+        // Relationship with TrainingLogs
+        public ICollection<TrainingLogMove> TrainingLogMoves { get; set; } = new List<TrainingLogMove>();
     }
 }

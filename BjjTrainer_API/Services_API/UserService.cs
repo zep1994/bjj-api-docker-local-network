@@ -1,6 +1,5 @@
 ﻿using BjjTrainer_API.Data;
 using BjjTrainer_API.Models.Lessons;
-using BjjTrainer_API.Models.User;
 using BjjTrainer_API.Models.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

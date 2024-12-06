@@ -3,9 +3,8 @@ using BjjTrainer.Services.Lessons;
 using BjjTrainer.Services.Training;
 using BjjTrainer.Services.Users;
 using BjjTrainer.ViewModels;
-using BjjTrainer.ViewModels.Training;
+using BjjTrainer.ViewModels.Users;
 using BjjTrainer.Views.Lessons;
-using BjjTrainer.Views.Training;
 using BjjTrainer.Views.Users;
 
 namespace BjjTrainer
@@ -48,13 +47,12 @@ namespace BjjTrainer
             builder.Services.AddTransient<SubLessonDetailsPage>();
 
             //Register Training
-            builder.Services.AddSingleton<TrainingSessionService>();
-            builder.Services.AddTransient<TrainingSessionListViewModel>();
-            builder.Services.AddTransient<TrainingSessionDetailViewModel>();
-            builder.Services.AddTransient<TrainingSessionListPage>();
-            builder.Services.AddTransient<TrainingSessionDetailPage>();
-            builder.Services.AddTransient<TrainingSessionCreatePage>();
-            builder.Services.AddTransient<TrainingSessionCreateViewModel>();
+            builder.Services.AddSingleton<TrainingService>();
+
+            // Register Users
+            builder.Services.AddSingleton<UserProgressService>();
+            builder.Services.AddTransient<UserProgressViewModel>();
+            builder.Services.AddTransient<UserProgressPage>();
 
 
 

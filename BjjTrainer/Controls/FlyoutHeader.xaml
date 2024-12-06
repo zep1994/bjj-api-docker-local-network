@@ -34,12 +34,19 @@
                     HorizontalOptions="Start"
                     Clicked="OnFavoriteLessonsClicked" />
 
-            <!-- Favorite Lessons Button -->
+            <!-- Training Logs Button -->
             <Button Text="Training Log"
                     BackgroundColor="Transparent"
                     TextColor="White"
                     HorizontalOptions="Start"
                     Clicked="OnTrainingLogClicked" />
+
+            <!-- Progress Dashboard Button -->
+            <Button Text="Progress Dashboard"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    HorizontalOptions="Start"
+                    Clicked="OnProgressDashClicked" />
 
             <!-- Logout Button -->
             <Button Text="Logout"

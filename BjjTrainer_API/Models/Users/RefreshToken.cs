@@ -1,5 +1,4 @@
-﻿using BjjTrainer_API.Models.User;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BjjTrainer_API.Models.Users
 {
