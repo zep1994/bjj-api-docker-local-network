@@ -1,4 +1,5 @@
-﻿using BjjTrainer_API.Models.Lessons;
+﻿using BjjTrainer_API.Models.Calendar;
+using BjjTrainer_API.Models.Lessons;
 using BjjTrainer_API.Models.Moves;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,6 +9,8 @@ namespace BjjTrainer_API.Models.Users
     [Table("ApplicationUsers")]
     public class ApplicationUser : IdentityUser
     {
+        // Navigation property for the one-to-many relationship
+        public ICollection<CalendarEvent> CalendarEvents { get; set; } = new HashSet<CalendarEvent>();
         // Track lessons the user has engaged with
         public ICollection<Lesson> Lessons { get; set; } = new List<Lesson>();
 

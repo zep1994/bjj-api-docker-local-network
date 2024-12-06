@@ -1,6 +1,7 @@
 using BjjTrainer_API.Data;
 using BjjTrainer_API.Models.Users;
 using BjjTrainer_API.Services_API;
+using BjjTrainer_API.Services_API.Calendar;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -20,12 +21,13 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddScoped<LessonService>();
-builder.Services.AddScoped< LessonSectionService>();
+builder.Services.AddScoped<LessonSectionService>();
 builder.Services.AddScoped<SubLessonService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddScoped<MoveService>();
 builder.Services.AddScoped<TrainingService>();
+builder.Services.AddScoped<CalendarService>();
 
 // In Program.cs or wherever you configure JSON serialization
 builder.Services.AddControllers()

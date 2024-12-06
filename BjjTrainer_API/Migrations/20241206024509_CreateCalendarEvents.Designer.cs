@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using BjjTrainer_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BjjTrainer_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241206024509_CreateCalendarEvents")]
+    partial class CreateCalendarEvents
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,19 +56,17 @@ namespace BjjTrainer_API.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("CalendarEvents");
                 });
@@ -445,17 +446,6 @@ namespace BjjTrainer_API.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BjjTrainer_API.Models.Calendar.CalendarEvent", b =>
-                {
-                    b.HasOne("BjjTrainer_API.Models.Users.ApplicationUser", "ApplicationUser")
-                        .WithMany("CalendarEvents")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-                });
-
             modelBuilder.Entity("BjjTrainer_API.Models.Joins.SubLessonMove", b =>
                 {
                     b.HasOne("BjjTrainer_API.Models.Moves.Move", "Move")
@@ -569,8 +559,6 @@ namespace BjjTrainer_API.Migrations
 
             modelBuilder.Entity("BjjTrainer_API.Models.Users.ApplicationUser", b =>
                 {
-                    b.Navigation("CalendarEvents");
-
                     b.Navigation("Moves");
 
                     b.Navigation("TrainingLogs");
