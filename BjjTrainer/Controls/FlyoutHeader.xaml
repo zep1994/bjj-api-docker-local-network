@@ -48,6 +48,13 @@
                     HorizontalOptions="Start"
                     Clicked="OnProgressDashClicked" />
 
+            <!-- Calendar and Event Button -->
+            <Button Text="Calendar"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    HorizontalOptions="Start"
+                    Clicked="OnCalendarClicked" />
+
             <!-- Logout Button -->
             <Button Text="Logout"
                     BackgroundColor="Transparent"

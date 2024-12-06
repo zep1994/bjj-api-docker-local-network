@@ -39,5 +39,10 @@ namespace BjjTrainer.Controls
         {
             await Shell.Current.GoToAsync("//UserProgressPage");
         }
+
+        private async void OnCalendarClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//CalendarPage");
+        }
     }
 }

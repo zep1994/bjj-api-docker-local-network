@@ -1,4 +1,5 @@
-﻿using BjjTrainer_API.Models.Joins;
+﻿using BjjTrainer_API.Models.Calendar;
+using BjjTrainer_API.Models.Joins;
 using BjjTrainer_API.Models.Lessons;
 using BjjTrainer_API.Models.Moves;
 using BjjTrainer_API.Models.Users;
@@ -19,6 +20,7 @@ namespace BjjTrainer_API.Data
         public DbSet<SubLessonMove> SubLessonMoves { get; set; }
         public DbSet<TrainingLog> TrainingLogs { get; set; }
         public DbSet<TrainingLogMove> TrainingLogMoves { get; set; }
+        public DbSet<CalendarEvent> CalendarEvents { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -63,7 +65,7 @@ namespace BjjTrainer_API.Data
 
             modelBuilder.Entity<ApplicationUser>()
                 .HasMany(u => u.Lessons)
-                .WithMany(l => l.ApplicationUsers)
+                .WithMany(l => l.ApplicationUser)
                 .UsingEntity<Dictionary<string, object>>(
                     "ApplicationUserLessonJoin",
                     j => j
@@ -115,9 +117,15 @@ namespace BjjTrainer_API.Data
             // TrainingLog -> ApplicationUser
             modelBuilder.Entity<TrainingLog>()
                 .HasOne(t => t.ApplicationUser)
-                .WithMany(u => u.TrainingLogs) // Ensure ApplicationUser has a TrainingLogs collection
+                .WithMany(u => u.TrainingLogs) 
                 .HasForeignKey(t => t.ApplicationUserId)
-                .OnDelete(DeleteBehavior.Cascade); // Adjust deletion behavior as needed
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CalendarEvent>()
+                    .HasOne(e => e.ApplicationUser)        
+                    .WithMany(u => u.CalendarEvents)     
+                    .HasForeignKey(e => e.ApplicationUserId) 
+                    .OnDelete(DeleteBehavior.Cascade); 
         }
     }
 }
