@@ -15,25 +15,9 @@ namespace BjjTrainer_API.Services_API
         }
 
         // Retrieve all moves
-        public async Task<List<MoveDto>> GetAllMovesAsync()
+        public async Task<List<Move>> GetAllMovesAsync()
         {
-            return await _context.Moves
-                .Select(m => new MoveDto
-                {
-                    Id = m.Id,
-                    Name = m.Name,
-                    //Description = m.Description,
-                    //Content = m.Content,
-                    //SkillLevel = m.SkillLevel,
-                    //Category = m.Category,
-                    //StartingPosition = m.StartingPosition,
-                    //History = m.History,
-                    //Scenarios = m.Scenarios,
-                    //CounterStrategies = m.CounterStrategies,
-                    //Tags = m.Tags,
-                    //LegalInCompetitions = m.LegalInCompetitions
-                })
-                .ToListAsync();
+            return await _context.Moves.ToListAsync();
         }
 
         // Retrieve a move by ID

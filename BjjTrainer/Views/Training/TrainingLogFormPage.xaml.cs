@@ -1,4 +1,3 @@
-using BjjTrainer.Services;
 using BjjTrainer.Services.Training;
 using BjjTrainer.ViewModels.Training;
 

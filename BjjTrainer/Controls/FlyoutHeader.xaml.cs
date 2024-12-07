@@ -38,6 +38,11 @@ namespace BjjTrainer.Controls
         private async void OnProgressDashClicked(object sender, EventArgs e)
         {
             await Shell.Current.GoToAsync("//UserProgressPage");
+        }        
+        
+        private async void OnMovesClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//MovesPage");
         }
 
         private async void OnCalendarClicked(object sender, EventArgs e)

@@ -1,5 +1,5 @@
-﻿using BjjTrainer.Services.Moves;
-using BjjTrainer.ViewModels.Moves;
+﻿using BjjTrainer.Models.Move;
+using BjjTrainer.Services.Moves;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -9,7 +9,7 @@ namespace BjjTrainer.ViewModels.Training
     public class TrainingLogFormViewModel : INotifyPropertyChanged
     {
         private readonly MoveService _moveService;
-        public ObservableCollection<MoveViewModel> Moves { get; private set; }
+        public ObservableCollection<Move> Moves { get; private set; } = new ObservableCollection<Move>();
 
         private string _notes;
         public string Notes
@@ -57,7 +57,6 @@ namespace BjjTrainer.ViewModels.Training
         public TrainingLogFormViewModel()
         {
             _moveService = new MoveService();
-            Moves = new ObservableCollection<MoveViewModel>();
             LoadMovesAsync();
         }
 
@@ -65,11 +64,10 @@ namespace BjjTrainer.ViewModels.Training
         {
             try
             {
-                var moves = await _moveService.GetMovesAsync();
+                var moves = await _moveService.GetAllMovesAsync();
                 Moves.Clear();
                 foreach (var move in moves)
                 {
-                    Console.WriteLine($"Move Loaded: {move.Name}"); // Debugging
                     Moves.Add(move);
                 }
             }

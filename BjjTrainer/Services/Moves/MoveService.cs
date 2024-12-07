@@ -1,34 +1,19 @@
 ﻿using BjjTrainer.Models.Move;
-using BjjTrainer.ViewModels.Moves;
-using System.Text.Json;
+using System.Net.Http.Json;
 
 namespace BjjTrainer.Services.Moves
 {
     public class MoveService : ApiService
     {
-        public async Task<List<MoveViewModel>> GetMovesAsync()
+        public async Task<List<Move>> GetAllMovesAsync()
         {
             try
             {
-                var response = await HttpClient.GetAsync("moves");
-                var responseContent = await response.Content.ReadAsStringAsync();
-
-                response.EnsureSuccessStatusCode();
-
-                var json = await response.Content.ReadAsStringAsync();
-
-                // Deserialize API response into a list of MoveViewModel
-                var moves = JsonSerializer.Deserialize<List<MoveResponse>>(json);
-
-                return moves.Select(move => new MoveViewModel
-                {
-                    Id = move.Id,
-                    Name = move.Name
-                }).ToList();
+                return await HttpClient.GetFromJsonAsync<List<Move>>("moves") ?? new List<Move>();
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Failed to fetch moves", ex);
+                throw new Exception($"Error fetching moves: {ex.Message}");
             }
         }
     }

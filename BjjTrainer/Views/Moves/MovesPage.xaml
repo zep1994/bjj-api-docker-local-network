@@ -1,0 +1,22 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BjjTrainer.Views.Moves.MovesPage">
+
+    <RefreshView Command="{Binding LoadMovesCommand}" IsRefreshing="{Binding IsBusy}">
+        <CollectionView ItemsSource="{Binding Moves}" VerticalOptions="FillAndExpand">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="10" Padding="10" BackgroundColor="LightGray" CornerRadius="10">
+                        <StackLayout>
+                            <Label Text="{Binding Name}" FontSize="20" FontAttributes="Bold" TextColor="Black" />
+                            <Label Text="{Binding Description}" FontSize="14" TextColor="DarkGray" />
+                            <Label Text="{Binding SkillLevel, StringFormat='Skill Level: {0}'}" FontSize="12" TextColor="Blue" />
+                            <Label Text="{Binding Category, StringFormat='Category: {0}'}" FontSize="12" TextColor="Green" />
+                            <Label Text="{Binding TrainingLogCount, StringFormat='Used {0} times'}" FontSize="12" TextColor="Purple" />
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>

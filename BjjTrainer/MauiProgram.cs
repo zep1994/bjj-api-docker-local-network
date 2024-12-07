@@ -1,10 +1,13 @@
 ﻿using BjjTrainer.Services;
 using BjjTrainer.Services.Lessons;
+using BjjTrainer.Services.Moves;
 using BjjTrainer.Services.Training;
 using BjjTrainer.Services.Users;
 using BjjTrainer.ViewModels;
+using BjjTrainer.ViewModels.Moves;
 using BjjTrainer.ViewModels.Users;
 using BjjTrainer.Views.Lessons;
+using BjjTrainer.Views.Moves;
 using BjjTrainer.Views.Users;
 
 namespace BjjTrainer
@@ -53,6 +56,11 @@ namespace BjjTrainer
             builder.Services.AddSingleton<UserProgressService>();
             builder.Services.AddTransient<UserProgressViewModel>();
             builder.Services.AddTransient<UserProgressPage>();
+
+            // Register Moves
+            builder.Services.AddSingleton<MoveService>();
+            builder.Services.AddTransient<MovesViewModel>();
+            builder.Services.AddTransient<MovesPage>();
 
 
 
