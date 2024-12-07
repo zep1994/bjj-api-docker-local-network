@@ -34,7 +34,7 @@ namespace BjjTrainer.ViewModels
             catch (Exception ex)
             {
                 // You can add logging here
-                await Application.Current.MainPage.DisplayAlert("Error", "Failed to load sublessons.", "OK");
+                await Application.Current.MainPage.DisplayAlert("Error",$"{ex}", "OK");
             }
         }
     }

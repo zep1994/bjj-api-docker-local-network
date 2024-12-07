@@ -1,4 +1,4 @@
-﻿using BjjTrainer.Models.DTO;
+﻿using BjjTrainer.Models.Move;
 using BjjTrainer.Services.Users;
 using MvvmHelpers;
 using System.Collections.ObjectModel;
@@ -9,7 +9,6 @@ namespace BjjTrainer.ViewModels.Users
     public class UserProgressViewModel : BaseViewModel
     {
         private readonly UserProgressService _userProgressService;
-
         public ObservableCollection<MoveDto> MovesPerformed { get; set; } = new ObservableCollection<MoveDto>();
 
         private string _totalTrainingTime;

@@ -24,6 +24,7 @@ namespace BjjTrainer.Services.Lessons
         public async Task<SubLessonDetailsDto> GetSubLessonDetailsByIdAsync(int subLessonId)
         {
             var response = await HttpClient.GetAsync($"sublessons/{subLessonId}/details");
+            Console.WriteLine($"API Response: {response}");
             response.EnsureSuccessStatusCode();
 
             var options = new JsonSerializerOptions

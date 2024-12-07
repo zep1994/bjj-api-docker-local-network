@@ -55,6 +55,14 @@
                     HorizontalOptions="Start"
                     Clicked="OnCalendarClicked" />
 
+            <!-- Movces Button -->
+            <Button Text="Moves"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    HorizontalOptions="Start"
+                    Clicked="OnMovesClicked" />
+
+            
             <!-- Logout Button -->
             <Button Text="Logout"
                     BackgroundColor="Transparent"

@@ -8,6 +8,7 @@
     xmlns:views="clr-namespace:BjjTrainer.Views"
     xmlns:lessons="clr-namespace:BjjTrainer.Views.Lessons"
     xmlns:users="clr-namespace:BjjTrainer.Views.Users"
+    xmlns:moves="clr-namespace:BjjTrainer.Views.Moves"
     xmlns:events="clr-namespace:BjjTrainer.Views.Events"
     xmlns:train="clr-namespace:BjjTrainer.Views.Training"
     xmlns:viewModels="clr-namespace:BjjTrainer.ViewModels"
@@ -77,4 +78,5 @@
     <ShellContent Route="UserProfilePage" ContentTemplate="{DataTemplate users:UserProfilePage}" />
     <ShellContent Route="UserProgressPage" ContentTemplate="{DataTemplate users:UserProgressPage}" />
     <ShellContent Route="CalendarPage" ContentTemplate="{DataTemplate events:CalendarPage}" />
+    <ShellContent Route="MovesPage" ContentTemplate="{DataTemplate moves:MovesPage}" />
 </Shell>

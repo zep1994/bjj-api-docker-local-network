@@ -1,6 +1,8 @@
 ﻿using BjjTrainer.Models.DTO;
+using BjjTrainer.Models.Move;
 using BjjTrainer.Services.Lessons;
 using MvvmHelpers;
+using System.Diagnostics;
 using System.Windows.Input;
 
 namespace BjjTrainer.ViewModels
@@ -48,20 +50,33 @@ namespace BjjTrainer.ViewModels
         {
             try
             {
+                Debug.WriteLine($"Start loading SubLesson ID: {subLessonId}");
                 SubLessonDetails = await _subLessonService.GetSubLessonDetailsByIdAsync(subLessonId);
-                OnPropertyChanged(nameof(SubLessonDetails));
 
-                // If no moves are selected, set the first move as default
-                if (SubLessonDetails.Moves.Any())
+                if (SubLessonDetails == null)
                 {
-                    SelectedMove = SubLessonDetails.Moves.First();
+                    Debug.WriteLine("SubLessonDetails is null.");
+                    throw new Exception("SubLessonDetails could not be fetched.");
                 }
+
+                Debug.WriteLine($"SubLesson Title: {SubLessonDetails.Title}");
+                if (SubLessonDetails.Moves == null || !SubLessonDetails.Moves.Any())
+                {
+                    Debug.WriteLine("No moves available.");
+                    SubLessonDetails.Moves = new List<MoveDto>();
+                }
+
+                SelectedMove = SubLessonDetails.Moves.FirstOrDefault();
+                Debug.WriteLine($"Selected Move: {SelectedMove?.Name ?? "None"}");
             }
             catch (Exception ex)
             {
+                Debug.WriteLine($"Error: {ex.Message}");
                 await Application.Current.MainPage.DisplayAlert("Error", "Failed to load sublesson details.", "OK");
             }
         }
+
+
 
         private async void OnBackToLessons()
         {

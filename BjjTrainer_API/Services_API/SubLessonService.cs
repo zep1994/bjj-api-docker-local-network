@@ -2,6 +2,7 @@
 using BjjTrainer_API.Models.DTO;
 using BjjTrainer_API.Models.Joins;
 using BjjTrainer_API.Models.Lessons;
+using BjjTrainer_API.Models.Moves;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,7 +50,7 @@ namespace BjjTrainer_API.Services_API
                 {
                     Id = subLesson.Id,
                     Title = subLesson.Title,
-                    Moves = subLesson.SubLessonMoves.Select(m => new MoveDto
+                    Moves = subLesson.SubLessonMoves.Select(m => new Move
                     {
                         Id = m.Move.Id,
                         Name = m.Move.Name,
