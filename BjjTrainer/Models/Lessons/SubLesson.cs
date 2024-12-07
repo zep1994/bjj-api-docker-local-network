@@ -1,4 +1,4 @@
-﻿using BjjTrainer.Models.DTO;
+﻿using BjjTrainer.Models.Move;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BjjTrainer.Models.Lessons

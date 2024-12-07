@@ -1,4 +1,6 @@
-﻿namespace BjjTrainer_API.Models.DTO
+﻿using BjjTrainer_API.Models.Moves;
+
+namespace BjjTrainer_API.Models.DTO
 {
     public class SubLessonDetailsDto
     {
@@ -8,6 +10,6 @@
 
         public string Notes { get; set; } = string.Empty;
 
-        public List<MoveDto> Moves { get; set; } = new List<MoveDto>();
+        public List<Move> Moves { get; set; } = new List<Move>();
     }
 }

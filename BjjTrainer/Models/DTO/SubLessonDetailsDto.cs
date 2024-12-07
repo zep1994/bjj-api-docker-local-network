@@ -1,4 +1,6 @@
-﻿namespace BjjTrainer.Models.DTO
+﻿using BjjTrainer.Models.Move;
+
+namespace BjjTrainer.Models.DTO
 {
     public class SubLessonDetailsDto
     {

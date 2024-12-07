@@ -53,13 +53,7 @@ namespace BjjTrainer_API.Services_API
                 Description = move.Description,
                 Content = move.Content,
                 SkillLevel = move.SkillLevel,
-                Category = move.Category,
-                StartingPosition = move.StartingPosition,
-                History = move.History,
-                Scenarios = move.Scenarios,
-                CounterStrategies = move.CounterStrategies,
-                Tags = move.Tags,
-                LegalInCompetitions = move.LegalInCompetitions
+                Tags = move.Tags
             };
         }
 
@@ -72,13 +66,7 @@ namespace BjjTrainer_API.Services_API
                 Description = moveDto.Description,
                 Content = moveDto.Content,
                 SkillLevel = moveDto.SkillLevel,
-                Category = moveDto.Category,
-                StartingPosition = moveDto.StartingPosition,
-                History = moveDto.History,
-                Scenarios = moveDto.Scenarios,
-                CounterStrategies = moveDto.CounterStrategies,
-                Tags = moveDto.Tags,
-                LegalInCompetitions = moveDto.LegalInCompetitions
+                Tags = moveDto.Tags
             };
 
             _context.Moves.Add(move);
@@ -98,13 +86,7 @@ namespace BjjTrainer_API.Services_API
             move.Description = moveDto.Description;
             move.Content = moveDto.Content;
             move.SkillLevel = moveDto.SkillLevel;
-            move.Category = moveDto.Category;
-            move.StartingPosition = moveDto.StartingPosition;
-            move.History = moveDto.History;
-            move.Scenarios = moveDto.Scenarios;
-            move.CounterStrategies = moveDto.CounterStrategies;
             move.Tags = moveDto.Tags;
-            move.LegalInCompetitions = moveDto.LegalInCompetitions;
 
             _context.Entry(move).State = EntityState.Modified;
             await _context.SaveChangesAsync();
@@ -136,13 +118,7 @@ namespace BjjTrainer_API.Services_API
                     Description = slm.Move.Description,
                     Content = slm.Move.Content,
                     SkillLevel = slm.Move.SkillLevel,
-                    Category = slm.Move.Category,
-                    StartingPosition = slm.Move.StartingPosition,
-                    History = slm.Move.History,
-                    Scenarios = slm.Move.Scenarios,
-                    CounterStrategies = slm.Move.CounterStrategies,
-                    Tags = slm.Move.Tags,
-                    LegalInCompetitions = slm.Move.LegalInCompetitions
+                    Tags = slm.Move.Tags
                 })
                 .ToListAsync();
         }
