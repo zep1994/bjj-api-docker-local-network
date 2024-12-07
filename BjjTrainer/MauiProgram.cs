@@ -6,7 +6,7 @@ using BjjTrainer.Services.Trainings;
 using BjjTrainer.Services.Users;
 using BjjTrainer.ViewModels;
 using BjjTrainer.ViewModels.Moves;
-using BjjTrainer.ViewModels.Trainings;
+using BjjTrainer.ViewModels.TrainingGoals;
 using BjjTrainer.ViewModels.Users;
 using BjjTrainer.Views.Events;
 using BjjTrainer.Views.Lessons;
@@ -59,6 +59,8 @@ namespace BjjTrainer
             builder.Services.AddSingleton<TrainingGoalService>();
             builder.Services.AddTransient<UserProgressViewModel>();
             builder.Services.AddTransient<TrainingGoalViewModel>();
+            builder.Services.AddTransient<TrainingGoalListViewModel>();
+            builder.Services.AddTransient<TrainingGoalListPage>();
             builder.Services.AddTransient<TrainingGoalPage>();
             builder.Services.AddTransient<TrainingLogFormPage>();
 

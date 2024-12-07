@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BjjTrainer.Views.Users.LoginPage"
              Shell.BackgroundColor="{StaticResource Primary}"
-             Title="LoginPage">
+             Title="Login Page">
     <ContentPage.Content>
         <Grid Padding="20" BackgroundColor="{StaticResource BackgroundLight}">
             <Grid.RowDefinitions>

@@ -11,13 +11,21 @@ namespace BjjTrainer.Services.TrainingGoals
             try
             {
                 var response = await HttpClient.PostAsJsonAsync("traininggoal/create", dto);
-                return response.IsSuccessStatusCode;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorDetails = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"API error: {response.StatusCode} - {errorDetails}");
+                }
+
+                return true;
             }
             catch (Exception ex)
             {
                 throw new Exception($"Failed to create training goal: {ex.Message}");
             }
         }
+
 
         public async Task<List<TrainingGoal>> GetTrainingGoalsAsync(string userId)
         {

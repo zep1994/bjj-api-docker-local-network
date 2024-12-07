@@ -1,25 +1,33 @@
-﻿<!-- MainPage.xaml -->
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BjjTrainer.Views.MainPage"
-             BackgroundColor="#F5F5F5"
-             Title="Main Page">
+             Title="BJJ Trainer"
+             BackgroundColor="#F3F4F6">
+
+    <ContentPage.Resources>
+        <Style TargetType="Button" x:Key="NavButtonStyle">
+            <Setter Property="BackgroundColor" Value="#007AFF" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="HeightRequest" Value="50" />
+            <Setter Property="Margin" Value="10" />
+        </Style>
+    </ContentPage.Resources>
+
     <ContentPage.Content>
         <ScrollView>
-            <StackLayout Spacing="30" Padding="20">
-                <!-- Page Header -->
-                <Label Text="Jiu-Jitsu Tracker" 
-                       FontSize="32" 
-                       FontAttributes="Bold" 
-                       HorizontalOptions="Center" 
-                       TextColor="#4CAF50" />
-                <Label Text="Plan your training, track progress, and master techniques!" 
-                       FontSize="18" 
-                       HorizontalOptions="Center" 
-                       TextColor="#757575" />
+            <VerticalStackLayout Padding="20" Spacing="15">
+                <Label Text="Welcome to BJJ Trainer!"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       TextColor="#007AFF"
+                       Margin="0,0,0,20" />
 
-                <!-- Navigation Grid -->
-                <Grid ColumnSpacing="15" RowSpacing="15" Padding="10">
+                <!-- Buttons -->
+                <Grid ColumnSpacing="10" RowSpacing="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -31,22 +39,15 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <!-- Buttons -->
                     <Button Grid.Row="0" Grid.Column="0" Text="Lessons" Style="{StaticResource NavButtonStyle}" Clicked="OnLessonsClicked" />
                     <Button Grid.Row="0" Grid.Column="1" Text="Training Log" Style="{StaticResource NavButtonStyle}" Clicked="OnTrainingLogClicked" />
-
-                    <Button Grid.Row="1" Grid.Column="0" Text="User's Lessons" Style="{StaticResource NavButtonStyle}" Clicked="OnUserLessonsClicked" />
+                    <Button Grid.Row="1" Grid.Column="0" Text="Goals" Style="{StaticResource NavButtonStyle}" Clicked="OnGoalsClicked" />
                     <Button Grid.Row="1" Grid.Column="1" Text="User Progress" Style="{StaticResource NavButtonStyle}" Clicked="OnUserProgressClicked" />
-
                     <Button Grid.Row="2" Grid.Column="0" Text="Calendar" Style="{StaticResource NavButtonStyle}" Clicked="OnCalendarClicked" />
-                    <Button Grid.Row="2" Grid.Column="1" Text="Achievements" Style="{StaticResource NavButtonStyle}" Clicked="OnAchievementsClicked" />
-
-                    <Button Grid.Row="3" Grid.Column="0" Text="Training Goals" Style="{StaticResource NavButtonStyle}" Clicked="OnTrainingGoalsClicked" />
-                    <Button Grid.Row="3" Grid.Column="1" Text="Moves" Style="{StaticResource NavButtonStyle}" Clicked="OnMovesClicked" />
-
-                    <Button Grid.Row="4" Grid.ColumnSpan="2" Text="Account" Style="{StaticResource NavButtonStyle}" Clicked="OnAccountClicked" />
+                    <Button Grid.Row="2" Grid.Column="1" Text="Moves" Style="{StaticResource NavButtonStyle}" Clicked="OnMovesClicked" />
+                    <Button Grid.Row="3" Grid.Column="1" Text="Account" Style="{StaticResource NavButtonStyle}" Clicked="OnAccountClicked" />
                 </Grid>
-            </StackLayout>
+            </VerticalStackLayout>
         </ScrollView>
     </ContentPage.Content>
 </ContentPage>

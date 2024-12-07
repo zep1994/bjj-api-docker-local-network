@@ -17,9 +17,9 @@
             await Shell.Current.GoToAsync("//TrainingLogFormPage");
         }
 
-        private async void OnUserLessonsClicked(object sender, EventArgs e)
+        private async void OnGoalsClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("//FavoritesPage");
+            await Shell.Current.GoToAsync("//TrainingGoalListPage");
         }
 
         private async void OnUserProgressClicked(object sender, EventArgs e)
@@ -30,16 +30,6 @@
         private async void OnCalendarClicked(object sender, EventArgs e)
         {
             await Shell.Current.GoToAsync("//CalendarPage");
-        }
-
-        private async void OnAchievementsClicked(object sender, EventArgs e)
-        {
-            await Shell.Current.GoToAsync("//AchievementsPage");
-        }
-
-        private async void OnTrainingGoalsClicked(object sender, EventArgs e)
-        {
-            await Shell.Current.GoToAsync("//TrainingGoalsPage");
         }
 
         private async void OnMovesClicked(object sender, EventArgs e)

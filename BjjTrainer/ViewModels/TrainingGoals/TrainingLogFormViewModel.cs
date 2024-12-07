@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace BjjTrainer.ViewModels.Trainings
+namespace BjjTrainer.ViewModels.TrainingGoals
 {
     public class TrainingLogFormViewModel : INotifyPropertyChanged
     {

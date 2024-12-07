@@ -2,79 +2,78 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BjjTrainer.Controls.FlyoutHeader">
-    <Grid BackgroundColor="Black">
-        <Image Aspect="AspectFill" 
-               Opacity="0.6" />
-        <StackLayout Padding="10" VerticalOptions="StartAndExpand" HorizontalOptions="StartAndExpand">
-            <Label Text="Menu" 
-                   TextColor="White" 
-                   FontAttributes="Bold" 
-                   HorizontalTextAlignment="Start"
-                   VerticalTextAlignment="Center" 
-                   FontSize="24" />
+    <Grid BackgroundColor="#007AFF">
+        <!-- Background Image -->
+        <!--<Image Aspect="AspectFill" 
+               Source="header_background.png"
+               Opacity="0.5" />-->
 
-            <!-- Home Button -->
-            <Button Text="Home"
-                    BackgroundColor="Transparent"
-                    TextColor="White"
-                    HorizontalOptions="Start"
-                    Clicked="OnHomeButtonClicked" />
+        <!-- Main Content -->
+        <StackLayout Padding="20" Spacing="10" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <!-- App Title -->
+            <Label Text="BJJ Trainer"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalTextAlignment="Start" />
 
-            <!-- Account Button -->
-            <Button Text="Account"
-                    BackgroundColor="Transparent"
-                    TextColor="White"
-                    HorizontalOptions="Start"
-                    Clicked="OnAccountClicked" />
-
-            <!-- Favorite Lessons Button -->
-            <Button Text="Favorite Lessons"
-                    BackgroundColor="Transparent"
-                    TextColor="White"
-                    HorizontalOptions="Start"
-                    Clicked="OnFavoriteLessonsClicked" />
-
-            <!-- Training Logs Button -->
-            <Button Text="Training Log"
-                    BackgroundColor="Transparent"
-                    TextColor="White"
-                    HorizontalOptions="Start"
-                    Clicked="OnTrainingLogClicked" />
-
-            <!-- Progress Dashboard Button -->
-            <Button Text="Progress Dashboard"
-                    BackgroundColor="Transparent"
-                    TextColor="White"
-                    HorizontalOptions="Start"
-                    Clicked="OnProgressDashClicked" />
-
-            <!-- Calendar and Event Button -->
-            <Button Text="Calendar"
-                    BackgroundColor="Transparent"
-                    TextColor="White"
-                    HorizontalOptions="Start"
-                    Clicked="OnCalendarClicked" />
-
-            <!-- Movces Button -->
-            <Button Text="Moves"
-                    BackgroundColor="Transparent"
-                    TextColor="White"
-                    HorizontalOptions="Start"
-                    Clicked="OnMovesClicked" />
-
-            <!-- Goals Button -->
-            <Button Text="Your Goals"
-                    BackgroundColor="Transparent"
-                    TextColor="White"
-                    HorizontalOptions="Start"
-                    Clicked="OnGoalsClicked" />
-
-            <!-- Logout Button -->
-            <Button Text="Logout"
-                    BackgroundColor="Transparent"
-                    TextColor="White"
-                    HorizontalOptions="Start"
-                    Clicked="OnLogoutButtonClicked" />
+            <!-- Navigation Buttons -->
+            <StackLayout Spacing="5">
+                <Button Text="Home"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Start"
+                        Clicked="OnHomeButtonClicked" />
+                <Button Text="Account"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Start"
+                        Clicked="OnAccountClicked" />
+                <Button Text="Favorite Lessons"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Start"
+                        Clicked="OnFavoriteLessonsClicked" />
+                <Button Text="Training Log"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Start"
+                        Clicked="OnTrainingLogClicked" />
+                <Button Text="Progress Dashboard"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Start"
+                        Clicked="OnProgressDashClicked" />
+                <Button Text="Calendar"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Start"
+                        Clicked="OnCalendarClicked" />
+                <Button Text="Moves"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Start"
+                        Clicked="OnMovesClicked" />
+                <Button Text="Your Goals"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Start"
+                        Clicked="OnGoalsClicked" />
+                <Button Text="Logout"
+                        BackgroundColor="Transparent"
+                        TextColor="#FF6347"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Start"
+                        Clicked="OnLogoutButtonClicked" />
+            </StackLayout>
         </StackLayout>
     </Grid>
 </ContentView>

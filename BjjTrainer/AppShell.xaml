@@ -22,17 +22,21 @@
     </Shell.FlyoutHeader>
 
     <!-- Unique routes for each page -->
-    <ShellContent Route="MainPage" ContentTemplate="{DataTemplate views:MainPage}" />
-    <ShellContent Route="LessonsPage" ContentTemplate="{DataTemplate lessons:LessonsPage}" />
+    <ShellContent Title="Main" Route="MainPage" ContentTemplate="{DataTemplate views:MainPage}" />
+    <ShellContent Title="Lessons" Route="LessonsPage" ContentTemplate="{DataTemplate lessons:LessonsPage}" />
     <ShellContent Route="SubLessonPage" ContentTemplate="{DataTemplate lessons:SubLessonPage}" />
     <ShellContent Route="SubLessonDetailsPage" ContentTemplate="{DataTemplate lessons:SubLessonDetailsPage}" />
     <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate users:LoginPage}" />
     <ShellContent Route="FavoritesPage" ContentTemplate="{DataTemplate users:FavoritesPage}" />
-    <ShellContent Route="TrainingLogFormPage" ContentTemplate="{DataTemplate train:TrainingLogFormPage}" />
-    <ShellContent Route="UserProfilePage" ContentTemplate="{DataTemplate users:UserProfilePage}" />
-    <ShellContent Route="UserProgressPage" ContentTemplate="{DataTemplate users:UserProgressPage}" />
-    <ShellContent Route="CalendarPage" ContentTemplate="{DataTemplate events:CalendarPage}" />
-    <ShellContent Route="MovesPage" ContentTemplate="{DataTemplate moves:MovesPage}" />
-    <ShellContent Title="TrainingGoalPage" ContentTemplate="{DataTemplate goals:TrainingGoalPage}" />
+    <ShellContent Title="Training Log" Route="TrainingLogFormPage" ContentTemplate="{DataTemplate train:TrainingLogFormPage}" />
+    <ShellContent Title="Account" Route="UserProfilePage" ContentTemplate="{DataTemplate users:UserProfilePage}" />
+    <ShellContent Title="Progress" Route="UserProgressPage" ContentTemplate="{DataTemplate users:UserProgressPage}" />
+    <ShellContent Title="Calendar" Route="CalendarPage" ContentTemplate="{DataTemplate events:CalendarPage}" />
+    <ShellContent Title="Moves" Route="MovesPage" ContentTemplate="{DataTemplate moves:MovesPage}" />
+    <ShellContent Title="Training Goals" 
+                  Route="TrainingGoalListPage" 
+                  ContentTemplate="{DataTemplate goals:TrainingGoalListPage}" />
 
+    <ShellContent Route="TrainingGoalPage" 
+                  ContentTemplate="{DataTemplate goals:TrainingGoalPage}" />
 </Shell>
