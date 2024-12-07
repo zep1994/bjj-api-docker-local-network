@@ -2,9 +2,7 @@
 using BjjTrainer.Services.Lessons;
 using BjjTrainer.Services.Users;
 using MvvmHelpers;
-using MvvmHelpers.Commands;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 
 namespace BjjTrainer.ViewModels
 {

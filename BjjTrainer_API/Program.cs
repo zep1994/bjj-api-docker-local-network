@@ -1,7 +1,11 @@
 using BjjTrainer_API.Data;
 using BjjTrainer_API.Models.Users;
-using BjjTrainer_API.Services_API;
-using BjjTrainer_API.Services_API.Calendar;
+using BjjTrainer_API.Services_API.Calendars;
+using BjjTrainer_API.Services_API.Goals;
+using BjjTrainer_API.Services_API.Lessons;
+using BjjTrainer_API.Services_API.Moves;
+using BjjTrainer_API.Services_API.Trainings;
+using BjjTrainer_API.Services_API.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +31,7 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddScoped<MoveService>();
 builder.Services.AddScoped<TrainingService>();
+builder.Services.AddScoped<TrainingGoalService>();
 builder.Services.AddScoped<CalendarService>();
 
 // In Program.cs or wherever you configure JSON serialization

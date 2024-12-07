@@ -45,6 +45,11 @@ namespace BjjTrainer.Controls
             await Shell.Current.GoToAsync("//MovesPage");
         }
 
+        private async void OnGoalsClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//TrainingGoalPage");
+        }
+        
         private async void OnCalendarClicked(object sender, EventArgs e)
         {
             await Shell.Current.GoToAsync("//CalendarPage");

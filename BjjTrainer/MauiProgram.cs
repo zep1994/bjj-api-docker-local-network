@@ -1,13 +1,18 @@
 ﻿using BjjTrainer.Services;
 using BjjTrainer.Services.Lessons;
 using BjjTrainer.Services.Moves;
-using BjjTrainer.Services.Training;
+using BjjTrainer.Services.TrainingGoals;
+using BjjTrainer.Services.Trainings;
 using BjjTrainer.Services.Users;
 using BjjTrainer.ViewModels;
 using BjjTrainer.ViewModels.Moves;
+using BjjTrainer.ViewModels.Trainings;
 using BjjTrainer.ViewModels.Users;
+using BjjTrainer.Views.Events;
 using BjjTrainer.Views.Lessons;
 using BjjTrainer.Views.Moves;
+using BjjTrainer.Views.Training;
+using BjjTrainer.Views.TrainingGoals;
 using BjjTrainer.Views.Users;
 
 namespace BjjTrainer
@@ -51,6 +56,14 @@ namespace BjjTrainer
 
             //Register Training
             builder.Services.AddSingleton<TrainingService>();
+            builder.Services.AddSingleton<TrainingGoalService>();
+            builder.Services.AddTransient<UserProgressViewModel>();
+            builder.Services.AddTransient<TrainingGoalViewModel>();
+            builder.Services.AddTransient<TrainingGoalPage>();
+            builder.Services.AddTransient<TrainingLogFormPage>();
+
+            // Register Calendar
+            builder.Services.AddTransient<CalendarPage>();
 
             // Register Users
             builder.Services.AddSingleton<UserProgressService>();

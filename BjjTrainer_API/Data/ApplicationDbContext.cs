@@ -1,7 +1,9 @@
-﻿using BjjTrainer_API.Models.Calendar;
+﻿using BjjTrainer_API.Models.Calendars;
+using BjjTrainer_API.Models.Goals;
 using BjjTrainer_API.Models.Joins;
 using BjjTrainer_API.Models.Lessons;
 using BjjTrainer_API.Models.Moves;
+using BjjTrainer_API.Models.Trainings;
 using BjjTrainer_API.Models.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,7 +23,8 @@ namespace BjjTrainer_API.Data
         public DbSet<TrainingLog> TrainingLogs { get; set; }
         public DbSet<TrainingLogMove> TrainingLogMoves { get; set; }
         public DbSet<CalendarEvent> CalendarEvents { get; set; }
-
+        public DbSet<TrainingGoal> TrainingGoals { get; set; }
+        public DbSet<UserTrainingGoalMove> UserTrainingGoalMoves { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -125,7 +128,28 @@ namespace BjjTrainer_API.Data
                     .HasOne(e => e.ApplicationUser)        
                     .WithMany(u => u.CalendarEvents)     
                     .HasForeignKey(e => e.ApplicationUserId) 
-                    .OnDelete(DeleteBehavior.Cascade); 
+                    .OnDelete(DeleteBehavior.Cascade);
+
+            // TrainingGoal -> Move
+            // Configure many-to-many relationship
+            modelBuilder.Entity<UserTrainingGoalMove>()
+                .HasKey(utgm => new { utgm.TrainingGoalId, utgm.MoveId });
+
+            modelBuilder.Entity<UserTrainingGoalMove>()
+                .HasOne(utgm => utgm.TrainingGoal)
+                .WithMany(tg => tg.UserTrainingGoalMoves)
+                .HasForeignKey(utgm => utgm.TrainingGoalId);
+
+            modelBuilder.Entity<UserTrainingGoalMove>()
+                .HasOne(utgm => utgm.Move)
+                .WithMany(m => m.UserTrainingGoalMoves)
+                .HasForeignKey(utgm => utgm.MoveId);
+
+            // Configure one-to-many relationship with ApplicationUser
+            modelBuilder.Entity<TrainingGoal>()
+                .HasOne(tg => tg.ApplicationUser)
+                .WithMany(au => au.TrainingGoals)
+                .HasForeignKey(tg => tg.ApplicationUserId);
         }
     }
 }

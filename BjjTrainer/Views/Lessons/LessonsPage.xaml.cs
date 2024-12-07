@@ -36,6 +36,7 @@ namespace BjjTrainer.Views.Lessons
         private async void OnAddToFavoritesClicked(object sender, EventArgs e)
         {
             var button = (Button)sender;
+            button.Clicked -= OnAddToFavoritesClicked; // Detach if dynamically created
             var lessonId = (int)button.CommandParameter;
 
             bool isAddedToFavorites = await _viewModel.AddToFavoritesAsync(lessonId);

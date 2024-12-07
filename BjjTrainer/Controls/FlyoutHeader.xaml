@@ -62,7 +62,13 @@
                     HorizontalOptions="Start"
                     Clicked="OnMovesClicked" />
 
-            
+            <!-- Goals Button -->
+            <Button Text="Your Goals"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    HorizontalOptions="Start"
+                    Clicked="OnGoalsClicked" />
+
             <!-- Logout Button -->
             <Button Text="Logout"
                     BackgroundColor="Transparent"

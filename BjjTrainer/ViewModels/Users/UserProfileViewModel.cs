@@ -7,13 +7,94 @@ namespace BjjTrainer.ViewModels.Users
     {
         private readonly UserService _userService;
 
-        public string Username { get; set; }
-        public string Email { get; set; }
+        private string username;
+        public string Username
+        {
+            get => username;
+            set => SetProperty(ref username, value);
+        }
+
+        private string email;
+        public string Email
+        {
+            get => email;
+            set => SetProperty(ref email, value);
+        }
+
+        private string belt = "White";
+        public string Belt
+        {
+            get => belt;
+            set => SetProperty(ref belt, value);
+        }
+
+        private int beltStripes;
+        public int BeltStripes
+        {
+            get => beltStripes;
+            set => SetProperty(ref beltStripes, value);
+        }
+
+        private int trainingHoursThisWeek;
+        public int TrainingHoursThisWeek
+        {
+            get => trainingHoursThisWeek;
+            set => SetProperty(ref trainingHoursThisWeek, value);
+        }
+
+        private string preferredTrainingStyle;
+        public string PreferredTrainingStyle
+        {
+            get => preferredTrainingStyle;
+            set => SetProperty(ref preferredTrainingStyle, value);
+        }
+
+        private string profilePictureUrl;
+        public string ProfilePictureUrl
+        {
+            get => profilePictureUrl;
+            set => SetProperty(ref profilePictureUrl, value);
+        }
+
+        private DateTime? lastLoginDate;
+        public DateTime? LastLoginDate
+        {
+            get => lastLoginDate;
+            set => SetProperty(ref lastLoginDate, value);
+        }
+
+        private int totalSubmissions;
+        public int TotalSubmissions
+        {
+            get => totalSubmissions;
+            set => SetProperty(ref totalSubmissions, value);
+        }
+
+        private int totalTaps;
+        public int TotalTaps
+        {
+            get => totalTaps;
+            set => SetProperty(ref totalTaps, value);
+        }
+
+        private double totalTrainingTime;
+        public double TotalTrainingTime
+        {
+            get => totalTrainingTime;
+            set => SetProperty(ref totalTrainingTime, value);
+        }
+
+        private int totalRoundsRolled;
+        public int TotalRoundsRolled
+        {
+            get => totalRoundsRolled;
+            set => SetProperty(ref totalRoundsRolled, value);
+        }
 
         public UserProfileViewModel()
         {
             _userService = new UserService();
-            LoadUserDataAsync();
+            _ = LoadUserDataAsync();
         }
 
         private async Task LoadUserDataAsync()
@@ -26,10 +107,31 @@ namespace BjjTrainer.ViewModels.Users
 
                 if (user != null)
                 {
-                    Username = user.Username;
+                    Username = user.UserName;
                     Email = user.Email;
+                    Belt = user.Belt;
+                    BeltStripes = user.BeltStripes;
+                    TrainingHoursThisWeek = user.TrainingHoursThisWeek;
+                    PreferredTrainingStyle = user.PreferredTrainingStyle;
+                    ProfilePictureUrl = user.ProfilePictureUrl;
+                    LastLoginDate = user.LastLoginDate;
+                    TotalSubmissions = user.TotalSubmissions;
+                    TotalTaps = user.TotalTaps;
+                    TotalTrainingTime = user.TotalTrainingTime;
+                    TotalRoundsRolled = user.TotalRoundsRolled;
+
                     OnPropertyChanged(nameof(Username));
                     OnPropertyChanged(nameof(Email));
+                    OnPropertyChanged(nameof(Belt));
+                    OnPropertyChanged(nameof(BeltStripes));
+                    OnPropertyChanged(nameof(TrainingHoursThisWeek));
+                    OnPropertyChanged(nameof(PreferredTrainingStyle));
+                    OnPropertyChanged(nameof(ProfilePictureUrl));
+                    OnPropertyChanged(nameof(LastLoginDate));
+                    OnPropertyChanged(nameof(TotalSubmissions));
+                    OnPropertyChanged(nameof(TotalTaps));
+                    OnPropertyChanged(nameof(TotalTrainingTime));
+                    OnPropertyChanged(nameof(TotalRoundsRolled));
                 }
             }
         }

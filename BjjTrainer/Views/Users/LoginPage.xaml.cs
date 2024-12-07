@@ -17,6 +17,10 @@ public partial class LoginPage : ContentPage
         await Navigation.PushAsync(new SignupPage());
     }
 
+    private async void OnForgotPasswordTapped(object sender, EventArgs e)
+    {
+        await DisplayAlert("Forgot Password", "Password recovery process here.", "OK");
+    }
 
     private async void OnLoginClicked(object sender, EventArgs e)
     {

@@ -1,5 +1,5 @@
 ﻿using BjjTrainer_API.Models.Moves;
-using BjjTrainer_API.Models.Users;
+using BjjTrainer_API.Models.Trainings;
 
 namespace BjjTrainer_API.Models.Joins
 {

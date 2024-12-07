@@ -9,6 +9,7 @@ namespace BjjTrainer.ViewModels.Users
     public class UserProgressViewModel : BaseViewModel
     {
         private readonly UserProgressService _userProgressService;
+
         public ObservableCollection<MoveDto> MovesPerformed { get; set; } = new ObservableCollection<MoveDto>();
 
         private string _totalTrainingTime;

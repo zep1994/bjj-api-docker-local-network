@@ -1,22 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BjjTrainer.Views.Moves.MovesPage">
+             x:Class="BjjTrainer.Views.Moves.MovesPage"
+             Title="Moves"
+             BackgroundColor="#F3F4F6">
 
-    <RefreshView Command="{Binding LoadMovesCommand}" IsRefreshing="{Binding IsBusy}">
-        <CollectionView ItemsSource="{Binding Moves}" VerticalOptions="FillAndExpand">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame Margin="10" Padding="10" BackgroundColor="LightGray" CornerRadius="10">
-                        <StackLayout>
-                            <Label Text="{Binding Name}" FontSize="20" FontAttributes="Bold" TextColor="Black" />
-                            <Label Text="{Binding Description}" FontSize="14" TextColor="DarkGray" />
-                            <Label Text="{Binding SkillLevel, StringFormat='Skill Level: {0}'}" FontSize="12" TextColor="Blue" />
-                            <Label Text="{Binding Category, StringFormat='Category: {0}'}" FontSize="12" TextColor="Green" />
-                            <Label Text="{Binding TrainingLogCount, StringFormat='Used {0} times'}" FontSize="12" TextColor="Purple" />
-                        </StackLayout>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </RefreshView>
+    <ContentPage.Resources>
+        <!-- Label Styles -->
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="TextColor" Value="#333" />
+        </Style>
+
+        <!-- Frame/Card Style -->
+        <Style TargetType="Frame">
+            <Setter Property="CornerRadius" Value="15" />
+            <Setter Property="Padding" Value="15" />
+            <Setter Property="BackgroundColor" Value="White" />
+            <Setter Property="BorderColor" Value="#E0E0E0" />
+            <Setter Property="HasShadow" Value="True" />
+        </Style>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <RefreshView Command="{Binding LoadMovesCommand}" IsRefreshing="{Binding IsBusy}">
+            <CollectionView ItemsSource="{Binding Moves}" 
+                            VerticalOptions="FillAndExpand"
+                            BackgroundColor="Transparent">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="10">
+                            <VerticalStackLayout Spacing="10">
+                                <!-- Move Name -->
+                                <Label Text="{Binding Name}" 
+                                       FontSize="20" 
+                                       FontAttributes="Bold" 
+                                       TextColor="#007AFF" />
+
+                                <!-- Move Description -->
+                                <Label Text="{Binding Description}" 
+                                       FontSize="14" 
+                                       TextColor="#555"
+                                       LineBreakMode="WordWrap" />
+
+                                <!-- Additional Details -->
+                                <HorizontalStackLayout Spacing="10">
+                                    <Label Text="Skill Level:" FontSize="14" FontAttributes="Bold" TextColor="#444" />
+                                    <Label Text="{Binding SkillLevel}" FontSize="14" TextColor="#007AFF" />
+                                </HorizontalStackLayout>
+
+                                <HorizontalStackLayout Spacing="10">
+                                    <Label Text="Category:" FontSize="14" FontAttributes="Bold" TextColor="#444" />
+                                    <Label Text="{Binding Category}" FontSize="14" TextColor="#32CD32" />
+                                </HorizontalStackLayout>
+
+                                <HorizontalStackLayout Spacing="10">
+                                    <Label Text="Used:" FontSize="14" FontAttributes="Bold" TextColor="#444" />
+                                    <Label Text="{Binding TrainingLogCount, StringFormat='{0} times'}" FontSize="14" TextColor="#800080" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </ContentPage.Content>
 </ContentPage>
