@@ -21,35 +21,50 @@ namespace BjjTrainer.Views.Lessons
             base.OnAppearing();
             await _viewModel.LoadLessonsAsync();
         }
+        private async void OnAddToFavoritesClicked(object sender, EventArgs e)
+        {
+            var button = sender as Button;
+            if (button == null) return;
+
+            // Prevent multiple clicks
+            button.IsEnabled = false;
+
+            try
+            {
+                var lessonId = (int)button.CommandParameter;
+                bool isAddedToFavorites = await _viewModel.AddToFavoritesAsync(lessonId);
+
+                if (isAddedToFavorites)
+                {
+                    await DisplayAlert("Success", "Lesson added to favorites!", "OK");
+                    await Shell.Current.GoToAsync("//FavoritesPage");
+                }
+                else
+                {
+                    await DisplayAlert("Error", "Failed to add lesson to favorites.", "OK");
+                }
+            }
+            finally
+            {
+                button.IsEnabled = true;
+            }
+        }
+
+        public async void OnUserLessonsClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//FavoritesPage");
+        }
 
         public async void OnViewLessonSectionsClicked(object sender, EventArgs e)
         {
-            var button = (Button)sender;
-            var selectedLesson = (Lesson)button.BindingContext;
+            var button = sender as Button;
+            if (button == null) return;
 
+            var selectedLesson = button.CommandParameter as Lesson;
             if (selectedLesson != null)
             {
                 await Navigation.PushAsync(new LessonSectionPage(selectedLesson.Id, selectedLesson.Title));
             }
         }
-
-        private async void OnAddToFavoritesClicked(object sender, EventArgs e)
-        {
-            var button = (Button)sender;
-            var lessonId = (int)button.CommandParameter;
-
-            bool isAddedToFavorites = await _viewModel.AddToFavoritesAsync(lessonId);
-
-            if (isAddedToFavorites)
-            {
-                await DisplayAlert("Success", "Lesson added to favorites!", "OK");
-                await Shell.Current.GoToAsync("//FavoritesPage"); // Navigate to FavoritesPage
-            }
-            else
-            {
-                await DisplayAlert("Error", "Failed to add lesson to favorites.", "OK");
-            }
-        }
-
     }
 }

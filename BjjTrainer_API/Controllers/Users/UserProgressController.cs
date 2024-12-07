@@ -1,5 +1,5 @@
 ﻿using BjjTrainer_API.Models.DTO;
-using BjjTrainer_API.Services_API;
+using BjjTrainer_API.Services_API.Trainings;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BjjTrainer_API.Controllers.Users

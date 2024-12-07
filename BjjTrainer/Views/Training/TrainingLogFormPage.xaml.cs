@@ -1,5 +1,5 @@
-using BjjTrainer.Services.Training;
-using BjjTrainer.ViewModels.Training;
+using BjjTrainer.Services.Trainings;
+using BjjTrainer.ViewModels.TrainingGoals;
 
 namespace BjjTrainer.Views.Training
 {

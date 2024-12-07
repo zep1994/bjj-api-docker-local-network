@@ -1,66 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BjjTrainer.Views.Lessons.LessonsPage"
-             Title="Lessons">
+             Title="Lessons"
+             BackgroundColor="#F3F4F6">
 
     <ContentPage.Resources>
-        <Style TargetType="Label">
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="TextColor" Value="Black"/>
+        <!-- Button Styles -->
+        <Style TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#007AFF" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="HeightRequest" Value="40" />
+            <Setter Property="FontSize" Value="16" />
         </Style>
-        <Style TargetType="StackLayout">
-            <Setter Property="Padding" Value="10"/>
-            <Setter Property="BackgroundColor" Value="White"/>
-            <Setter Property="Margin" Value="10"/>
-        </Style>
-        <x:Double x:Key="boxSize">50</x:Double>
-        <x:Int32 x:Key="rowHeight">260</x:Int32>
     </ContentPage.Resources>
 
     <ContentPage.Content>
-        <ListView x:Name="LessonsListView"
-                  ItemsSource="{Binding Lessons}"
-                  SelectionMode="None"
-                  RowHeight="{StaticResource rowHeight}"
-                  VerticalOptions="FillAndExpand">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <StackLayout Padding="10"
-                                     Orientation="Vertical"
-                                     Spacing="5"
-                                     BackgroundColor="#F9F9F9">
-                            <!-- Lesson Title -->
-                            <Label Text="{Binding Title}"
-                                   FontAttributes="Bold"
-                                   FontSize="20"
-                                   TextColor="#333"/>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <!-- Navigation Bar -->
+            <Frame CornerRadius="15" Padding="10" BackgroundColor="White" BorderColor="#E0E0E0" HasShadow="True">
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="FillAndExpand">
+                    <Button Text="All Lessons" Command="{Binding LoadAllLessonsCommand}" />
+                    <Button Text="My Favorites" Clicked="OnUserLessonsClicked" />
+                </HorizontalStackLayout>
+            </Frame>
 
-                            <!-- Lesson Description -->
-                            <Label Text="{Binding Description}"
-                                   FontSize="14"
-                                   TextColor="#555"/>
-
-                            <!-- Lesson Details -->
-                            <StackLayout Orientation="Horizontal" Spacing="15">
-                                <Label Text="{Binding Belt}" FontSize="14" TextColor="#007AFF"/>
-                                <Label Text="{Binding Category}" FontSize="14" TextColor="#007AFF"/>
-                                <Label Text="{Binding Difficulty}" FontSize="14" TextColor="#007AFF"/>
-                            </StackLayout>
-
-                            <!-- Navigate to Lesson Sections Button -->
-                            <Button Text="View Lesson Sections" Clicked="OnViewLessonSectionsClicked" BackgroundColor="#007AFF" TextColor="White"/>
-
-                            <!-- Add to Favorites Button -->
-                            <Button Text="Add to Favorites"
-                                    Clicked="OnAddToFavoritesClicked"
-                                    CommandParameter="{Binding Id}"
-                                    BackgroundColor="#FF6347"
-                                    TextColor="White"/>
-                        </StackLayout>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            <!-- Lesson List -->
+            <CollectionView ItemsSource="{Binding Lessons}" VerticalOptions="FillAndExpand">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="10" Padding="10" BackgroundColor="White" CornerRadius="10" HasShadow="True">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Title}" FontSize="20" FontAttributes="Bold" TextColor="#333" />
+                                <Label Text="{Binding Description}" FontSize="14" TextColor="#555" />
+                                <Button Text="View Details" CommandParameter="{Binding .}" Clicked="OnViewLessonSectionsClicked" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
     </ContentPage.Content>
 </ContentPage>

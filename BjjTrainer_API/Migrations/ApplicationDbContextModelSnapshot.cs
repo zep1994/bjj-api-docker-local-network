@@ -38,7 +38,7 @@ namespace BjjTrainer_API.Migrations
                     b.ToTable("ApplicationUserLessonJoin");
                 });
 
-            modelBuilder.Entity("BjjTrainer_API.Models.Calendar.CalendarEvent", b =>
+            modelBuilder.Entity("BjjTrainer_API.Models.Calendars.CalendarEvent", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,10 +53,10 @@ namespace BjjTrainer_API.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTime?>("EndDate")
                         .HasColumnType("date");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<DateTime?>("StartDate")
                         .HasColumnType("date");
 
                     b.Property<string>("Title")
@@ -68,6 +68,32 @@ namespace BjjTrainer_API.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.ToTable("CalendarEvents");
+                });
+
+            modelBuilder.Entity("BjjTrainer_API.Models.Goals.TrainingGoal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("GoalDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("TrainingGoals");
                 });
 
             modelBuilder.Entity("BjjTrainer_API.Models.Joins.SubLessonMove", b =>
@@ -102,6 +128,21 @@ namespace BjjTrainer_API.Migrations
                     b.HasIndex("MoveId");
 
                     b.ToTable("TrainingLogMoves");
+                });
+
+            modelBuilder.Entity("BjjTrainer_API.Models.Joins.UserTrainingGoalMove", b =>
+                {
+                    b.Property<int>("TrainingGoalId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MoveId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("TrainingGoalId", "MoveId");
+
+                    b.HasIndex("MoveId");
+
+                    b.ToTable("UserTrainingGoalMoves");
                 });
 
             modelBuilder.Entity("BjjTrainer_API.Models.Lessons.Lesson", b =>
@@ -282,6 +323,48 @@ namespace BjjTrainer_API.Migrations
                     b.ToTable("Moves");
                 });
 
+            modelBuilder.Entity("BjjTrainer_API.Models.Trainings.TrainingLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("RoundsRolled")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SelfAssessment")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Submissions")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Taps")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("TrainingTime")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("TrainingLogs");
+                });
+
             modelBuilder.Entity("BjjTrainer_API.Models.Users.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -306,6 +389,9 @@ namespace BjjTrainer_API.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<DateOnly?>("LastLoginDate")
+                        .HasColumnType("date");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
 
@@ -327,6 +413,14 @@ namespace BjjTrainer_API.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("PreferredTrainingStyle")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProfilePictureUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
@@ -342,8 +436,11 @@ namespace BjjTrainer_API.Migrations
                     b.Property<double>("TotalTrainingTime")
                         .HasColumnType("double precision");
 
-                    b.Property<DateTime?>("TrainingStartDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("TrainingHoursThisWeek")
+                        .HasColumnType("integer");
+
+                    b.Property<DateOnly?>("TrainingStartDate")
+                        .HasColumnType("date");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
@@ -388,48 +485,6 @@ namespace BjjTrainer_API.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("BjjTrainer_API.Models.Users.TrainingLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Notes")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("RoundsRolled")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("SelfAssessment")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Submissions")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Taps")
-                        .HasColumnType("integer");
-
-                    b.Property<double>("TrainingTime")
-                        .HasColumnType("double precision");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("TrainingLogs");
-                });
-
             modelBuilder.Entity("ApplicationUserLessonJoin", b =>
                 {
                     b.HasOne("BjjTrainer_API.Models.Users.ApplicationUser", null)
@@ -445,10 +500,21 @@ namespace BjjTrainer_API.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BjjTrainer_API.Models.Calendar.CalendarEvent", b =>
+            modelBuilder.Entity("BjjTrainer_API.Models.Calendars.CalendarEvent", b =>
                 {
                     b.HasOne("BjjTrainer_API.Models.Users.ApplicationUser", "ApplicationUser")
                         .WithMany("CalendarEvents")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("BjjTrainer_API.Models.Goals.TrainingGoal", b =>
+                {
+                    b.HasOne("BjjTrainer_API.Models.Users.ApplicationUser", "ApplicationUser")
+                        .WithMany("TrainingGoals")
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -483,7 +549,7 @@ namespace BjjTrainer_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BjjTrainer_API.Models.Users.TrainingLog", "TrainingLog")
+                    b.HasOne("BjjTrainer_API.Models.Trainings.TrainingLog", "TrainingLog")
                         .WithMany("TrainingLogMoves")
                         .HasForeignKey("TrainingLogId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -492,6 +558,25 @@ namespace BjjTrainer_API.Migrations
                     b.Navigation("Move");
 
                     b.Navigation("TrainingLog");
+                });
+
+            modelBuilder.Entity("BjjTrainer_API.Models.Joins.UserTrainingGoalMove", b =>
+                {
+                    b.HasOne("BjjTrainer_API.Models.Moves.Move", "Move")
+                        .WithMany("UserTrainingGoalMoves")
+                        .HasForeignKey("MoveId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BjjTrainer_API.Models.Goals.TrainingGoal", "TrainingGoal")
+                        .WithMany("UserTrainingGoalMoves")
+                        .HasForeignKey("TrainingGoalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Move");
+
+                    b.Navigation("TrainingGoal");
                 });
 
             modelBuilder.Entity("BjjTrainer_API.Models.Lessons.LessonSection", b =>
@@ -523,6 +608,17 @@ namespace BjjTrainer_API.Migrations
                         .HasForeignKey("ApplicationUserId");
                 });
 
+            modelBuilder.Entity("BjjTrainer_API.Models.Trainings.TrainingLog", b =>
+                {
+                    b.HasOne("BjjTrainer_API.Models.Users.ApplicationUser", "ApplicationUser")
+                        .WithMany("TrainingLogs")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                });
+
             modelBuilder.Entity("BjjTrainer_API.Models.Users.RefreshToken", b =>
                 {
                     b.HasOne("BjjTrainer_API.Models.Users.ApplicationUser", "User")
@@ -534,15 +630,9 @@ namespace BjjTrainer_API.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("BjjTrainer_API.Models.Users.TrainingLog", b =>
+            modelBuilder.Entity("BjjTrainer_API.Models.Goals.TrainingGoal", b =>
                 {
-                    b.HasOne("BjjTrainer_API.Models.Users.ApplicationUser", "ApplicationUser")
-                        .WithMany("TrainingLogs")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
+                    b.Navigation("UserTrainingGoalMoves");
                 });
 
             modelBuilder.Entity("BjjTrainer_API.Models.Lessons.Lesson", b =>
@@ -565,6 +655,13 @@ namespace BjjTrainer_API.Migrations
                     b.Navigation("SubLessonMoves");
 
                     b.Navigation("TrainingLogMoves");
+
+                    b.Navigation("UserTrainingGoalMoves");
+                });
+
+            modelBuilder.Entity("BjjTrainer_API.Models.Trainings.TrainingLog", b =>
+                {
+                    b.Navigation("TrainingLogMoves");
                 });
 
             modelBuilder.Entity("BjjTrainer_API.Models.Users.ApplicationUser", b =>
@@ -573,12 +670,9 @@ namespace BjjTrainer_API.Migrations
 
                     b.Navigation("Moves");
 
-                    b.Navigation("TrainingLogs");
-                });
+                    b.Navigation("TrainingGoals");
 
-            modelBuilder.Entity("BjjTrainer_API.Models.Users.TrainingLog", b =>
-                {
-                    b.Navigation("TrainingLogMoves");
+                    b.Navigation("TrainingLogs");
                 });
 #pragma warning restore 612, 618
         }

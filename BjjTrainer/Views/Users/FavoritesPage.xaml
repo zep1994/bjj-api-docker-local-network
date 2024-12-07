@@ -1,66 +1,67 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BjjTrainer.Views.Users.FavoritesPage"
              xmlns:vm="clr-namespace:BjjTrainer.ViewModels"
-             Title="FavoritesPage">
+             x:Class="BjjTrainer.Views.Users.FavoritesPage"
+             Title="Favorites"
+             BackgroundColor="#F3F4F6">
+
     <ContentPage.BindingContext>
         <vm:FavoritesViewModel />
     </ContentPage.BindingContext>
 
+    <ContentPage.Resources>
+        <!-- Label Styles -->
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="TextColor" Value="#333" />
+        </Style>
+
+        <!-- Frame/Card Style -->
+        <Style TargetType="Frame">
+            <Setter Property="CornerRadius" Value="15" />
+            <Setter Property="Padding" Value="15" />
+            <Setter Property="BackgroundColor" Value="White" />
+            <Setter Property="BorderColor" Value="#E0E0E0" />
+            <Setter Property="HasShadow" Value="True" />
+        </Style>
+
+        <!-- Button Styles -->
+        <Style TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#4CAF50" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="Padding" Value="10" />
+        </Style>
+    </ContentPage.Resources>
+
     <ContentPage.Content>
-        <StackLayout Padding="20" Spacing="15" BackgroundColor="White">
-            <!-- Header Label -->
-            <Label Text="My Favorite Lessons" 
-                   FontSize="24"
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center"
-                   TextColor="#333"
-                   Margin="0,10,0,10"/>
-
-            <!-- ListView to display favorite lessons -->
-            <ListView x:Name="FavoritesListView"
-                      ItemsSource="{Binding FavoriteLessons}"
-                      IsPullToRefreshEnabled="True"
-                      RefreshCommand="{Binding LoadFavoritesCommand}"
-                      IsRefreshing="{Binding IsRefreshing}"
-                      SelectionMode="None"
-                      RowHeight="100"
-                      VerticalOptions="FillAndExpand"
-                      SeparatorColor="#CCCCCC">
-
-                <ListView.ItemTemplate>
+        <!-- Wrapping CollectionView with RefreshView -->
+        <RefreshView Command="{Binding LoadFavoritesCommand}" IsRefreshing="{Binding IsRefreshing}">
+            <CollectionView ItemsSource="{Binding FavoriteLessons}" 
+                            VerticalOptions="FillAndExpand"
+                            BackgroundColor="Transparent">
+                <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <ViewCell>
-                            <Frame CornerRadius="8"
-                                   HasShadow="True"
-                                   Padding="10"
-                                   Margin="0,5"
-                                   BackgroundColor="#F0F0F0">
-                                <StackLayout>
-                                    <Label Text="{Binding Title}"
-                                           FontAttributes="Bold"
-                                           FontSize="18"
-                                           TextColor="#222" />
-                                    <Label Text="{Binding Description}"
-                                           FontSize="14"
-                                           TextColor="#555" />
-                                </StackLayout>
-                            </Frame>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                        <Frame Margin="10">
+                            <VerticalStackLayout Spacing="10">
+                                <!-- Lesson Title -->
+                                <Label Text="{Binding Title}" 
+                                       FontSize="20" 
+                                       FontAttributes="Bold" 
+                                       TextColor="#007AFF" />
 
-            <!-- Back Button -->
-            <Button Text="Back to Lessons"
-                    FontSize="Medium"
-                    BackgroundColor="#4CAF50"
-                    TextColor="White"
-                    CornerRadius="8"
-                    Padding="10"
-                    HorizontalOptions="Center"
-                    Clicked="OnBackToLessonsClicked" />
-        </StackLayout>
+                                <!-- Lesson Description -->
+                                <Label Text="{Binding Description}" 
+                                       FontSize="14" 
+                                       TextColor="#555"
+                                       LineBreakMode="WordWrap" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
     </ContentPage.Content>
 </ContentPage>

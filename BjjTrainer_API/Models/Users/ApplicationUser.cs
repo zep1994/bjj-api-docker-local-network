@@ -1,6 +1,8 @@
-﻿using BjjTrainer_API.Models.Calendar;
+﻿using BjjTrainer_API.Models.Calendars;
+using BjjTrainer_API.Models.Goals;
 using BjjTrainer_API.Models.Lessons;
 using BjjTrainer_API.Models.Moves;
+using BjjTrainer_API.Models.Trainings;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,18 +20,21 @@ namespace BjjTrainer_API.Models.Users
         public ICollection<Move> Moves { get; set; } = new List<Move>();
 
         public ICollection<TrainingLog> TrainingLogs { get; set; } = new List<TrainingLog>();
+        public ICollection<TrainingGoal> TrainingGoals { get; set; } = new List<TrainingGoal>();
 
-        // Track User Start Date
-        public DateTime? TrainingStartDate { get; set; }
 
-        // Add training stats for progress tracking
+        [Column(TypeName = "date")]
+        public DateOnly? TrainingStartDate { get; set; }
         public int TotalSubmissions { get; set; } = 0;
         public int TotalTaps { get; set; } = 0;
-        public double TotalTrainingTime { get; set; } = 0; // in minutes
+        public double TotalTrainingTime { get; set; } = 0; // HH.MM
         public int TotalRoundsRolled { get; set; } = 0;
-
-        // For belt tracking or progress
         public string Belt { get; set; } = "White";
         public int BeltStripes { get; set; } = 0;
+        public string ProfilePictureUrl { get; set; } = string.Empty;  
+        public int TrainingHoursThisWeek { get; set; } = 0; 
+        [Column(TypeName = "date")]
+        public DateOnly? LastLoginDate { get; set; } 
+        public string PreferredTrainingStyle { get; set; } = "Half-Gaurd"; 
     }
 }

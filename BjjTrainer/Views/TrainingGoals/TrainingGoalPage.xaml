@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BjjTrainer.Views.TrainingGoals.TrainingGoalPage"
+             Title="Add Training Goal">
+
+    <ContentPage.Content>
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <!-- Goal Date Picker -->
+            <DatePicker x:Name="GoalDatePicker" />
+
+            <!-- Notes Entry -->
+            <Editor x:Name="NotesEditor" 
+                    Placeholder="Enter notes about your goal..." 
+                    HeightRequest="100" />
+
+            <!-- Moves Selection -->
+            <Label Text="Select Moves" FontSize="18" FontAttributes="Bold" />
+            <CollectionView x:Name="MovesCollectionView" SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Orientation="Horizontal" Spacing="10">
+                            <CheckBox IsChecked="{Binding IsSelected}" />
+                            <Label Text="{Binding Name}" VerticalOptions="Center" />
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Submit Button -->
+            <Button Text="Save Goal"
+                    BackgroundColor="#007AFF"
+                    TextColor="White"
+                    CornerRadius="8"
+                    Clicked="OnSaveGoalClicked" />
+        </VerticalStackLayout>
+    </ContentPage.Content>
+</ContentPage>

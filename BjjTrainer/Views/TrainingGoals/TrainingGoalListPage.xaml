@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BjjTrainer.Views.TrainingGoals.TrainingGoalListPage"
+             Title="Training Goals">
+
+    <ContentPage.Content>
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <!-- List of Training Goals -->
+            <CollectionView ItemsSource="{Binding TrainingGoals}" SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BorderColor="LightGray" CornerRadius="8" Padding="10" Margin="0,5">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Notes}" FontSize="18" TextColor="#333" />
+                                <Label Text="{Binding GoalDate, StringFormat='{0:MMMM dd, yyyy}'}" FontSize="14" TextColor="#555" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Add New Goal Button -->
+            <Button Text="Add New Goal"
+                    BackgroundColor="#007AFF"
+                    TextColor="White"
+                    CornerRadius="8"
+                    Clicked="OnNewGoalClicked" />
+        </VerticalStackLayout>
+    </ContentPage.Content>
+</ContentPage>
