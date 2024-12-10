@@ -3,11 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BjjTrainer.Views.MainPage"
              Title="BJJ Trainer"
-             BackgroundColor="#F3F4F6">
+             BackgroundColor="#292929">
 
     <ContentPage.Resources>
-        <Style TargetType="Button" x:Key="NavButtonStyle">
-            <Setter Property="BackgroundColor" Value="#007AFF" />
+        <Style TargetType="Button" x:Key="TransparentButtonStyle">
+            <Setter Property="BackgroundColor" Value="Transparent" />
             <Setter Property="TextColor" Value="White" />
             <Setter Property="CornerRadius" Value="10" />
             <Setter Property="FontSize" Value="16" />
@@ -39,13 +39,13 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Button Grid.Row="0" Grid.Column="0" Text="Lessons" Style="{StaticResource NavButtonStyle}" Clicked="OnLessonsClicked" />
-                    <Button Grid.Row="0" Grid.Column="1" Text="Training Log" Style="{StaticResource NavButtonStyle}" Clicked="OnTrainingLogClicked" />
-                    <Button Grid.Row="1" Grid.Column="0" Text="Goals" Style="{StaticResource NavButtonStyle}" Clicked="OnGoalsClicked" />
-                    <Button Grid.Row="1" Grid.Column="1" Text="User Progress" Style="{StaticResource NavButtonStyle}" Clicked="OnUserProgressClicked" />
-                    <Button Grid.Row="2" Grid.Column="0" Text="Calendar" Style="{StaticResource NavButtonStyle}" Clicked="OnCalendarClicked" />
-                    <Button Grid.Row="2" Grid.Column="1" Text="Moves" Style="{StaticResource NavButtonStyle}" Clicked="OnMovesClicked" />
-                    <Button Grid.Row="3" Grid.Column="1" Text="Account" Style="{StaticResource NavButtonStyle}" Clicked="OnAccountClicked" />
+                    <Button Grid.Row="0" Grid.Column="0" Text="Lessons" Style="{StaticResource TransparentButtonStyle}" Clicked="OnLessonsClicked" />
+                    <Button Grid.Row="0" Grid.Column="1" Text="Training Log" Style="{StaticResource TransparentButtonStyle}" Clicked="OnTrainingLogClicked" />
+                    <Button Grid.Row="1" Grid.Column="0" Text="Goals" Style="{StaticResource TransparentButtonStyle}" Clicked="OnGoalsClicked" />
+                    <Button Grid.Row="1" Grid.Column="1" Text="User Progress" Style="{StaticResource TransparentButtonStyle}" Clicked="OnUserProgressClicked" />
+                    <Button Grid.Row="2" Grid.Column="0" Text="Calendar" Style="{StaticResource TransparentButtonStyle}" Clicked="OnCalendarClicked" />
+                    <Button Grid.Row="2" Grid.Column="1" Text="Moves" Style="{StaticResource TransparentButtonStyle}" Clicked="OnMovesClicked" />
+                    <Button Grid.Row="3" Grid.Column="1" Text="Account" Style="{StaticResource TransparentButtonStyle}" Clicked="OnAccountClicked" />
                 </Grid>
             </VerticalStackLayout>
         </ScrollView>

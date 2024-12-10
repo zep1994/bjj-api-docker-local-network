@@ -21,6 +21,33 @@
         <controls:FlyoutHeader />
     </Shell.FlyoutHeader>
 
+    <TabBar>
+        <!-- Calendar -->
+        <ShellContent Title="Calendar"
+                      Icon="calendar.png"
+                      ContentTemplate="{DataTemplate events:CalendarPage}" />
+        <!-- Lessons -->
+        <ShellContent Title="Lessons"
+                      Icon="lessons.png"
+                      ContentTemplate="{DataTemplate lessons:LessonsPage}" />
+        <!-- Progress -->
+        <ShellContent Title="Progress"
+                      Icon="progress.png"
+                      ContentTemplate="{DataTemplate users:UserProgressPage}" />
+        <!-- Training -->
+        <ShellContent Title="Training"
+                      Icon="train.png"
+                      ContentTemplate="{DataTemplate train:TrainingLogFormPage}" />
+        <!-- Goals -->
+        <ShellContent Title="Goals"
+                      Icon="goal.png"
+                      ContentTemplate="{DataTemplate goals:TrainingGoalListPage}" />
+        <!-- Moves -->
+        <ShellContent Title="Moves"
+                      Icon="moves.png"
+                      ContentTemplate="{DataTemplate moves:MovesPage}" />
+    </TabBar>
+
     <!-- Unique routes for each page -->
     <ShellContent Title="Main" Route="MainPage" ContentTemplate="{DataTemplate views:MainPage}" />
     <ShellContent Title="Lessons" Route="LessonsPage" ContentTemplate="{DataTemplate lessons:LessonsPage}" />

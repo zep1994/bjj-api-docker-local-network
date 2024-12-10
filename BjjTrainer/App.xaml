@@ -19,6 +19,7 @@
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
                 <ResourceDictionary>
                     <!-- Add the converter to the resources -->
+                    <Converters:NullToBoolConverter x:Key="NullToBoolConverter" />
                     <Converters:GreaterThanZeroConverter x:Key="GreaterThanZeroConverter" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>

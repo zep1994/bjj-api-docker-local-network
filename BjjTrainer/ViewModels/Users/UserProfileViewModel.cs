@@ -113,7 +113,9 @@ namespace BjjTrainer.ViewModels.Users
                     BeltStripes = user.BeltStripes;
                     TrainingHoursThisWeek = user.TrainingHoursThisWeek;
                     PreferredTrainingStyle = user.PreferredTrainingStyle;
-                    ProfilePictureUrl = user.ProfilePictureUrl;
+                    ProfilePictureUrl = string.IsNullOrEmpty(user.ProfilePictureUrl)
+                    ? "Resources/Images/default_profile.png"
+                    : user.ProfilePictureUrl;
                     LastLoginDate = user.LastLoginDate;
                     TotalSubmissions = user.TotalSubmissions;
                     TotalTaps = user.TotalTaps;

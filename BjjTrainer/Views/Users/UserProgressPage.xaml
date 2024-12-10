@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BjjTrainer.Views.Users.UserProgressPage"
              Title="User Progress"
-             BackgroundColor="#F3F4F6"
+             BackgroundColor="#292929"
              Loaded="OnPageLoaded">
 
     <ContentPage.Content>
