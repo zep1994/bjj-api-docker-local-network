@@ -28,7 +28,9 @@ public partial class LoginPage : ContentPage
         if (!string.IsNullOrEmpty(token))
         {
             await DisplayAlert("Success", "Login Successful", "OK");
-            Application.Current.MainPage = new AppShell();
+            Preferences.Set("IsLoggedIn", true);
+
+            await Shell.Current.GoToAsync("//MainPage");
         }
         else
         {

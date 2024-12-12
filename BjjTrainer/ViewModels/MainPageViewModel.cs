@@ -1,30 +1,91 @@
-﻿using System.Windows.Input;
+﻿using BjjTrainer.Models.TrainingGoal;
+using BjjTrainer.Services.Events;
+using BjjTrainer.Services.Trainings;
+using BjjTrainer.Services.Users;
+using BjjTrainer.Views.Moves;
+using MvvmHelpers;
+using System.Collections.ObjectModel;
 
 namespace BjjTrainer.ViewModels
 {
-    public partial class MainPageViewModel : BindableObject
+    public class MainPageViewModel : BaseViewModel
     {
-        public ICommand NavigateToLessonsCommand { get; }
-        public ICommand LogoutCommand { get; }
+        private readonly TrainingService _trainingService;
+        private readonly EventService _eventService;
+        private readonly UserProgressService _userProgressService;
+        private TrainingSummaryModel _trainingSummary;
 
+
+        public ObservableCollection<TopMovesModel> TopMoves { get; set; } = new ObservableCollection<TopMovesModel>();
+        public ObservableCollection<TrainingGoal> TrainingGoals { get; set; } = new ObservableCollection<TrainingGoal>();
+
+        public string TotalTrainingLogs { get; private set; }
+        public string TotalTrainingTime { get; private set; }
+        public string AverageTrainingTime { get; private set; }
+
+        public string TotalGoalsAchieved { get; private set; }
+        public string TotalMovesPracticed { get; private set; }
 
         public MainPageViewModel()
         {
-            NavigateToLessonsCommand = new Command(async () =>
-            {
-                await Shell.Current.GoToAsync("LessonsPage"); // Update the route according to your Shell configuration
-            });
+            _trainingService = new TrainingService();
+            _eventService = new EventService();
+            _userProgressService = new UserProgressService();
 
-            LogoutCommand = new Command(ExecuteLogout);
+            LoadData();
+            _ = LoadTopMovesAsync();
+
         }
 
-        private async void ExecuteLogout()
+        public TrainingSummaryModel TrainingSummary
         {
-            // Clear the authentication token
-            Preferences.Remove("AuthToken");
+            get => _trainingSummary;
+            set => SetProperty(ref _trainingSummary, value);
+        }
 
-            // Navigate to LoginPage
-            await Shell.Current.GoToAsync("///LoginPage"); 
+        private async Task LoadTopMovesAsync()
+        {
+            try
+            {
+                // Replace "userId" with your actual logic to get the user's ID
+                var userId = Preferences.Get("UserId", string.Empty);
+                if (string.IsNullOrEmpty(userId))
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", "User not logged in.", "OK");
+                    return;
+                }
+
+                var topMoves = await _trainingService.GetTopMovesAsync();
+
+                TopMoves.Clear();
+                foreach (var move in topMoves)
+                {
+                    TopMoves.Add(move);
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load top moves: {ex.Message}", "OK");
+            }
+        }
+
+
+        private async void LoadData()
+        {
+            var moves = await _trainingService.GetTopMovesAsync();
+            foreach (var move in moves)
+                TopMoves.Add(move);
+
+            TrainingSummary = await _trainingService.GetTrainingSummaryAsync();
+
+
+            //var goals = await _eventService.GetUserGoalsAsync();
+            //foreach (var goal in goals)
+            //    TrainingGoals.Add(goal);
+
+            //var progress = await _userProgressService.GetUserProgressAsync();
+            //TotalGoalsAchieved = progress.GoalsAchieved.ToString();
+            //TotalMovesPracticed = progress.MovesPracticed.ToString();
         }
     }
 }

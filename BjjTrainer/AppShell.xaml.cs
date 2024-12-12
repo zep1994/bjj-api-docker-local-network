@@ -7,14 +7,37 @@ namespace BjjTrainer
         public AppShell()
         {
             InitializeComponent();
-            this.Navigated += OnNavigated;
-            BindingContext = new MainPageViewModel();
+            BindingContext = new AppShellViewModel();
+
+
+            Navigated += OnNavigated;
         }
 
         private void OnNavigated(object sender, ShellNavigatedEventArgs e)
         {
-            // Hide the Flyout after navigation
-            this.FlyoutIsPresented = false;
+            bool isLoggedIn = Preferences.Get("IsLoggedIn", false);
+            var currentRoute = Shell.Current?.CurrentItem?.Route;
+
+            // Set every page title to "Roll Call"
+            Title = "Roll Call";
+
+            if (currentRoute == "IMPL_LoginPage" || currentRoute == "IMPL_SignupPage")
+            {
+                // Enable FlyoutHeader for logged-in pages
+                Shell.SetFlyoutBehavior(this, FlyoutBehavior.Disabled);
+                ProfileImage.IsVisible = false;
+            }
+            else
+            {
+                // Enable FlyoutHeader for logged-in pages
+                Shell.SetFlyoutBehavior(this, FlyoutBehavior.Disabled);
+                ProfileImage.IsVisible = true;
+            }
+        }
+
+        private async void OnProfileClicked()
+        {
+            await Shell.Current.GoToAsync("//UserProfilePage");
         }
     }
 }

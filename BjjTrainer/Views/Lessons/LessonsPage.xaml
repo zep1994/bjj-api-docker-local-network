@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BjjTrainer.Views.Lessons.LessonsPage"
              Title="Lessons"
-             BackgroundColor="#F3F4F6">
+             BackgroundColor="{StaticResource BackgroundColor}">
 
     <ContentPage.Resources>
         <!-- Button Styles -->

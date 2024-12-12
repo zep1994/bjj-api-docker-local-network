@@ -47,13 +47,28 @@
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\Images\add.png" />
+	  <None Remove="Resources\Images\bjjlogo.png" />
+	  <None Remove="Resources\Images\calendar.png" />
+	  <None Remove="Resources\Images\default_profile.png" />
+	  <None Remove="Resources\Images\goal.png" />
+	  <None Remove="Resources\Images\home.png" />
+	  <None Remove="Resources\Images\lessons.png" />
+	  <None Remove="Resources\Images\logout.png" />
+	  <None Remove="Resources\Images\menu.png" />
+	  <None Remove="Resources\Images\moves.png" />
+	  <None Remove="Resources\Images\profile.png" />
+	  <None Remove="Resources\Images\progress.png" />
+	  <None Remove="Resources\Images\train.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -128,6 +143,6 @@
 	  <Folder Include="Models\Training\" />
 	</ItemGroup>
 
-	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionBjjTrainerHideInfoBar="True" /></VisualStudio></ProjectExtensions>
+	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionBjjTrainerHideInfoBar="True" XamarinHotReloadGenericExceptionInfoBarBjjTrainerHideInfoBar="True" XamarinHotReloadUnhandledDeviceExceptionBjjTrainerHideInfoBar="True" /></VisualStudio></ProjectExtensions>
 
 </Project>

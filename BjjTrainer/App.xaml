@@ -6,19 +6,12 @@
              x:Class="BjjTrainer.App">
     <Application.Resources>
         <ResourceDictionary>
-            <!-- Global Shell Style -->
-            <Style TargetType="Shell" ApplyToDerivedTypes="True">
-                <Setter Property="Shell.BackgroundColor" Value="#007AFF" />
-                <!-- Light Blue -->
-                <Setter Property="Shell.TitleColor" Value="White" />
-                <Setter Property="Shell.ForegroundColor" Value="White" />
-                <Setter Property="Shell.NavBarHasShadow" Value="False" />
-            </Style>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
                 <ResourceDictionary>
                     <!-- Add the converter to the resources -->
+                    <Converters:NullToBoolConverter x:Key="NullToBoolConverter" />
                     <Converters:GreaterThanZeroConverter x:Key="GreaterThanZeroConverter" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>

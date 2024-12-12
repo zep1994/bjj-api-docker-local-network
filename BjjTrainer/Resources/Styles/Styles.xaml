@@ -4,27 +4,18 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-    <!-- Color Palette -->
-    <Color x:Key="PrimaryColor">#4CAF50</Color>
-    <Color x:Key="SecondaryColor">#FF9800</Color>
-    <Color x:Key="AccentColor">#03A9F4</Color>
-    <Color x:Key="BackgroundLight">#F5F5F5</Color>
-    <Color x:Key="BackgroundDark">#212121</Color>
-    <Color x:Key="TextPrimary">#212121</Color>
-    <Color x:Key="TextSecondary">#757575</Color>
-
     <!-- Buttons -->
     <Style TargetType="Button">
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontAttributes" Value="Bold" />
-        <Setter Property="TextColor" Value="White" />
-        <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource CardBackgroundColor}" />
+        <Setter Property="TextColor" Value="{StaticResource PrimaryTextColor}" />
         <Setter Property="CornerRadius" Value="25" />
         <Setter Property="Padding" Value="15,10" />
         <Setter Property="HeightRequest" Value="50" />
         <Setter Property="Shadow">
             <Setter.Value>
-                <Shadow Brush="{StaticResource PrimaryColor}" Radius="10" Opacity="0.5" />
+                <Shadow Brush="{StaticResource Primary}" Radius="10" Opacity="0.5" />
             </Setter.Value>
         </Setter>
         <Setter Property="VisualStateManager.VisualStateGroups">
@@ -33,7 +24,7 @@
                     <VisualState x:Name="Normal" />
                     <VisualState x:Name="Pressed">
                         <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="{StaticResource AccentColor}" />
+                            <Setter Property="BackgroundColor" Value="{StaticResource ButtonTextColor}" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
@@ -41,15 +32,31 @@
         </Setter>
     </Style>
 
+    <!-- Transparent Button Style -->
+    <Style TargetType="Button" x:Key="TransparentButtonStyle">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="BorderColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="Transparent" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Padding" Value="10" />
+    </Style>
+
+
     <!-- Labels -->
     <Style TargetType="Label">
-        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="TextColor" Value="{StaticResource PrimaryTextColor}" />
         <Setter Property="FontSize" Value="16" />
+    </Style>
+
+    <!-- Secondary Labels -->
+    <Style x:Key="SecondaryLabelStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource SecondaryTextColor}" />
+        <Setter Property="FontSize" Value="14" />
     </Style>
 
     <!-- Headline Labels -->
     <Style TargetType="Label" x:Key="Headline">
-        <Setter Property="TextColor" Value="{StaticResource AccentColor}" />
+        <Setter Property="TextColor" Value="{StaticResource Tertiary}" />
         <Setter Property="FontSize" Value="24" />
         <Setter Property="FontAttributes" Value="Bold" />
         <Setter Property="HorizontalTextAlignment" Value="Center" />
@@ -58,7 +65,7 @@
 
     <!-- Card Style -->
     <Style TargetType="Frame">
-        <Setter Property="BackgroundColor" Value="White" />
+        <Setter Property="BackgroundColor" Value="{StaticResource Secondary}" />
         <Setter Property="CornerRadius" Value="15" />
         <Setter Property="Padding" Value="20" />
         <Setter Property="Margin" Value="10" />
@@ -71,10 +78,10 @@
 
     <!-- Shell -->
     <Style TargetType="Shell">
-        <Setter Property="Shell.BackgroundColor" Value="{StaticResource PrimaryColor}" />
-        <Setter Property="Shell.ForegroundColor" Value="{StaticResource TextPrimary}" />
-        <Setter Property="Shell.TitleColor" Value="{StaticResource PrimaryColor}" />
-        <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource AccentColor}" />
+        <Setter Property="Shell.BackgroundColor" Value="{StaticResource Primary}" />
+        <Setter Property="Shell.ForegroundColor" Value="{StaticResource Primary}" />
+        <Setter Property="Shell.TitleColor" Value="{StaticResource Secondary}" />
+        <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource Primary}" />
         <Setter Property="Shell.TabBarForegroundColor" Value="White" />
         <Setter Property="Shell.TabBarUnselectedColor" Value="{StaticResource TextSecondary}" />
     </Style>
@@ -82,35 +89,68 @@
     <!-- Entry -->
     <Style TargetType="Entry">
         <Setter Property="FontSize" Value="16" />
-        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="TextColor" Value="White" />
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="PlaceholderColor" Value="{StaticResource TextSecondary}" />
+        <Setter Property="PlaceholderColor" Value="White" />
+        <Setter Property="Margin" Value="5,0" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="PlaceholderColor" Value="White" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Focused">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{StaticResource White}" />
+                            <Setter Property="PlaceholderColor" Value="{StaticResource Tertiary}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!-- Editor -->
+    <Style TargetType="Editor">
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="TextColor" Value="{StaticResource White}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="PlaceholderColor" Value="{StaticResource White}" />
         <Setter Property="Margin" Value="5,0" />
     </Style>
 
     <!-- Tabs -->
     <Style TargetType="TabbedPage">
-        <Setter Property="BarBackgroundColor" Value="{StaticResource PrimaryColor}" />
+        <Setter Property="BarBackgroundColor" Value="{StaticResource Primary}" />
         <Setter Property="BarTextColor" Value="White" />
-        <Setter Property="UnselectedTabColor" Value="{StaticResource TextSecondary}" />
-        <Setter Property="SelectedTabColor" Value="White" />
+        <Setter Property="UnselectedTabColor" Value="{StaticResource SecondaryButtonColor}" />
+        <Setter Property="SelectedTabColor" Value="{StaticResource SecondaryButtonColor}" />
     </Style>
 
     <!-- CheckBox -->
     <Style TargetType="CheckBox">
-        <Setter Property="Color" Value="{StaticResource PrimaryColor}" />
+        <Setter Property="Color" Value="{StaticResource White}" />
     </Style>
 
     <!-- ProgressBar -->
     <Style TargetType="ProgressBar">
-        <Setter Property="ProgressColor" Value="{StaticResource PrimaryColor}" />
-        <Setter Property="BackgroundColor" Value="{StaticResource BackgroundLight}" />
+        <Setter Property="ProgressColor" Value="{StaticResource Tertiary}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
     </Style>
+
+    <!--Navigation Bar-->
+    <Style TargetType="NavigationPage">
+        <Setter Property="BarBackgroundColor" Value="{StaticResource BackgroundColor}" />
+        <Setter Property="BarTextColor" Value="{StaticResource TextPrimary}" />
+    </Style>
+
 
     <!-- Custom Font Example -->
     <Style TargetType="Label" x:Key="CustomFont">
         <Setter Property="FontFamily" Value="ComicSansMS" />
         <Setter Property="FontSize" Value="18" />
-        <Setter Property="TextColor" Value="{StaticResource AccentColor}" />
+        <Setter Property="TextColor" Value="{StaticResource Tertiary}" />
     </Style>
 </ResourceDictionary>
