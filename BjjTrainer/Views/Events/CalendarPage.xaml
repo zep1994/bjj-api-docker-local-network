@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:BjjTrainer.ViewModels.Events"
              x:Class="BjjTrainer.Views.Events.CalendarPage"
              Title="Calendar"
-             BackgroundColor="#F3F4F6">
+             BackgroundColor="#191919">
 
     <ContentPage.BindingContext>
         <local:CalendarViewModel />
@@ -22,8 +22,7 @@
             <Setter Property="Padding" Value="15" />
             <Setter Property="CornerRadius" Value="15" />
             <Setter Property="HasShadow" Value="True" />
-            <Setter Property="BackgroundColor" Value="White" />
-            <Setter Property="BorderColor" Value="#E0E0E0" />
+            <Setter Property="BackgroundColor" Value="LightGrey" />
             <Setter Property="Margin" Value="10,5" />
         </Style>
 

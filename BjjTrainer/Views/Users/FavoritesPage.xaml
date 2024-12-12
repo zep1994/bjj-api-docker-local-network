@@ -4,7 +4,7 @@
              xmlns:vm="clr-namespace:BjjTrainer.ViewModels"
              x:Class="BjjTrainer.Views.Users.FavoritesPage"
              Title="Favorites"
-             BackgroundColor="#292929">
+             BackgroundColor="{StaticResource BackgroundColor}">
 
     <ContentPage.BindingContext>
         <vm:FavoritesViewModel />

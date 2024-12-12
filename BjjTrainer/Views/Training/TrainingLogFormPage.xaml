@@ -2,7 +2,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BjjTrainer.Views.Training.TrainingLogFormPage"
              xmlns:sys="clr-namespace:System;assembly=System.Runtime"
-             Title="Training Log">
+             Title="Training Log"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
 
     <ScrollView>
         <StackLayout Padding="10" Spacing="10">
@@ -10,10 +12,12 @@
             <Label Text="Date" />
             <DatePicker x:Name="DatePicker" 
                         Date="{Binding Date, Mode=TwoWay}" 
+                        TextColor="#fff"
                         MinimumDate="{x:Static sys:DateTime.Today}" />
 
             <!-- Training Time -->
             <Entry x:Name="TrainingTimeEntry" 
+                   PlaceholderColor="White"
                    Placeholder="Enter training time (e.g., HH.MM)" 
                    Keyboard="Numeric" 
                    Text="{Binding TrainingTime, Mode=TwoWay}" />

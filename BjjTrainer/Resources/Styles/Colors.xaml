@@ -4,21 +4,42 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
+    <!-- Primary Colors -->
+    <Color x:Key="BackgroundColor">#000023</Color>
+    <Color x:Key="CardBackgroundColor">#212121</Color>
+
+
+    <!-- Button Colors -->
+    <Color x:Key="ButtonBackgroundColor">#03A9F4</Color>
+    <Color x:Key="ButtonTextColor">White</Color>
+    <Color x:Key="PrimaryTextColor">#fff</Color>
+    <Color x:Key="SecondaryTextColor">#D32F2F</Color>
+    <Color x:Key="EntryTextColor">#999</Color>
+    
+    <!-- Other Colors -->
+    <Color x:Key="PlaceholderTextColor">#9E9E9E</Color>
+    
     <!-- Primary Palette -->
-    <Color x:Key="Primary">#88CFF5</Color>
+    <Color x:Key="Primary">#000023</Color>
     <!-- Light Blue for highlights and buttons -->
-    <Color x:Key="PrimaryDark">#204A6D</Color>
+    <Color x:Key="PrimaryDark">#2C2C2C</Color>
     <!-- Dark Blue for graph bars and text -->
-    <Color x:Key="PrimaryDarkText">#000000</Color>
+    <Color x:Key="TextPrimary">#03A9F4</Color>
     <!-- Black for text and graph elements -->
 
     <!-- Secondary Palette -->
-    <Color x:Key="Secondary">#FF4141</Color>
+    <Color x:Key="Secondary">#2C2C2C</Color>
     <!-- Bright Red for progress indicators or highlights -->
-    <Color x:Key="SecondaryDarkText">#D32F2F</Color>
+    <Color x:Key="TextSecondary">#D32F2F</Color>
     <!-- Slightly darker red for text or contrast -->
-    <Color x:Key="Tertiary">#292929</Color>
+    <Color x:Key="Tertiary">#03A9F4</Color>
+    <Color x:Key="Tertiary-red">#D32F2F</Color>
     <!-- Background Gray -->
+
+    <!-- Button Colors -->
+    <Color x:Key="PrimaryButtonColor">#03A9F4</Color>
+    <Color x:Key="SecondaryButtonColor">#D32F2F</Color>
+
 
     <!-- Neutral Colors -->
     <Color x:Key="White">#FFFFFF</Color>

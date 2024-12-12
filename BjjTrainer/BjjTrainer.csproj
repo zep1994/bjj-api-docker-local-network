@@ -57,6 +57,7 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Images\add.png" />
+	  <None Remove="Resources\Images\bjjlogo.png" />
 	  <None Remove="Resources\Images\calendar.png" />
 	  <None Remove="Resources\Images\default_profile.png" />
 	  <None Remove="Resources\Images\goal.png" />
@@ -142,6 +143,6 @@
 	  <Folder Include="Models\Training\" />
 	</ItemGroup>
 
-	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionBjjTrainerHideInfoBar="True" /></VisualStudio></ProjectExtensions>
+	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionBjjTrainerHideInfoBar="True" XamarinHotReloadGenericExceptionInfoBarBjjTrainerHideInfoBar="True" XamarinHotReloadUnhandledDeviceExceptionBjjTrainerHideInfoBar="True" /></VisualStudio></ProjectExtensions>
 
 </Project>

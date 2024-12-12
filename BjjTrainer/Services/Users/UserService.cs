@@ -88,6 +88,8 @@ namespace BjjTrainer.Services.Users
             if (!string.IsNullOrEmpty(userId))
             {
                 Preferences.Set("UserId", userId);
+                Preferences.Set("IsLoggedIn", true);
+
             }
         }
 
@@ -145,6 +147,7 @@ namespace BjjTrainer.Services.Users
         public async Task<bool> LogoutAsync()
         {
             Preferences.Remove("AuthToken"); // Remove token from storage
+            Preferences.Set("IsLoggedIn", false);
             var response = await HttpClient.PostAsync("auth/logout", null);
             return response.IsSuccessStatusCode;
         }

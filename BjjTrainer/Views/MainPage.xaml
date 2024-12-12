@@ -2,51 +2,90 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BjjTrainer.Views.MainPage"
-             Title="BJJ Trainer"
-             BackgroundColor="#292929">
-
-    <ContentPage.Resources>
-        <Style TargetType="Button" x:Key="TransparentButtonStyle">
-            <Setter Property="BackgroundColor" Value="Transparent" />
-            <Setter Property="TextColor" Value="White" />
-            <Setter Property="CornerRadius" Value="10" />
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="HeightRequest" Value="50" />
-            <Setter Property="Margin" Value="10" />
-        </Style>
-    </ContentPage.Resources>
+             BackgroundColor="{StaticResource BackgroundColor}">
 
     <ContentPage.Content>
         <ScrollView>
-            <VerticalStackLayout Padding="20" Spacing="15">
-                <Label Text="Welcome to BJJ Trainer!"
-                       FontSize="28"
-                       FontAttributes="Bold"
-                       HorizontalOptions="Center"
-                       TextColor="#007AFF"
-                       Margin="0,0,0,20" />
+            <VerticalStackLayout Spacing="20" Padding="10">
 
-                <!-- Buttons -->
-                <Grid ColumnSpacing="10" RowSpacing="10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                <!-- Top Moves Section -->
+                <VerticalStackLayout Spacing="10" Padding="10">
+                    <Label Text="Top Moves" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" />
 
-                    <Button Grid.Row="0" Grid.Column="0" Text="Lessons" Style="{StaticResource TransparentButtonStyle}" Clicked="OnLessonsClicked" />
-                    <Button Grid.Row="0" Grid.Column="1" Text="Training Log" Style="{StaticResource TransparentButtonStyle}" Clicked="OnTrainingLogClicked" />
-                    <Button Grid.Row="1" Grid.Column="0" Text="Goals" Style="{StaticResource TransparentButtonStyle}" Clicked="OnGoalsClicked" />
-                    <Button Grid.Row="1" Grid.Column="1" Text="User Progress" Style="{StaticResource TransparentButtonStyle}" Clicked="OnUserProgressClicked" />
-                    <Button Grid.Row="2" Grid.Column="0" Text="Calendar" Style="{StaticResource TransparentButtonStyle}" Clicked="OnCalendarClicked" />
-                    <Button Grid.Row="2" Grid.Column="1" Text="Moves" Style="{StaticResource TransparentButtonStyle}" Clicked="OnMovesClicked" />
-                    <Button Grid.Row="3" Grid.Column="1" Text="Account" Style="{StaticResource TransparentButtonStyle}" Clicked="OnAccountClicked" />
-                </Grid>
+                    <!-- Placeholder for Pie Chart -->
+                    <Frame BackgroundColor="{StaticResource CardBackgroundColor}" CornerRadius="100" HeightRequest="200" WidthRequest="200" HorizontalOptions="Center">
+                        <Grid>
+                            <!-- Pie Chart Placeholder Circle -->
+                            <BoxView Color="{StaticResource PrimaryTextColor}" CornerRadius="100" HorizontalOptions="Fill" VerticalOptions="Fill" />
+                            <Label Text="Pie Chart Placeholder" 
+                                   TextColor="{StaticResource SecondaryTextColor}" 
+                                   HorizontalOptions="Center" 
+                                   VerticalOptions="Center" />
+                        </Grid>
+                    </Frame>
+
+                    <!-- Top Moves List -->
+                    <CollectionView ItemsSource="{Binding TopMoves}" BackgroundColor="{StaticResource CardBackgroundColor}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame BackgroundColor="{StaticResource CardBackgroundColor}" Padding="10" Margin="5" CornerRadius="8">
+                                    <VerticalStackLayout>
+                                        <Label Text="{Binding MoveName}" FontSize="18" TextColor="{StaticResource PrimaryTextColor}" />
+                                        <Label Text="{Binding UsagePercentage, StringFormat='Usage: {0}%'}" FontSize="14" TextColor="{StaticResource SecondaryTextColor}" />
+                                    </VerticalStackLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+
+                <!-- Training Information Section -->
+                <Frame BackgroundColor="{StaticResource CardBackgroundColor}" Padding="15" CornerRadius="10">
+                    <VerticalStackLayout>
+                        <Label Text="Training Summary" 
+                               FontSize="20" 
+                               FontAttributes="Bold" 
+                               TextColor="{StaticResource PrimaryTextColor}" />
+                        <Label Text="Total Training Logs: {Binding TotalTrainingLogs}" TextColor="{StaticResource SecondaryTextColor}" />
+                        <Label Text="Total Training Time: {Binding TotalTrainingTime}" TextColor="{StaticResource SecondaryTextColor}" />
+                        <Label Text="Average Training Time: {Binding AverageTrainingTime}" TextColor="{StaticResource SecondaryTextColor}" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Goals Section -->
+                <Frame BackgroundColor="{StaticResource CardBackgroundColor}" Padding="15" CornerRadius="10">
+                    <VerticalStackLayout>
+                        <Label Text="Goals" 
+                               FontSize="20" 
+                               FontAttributes="Bold" 
+                               TextColor="{StaticResource PrimaryTextColor}" />
+                        <CollectionView ItemsSource="{Binding TrainingGoals}" SelectionMode="None">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame BackgroundColor="{StaticResource SecondaryBackgroundColor}" CornerRadius="8" Padding="10" Margin="5">
+                                        <VerticalStackLayout>
+                                            <Label Text="{Binding Notes}" TextColor="{StaticResource PrimaryTextColor}" />
+                                            <Label Text="Target Date: {Binding GoalDate}" TextColor="{StaticResource SecondaryTextColor}" />
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- User Progress Section -->
+                <Frame BackgroundColor="{StaticResource CardBackgroundColor}" Padding="15" CornerRadius="10">
+                    <VerticalStackLayout>
+                        <Label Text="User Progress" 
+                               FontSize="20" 
+                               FontAttributes="Bold" 
+                               TextColor="{StaticResource PrimaryTextColor}" />
+                        <Label Text="Total Goals Achieved: {Binding TotalGoalsAchieved}" TextColor="{StaticResource SecondaryTextColor}" />
+                        <Label Text="Total Moves Practiced: {Binding TotalMovesPracticed}" TextColor="{StaticResource SecondaryTextColor}" />
+                    </VerticalStackLayout>
+                </Frame>
+
             </VerticalStackLayout>
         </ScrollView>
     </ContentPage.Content>

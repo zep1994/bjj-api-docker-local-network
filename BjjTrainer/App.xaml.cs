@@ -20,7 +20,7 @@ namespace BjjTrainer
                 e.SetObserved();
             };
 
-            MainPage = new NavigationPage(new LoginPage());
+            MainPage = new AppShell();
         }
     }
 }

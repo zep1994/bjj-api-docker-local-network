@@ -4,7 +4,6 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:BjjTrainer"
-    xmlns:controls="clr-namespace:BjjTrainer.Controls"
     xmlns:views="clr-namespace:BjjTrainer.Views"
     xmlns:lessons="clr-namespace:BjjTrainer.Views.Lessons"
     xmlns:users="clr-namespace:BjjTrainer.Views.Users"
@@ -13,57 +12,75 @@
     xmlns:train="clr-namespace:BjjTrainer.Views.Training"
     xmlns:goals="clr-namespace:BjjTrainer.Views.TrainingGoals"
     xmlns:viewModels="clr-namespace:BjjTrainer.ViewModels"
-    Shell.FlyoutBehavior="Flyout"
-    Shell.TitleColor="White"
-    Title="BjjTrainer">
-        
-    <Shell.FlyoutHeader>
-        <controls:FlyoutHeader />
-    </Shell.FlyoutHeader>
+    Title="BjjTrainer"
+    Shell.BackgroundColor="{StaticResource BackgroundColor}"
+    Shell.TabBarBackgroundColor="{StaticResource Primary}"
+    Shell.TabBarUnselectedColor="{StaticResource White}"
+    Shell.TabBarForegroundColor="{StaticResource Tertiary}">
 
+    <!--Custom Title View--> 
+    <Shell.TitleView>
+        <Grid Padding="10" BackgroundColor="{StaticResource BackgroundColor}">
+
+             <!--Page Title--> 
+            <Label Text="{Binding Title}" 
+                   FontAttributes="Bold" 
+                   FontSize="20" 
+                   TextColor="White"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Start" />
+
+            <Image x:Name="ProfileImage" 
+                   Source="default_profile.png" 
+                   HeightRequest="40" 
+                   WidthRequest="40" 
+                   Aspect="AspectFill"
+                   HorizontalOptions="End" 
+                   VerticalOptions="Center"
+                   Margin="0,0,10,0"
+                   IsVisible="True" />
+            
+        </Grid>
+    </Shell.TitleView>
+
+    <ShellContent Title="Login Page" 
+                  Route="LoginPage" 
+                  ContentTemplate="{DataTemplate users:LoginPage}" />
+    
+    <!-- TabBar -->
     <TabBar>
-        <!-- Calendar -->
-        <ShellContent Title="Calendar"
-                      Icon="calendar.png"
-                      ContentTemplate="{DataTemplate events:CalendarPage}" />
-        <!-- Lessons -->
-        <ShellContent Title="Lessons"
-                      Icon="lessons.png"
-                      ContentTemplate="{DataTemplate lessons:LessonsPage}" />
-        <!-- Progress -->
-        <ShellContent Title="Progress"
-                      Icon="progress.png"
-                      ContentTemplate="{DataTemplate users:UserProgressPage}" />
-        <!-- Training -->
-        <ShellContent Title="Training"
-                      Icon="train.png"
-                      ContentTemplate="{DataTemplate train:TrainingLogFormPage}" />
-        <!-- Goals -->
-        <ShellContent Title="Goals"
-                      Icon="goal.png"
-                      ContentTemplate="{DataTemplate goals:TrainingGoalListPage}" />
-        <!-- Moves -->
-        <ShellContent Title="Moves"
-                      Icon="moves.png"
-                      ContentTemplate="{DataTemplate moves:MovesPage}" />
+        <Tab Title="Home" Icon="home.png">
+            <ShellContent Route="MainPage" ContentTemplate="{DataTemplate views:MainPage}" />
+        </Tab>
+
+        <Tab Title="Training" Icon="train.png">
+            <ShellContent Route="TrainingLogFormPage" ContentTemplate="{DataTemplate train:TrainingLogFormPage}" />
+        </Tab>
+
+        <Tab Title="Goals" Icon="goal.png">
+            <ShellContent Route="TrainingGoalListPage" ContentTemplate="{DataTemplate goals:TrainingGoalListPage}" />
+        </Tab>
+
+        <Tab Title="Calendar" Icon="calendar.png">
+            <ShellContent Route="CalendarPage" ContentTemplate="{DataTemplate events:CalendarPage}" />
+        </Tab>
+
+        <Tab Title="Progress" Icon="progress.png">
+            <ShellContent Route="UserProgressPage" ContentTemplate="{DataTemplate users:UserProgressPage}" />
+        </Tab>
+
+        <Tab Title="Lessons" Icon="lessons.png">
+            <ShellContent Route="LessonsPage" ContentTemplate="{DataTemplate lessons:LessonsPage}" />
+        </Tab>
+
+        <Tab Title="Moves" Icon="moves.png">
+            <ShellContent Route="MovesPage" ContentTemplate="{DataTemplate moves:MovesPage}" />
+        </Tab>
     </TabBar>
 
     <!-- Unique routes for each page -->
-    <ShellContent Title="Main" Route="MainPage" ContentTemplate="{DataTemplate views:MainPage}" />
-    <ShellContent Title="Lessons" Route="LessonsPage" ContentTemplate="{DataTemplate lessons:LessonsPage}" />
-    <ShellContent Route="SubLessonPage" ContentTemplate="{DataTemplate lessons:SubLessonPage}" />
-    <ShellContent Route="SubLessonDetailsPage" ContentTemplate="{DataTemplate lessons:SubLessonDetailsPage}" />
-    <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate users:LoginPage}" />
-    <ShellContent Route="FavoritesPage" ContentTemplate="{DataTemplate users:FavoritesPage}" />
-    <ShellContent Title="Training Log" Route="TrainingLogFormPage" ContentTemplate="{DataTemplate train:TrainingLogFormPage}" />
-    <ShellContent Title="Account" Route="UserProfilePage" ContentTemplate="{DataTemplate users:UserProfilePage}" />
-    <ShellContent Title="Progress" Route="UserProgressPage" ContentTemplate="{DataTemplate users:UserProgressPage}" />
-    <ShellContent Title="Calendar" Route="CalendarPage" ContentTemplate="{DataTemplate events:CalendarPage}" />
-    <ShellContent Title="Moves" Route="MovesPage" ContentTemplate="{DataTemplate moves:MovesPage}" />
-    <ShellContent Title="Training Goals" 
-                  Route="TrainingGoalListPage" 
-                  ContentTemplate="{DataTemplate goals:TrainingGoalListPage}" />
-
-    <ShellContent Route="TrainingGoalPage" 
-                  ContentTemplate="{DataTemplate goals:TrainingGoalPage}" />
+    <ShellContent Title="Lessons" Route="SubLessonPage" ContentTemplate="{DataTemplate lessons:SubLessonPage}" />
+    <ShellContent Title="SubLessons" Route="SubLessonDetailsPage" ContentTemplate="{DataTemplate lessons:SubLessonDetailsPage}" />
+    <ShellContent Title="My Lessons" Route="FavoritesPage" ContentTemplate="{DataTemplate users:FavoritesPage}" />
+    <ShellContent Title="My Goals" Route="TrainingGoalPage" ContentTemplate="{DataTemplate goals:TrainingGoalPage}" />
 </Shell>
