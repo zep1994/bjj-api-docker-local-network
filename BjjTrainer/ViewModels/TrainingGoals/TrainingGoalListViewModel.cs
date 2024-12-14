@@ -28,8 +28,7 @@ public class TrainingGoalListViewModel : BaseViewModel
 
         try
         {
-            var userId = Preferences.Get("UserId", string.Empty);
-            var goals = await _trainingGoalService.GetTrainingGoalsAsync(userId);
+            var goals = await _trainingGoalService.GetTrainingGoalsAsync();
 
             TrainingGoals.Clear();
             foreach (var goal in goals)

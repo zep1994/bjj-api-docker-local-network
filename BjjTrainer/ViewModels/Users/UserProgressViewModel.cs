@@ -62,7 +62,7 @@ namespace BjjTrainer.ViewModels.Users
                 }
 
                 // Fetch progress data
-                var progress = await _userProgressService.GetUserProgressAsync(userId);
+                var progress = await _userProgressService.GetUserProgressAsync();
 
                 if (progress != null)
                 {

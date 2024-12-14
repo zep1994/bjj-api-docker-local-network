@@ -6,6 +6,8 @@ namespace BjjTrainer.Services.TrainingGoals
 {
     public class TrainingGoalService : ApiService
     {
+        public string userId { get; private set; }
+
         public async Task<bool> CreateTrainingGoalAsync(CreateTrainingGoalDto dto)
         {
             try
@@ -27,17 +29,43 @@ namespace BjjTrainer.Services.TrainingGoals
         }
 
 
-        public async Task<List<TrainingGoal>> GetTrainingGoalsAsync(string userId)
+        public async Task<List<TrainingGoal>> GetTrainingGoalsAsync()
         {
             try
             {
-                var goals = await HttpClient.GetFromJsonAsync<List<TrainingGoal>>($"traininggoal/{userId}");
-                return goals ?? new List<TrainingGoal>();
+                var userId = Preferences.Get("UserId", string.Empty);
+                if (string.IsNullOrEmpty(userId))
+                {
+                    Console.WriteLine("User ID is missing in Preferences.");
+                    return new List<TrainingGoal>();
+                }
+
+                var url = $"TrainingGoal/{userId}";
+                Console.WriteLine($"Fetching goals from URL: {url}");
+
+                var response = await HttpClient.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+
+                var goals = await response.Content.ReadFromJsonAsync<List<TrainingGoal>>();
+                if (goals == null || !goals.Any())
+                {
+                    Console.WriteLine("No goals found.");
+                    return new List<TrainingGoal>();
+                }
+
+                foreach (var goal in goals)
+                {
+                    Console.WriteLine($"Goal: {goal.Notes}, Moves Count: {goal.UserTrainingGoalMoves?.Count ?? 0}");
+                }
+
+                return goals;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Failed to fetch training goals: {ex.Message}");
+                Console.WriteLine($"Error fetching training goals: {ex.Message}");
+                return new List<TrainingGoal>();
             }
         }
+
     }
 }
