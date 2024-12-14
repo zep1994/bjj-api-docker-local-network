@@ -1,4 +1,4 @@
-﻿using BjjTrainer.Models.Move;
+﻿using BjjTrainer.Models.Users;
 
 namespace BjjTrainer.Models.TrainingGoal
 {
@@ -7,6 +7,6 @@ namespace BjjTrainer.Models.TrainingGoal
         public int Id { get; set; }
         public DateTime GoalDate { get; set; }
         public string Notes { get; set; } = string.Empty;
-        public List<MoveDto> Moves { get; set; } = new List<MoveDto>();
+        public List<UserTrainingGoalMove> UserTrainingGoalMoves { get; set; }
     }
 }

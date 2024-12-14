@@ -1,28 +1,73 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:Chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
              x:Class="BjjTrainer.Views.MainPage"
              BackgroundColor="{StaticResource BackgroundColor}">
 
     <ContentPage.Content>
         <ScrollView>
             <VerticalStackLayout Spacing="20" Padding="10">
-
-                <!-- Top Moves Section -->
                 <VerticalStackLayout Spacing="10" Padding="10">
-                    <Label Text="Top Moves" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" />
 
-                    <!-- Placeholder for Pie Chart -->
-                    <Frame BackgroundColor="{StaticResource CardBackgroundColor}" CornerRadius="100" HeightRequest="200" WidthRequest="200" HorizontalOptions="Center">
-                        <Grid>
-                            <!-- Pie Chart Placeholder Circle -->
-                            <BoxView Color="{StaticResource PrimaryTextColor}" CornerRadius="100" HorizontalOptions="Fill" VerticalOptions="Fill" />
-                            <Label Text="Pie Chart Placeholder" 
-                                   TextColor="{StaticResource SecondaryTextColor}" 
-                                   HorizontalOptions="Center" 
-                                   VerticalOptions="Center" />
-                        </Grid>
+                    <Label Text="User Progress" FontSize="24" HorizontalOptions="Center" />
+
+                    <!-- Progress Details -->
+                    <Frame BorderColor="Gray" Padding="10" CornerRadius="10">
+                        <VerticalStackLayout>
+                            <Label Text="Total Training Time:" FontAttributes="Bold" />
+                            <Label Text="{Binding TotalTrainingTime}" />
+
+                            <Label Text="Total Rounds Rolled:" FontAttributes="Bold" />
+                            <Label Text="{Binding TotalRoundsRolled}" />
+
+                            <Label Text="Total Submissions:" FontAttributes="Bold" />
+                            <Label Text="{Binding TotalSubmissions}" />
+
+                            <Label Text="Total Taps:" FontAttributes="Bold" />
+                            <Label Text="{Binding TotalTaps}" />
+
+                            <Label Text="Total Goals Achieved:" FontAttributes="Bold" />
+                            <Label Text="{Binding TotalGoalsAchieved}" />
+
+                            <Label Text="Total Moves Associated with Goals:" FontAttributes="Bold" />
+                            <Label Text="{Binding TotalMoves}" />
+
+                        </VerticalStackLayout>
                     </Frame>
+
+                    <!-- Moves Performed Chart -->
+                    <Label Text="Top Moves Performed" FontSize="24" HorizontalOptions="Center" FontAttributes="Bold" />
+                    <Chart:SfCircularChart>
+                        <Chart:SfCircularChart.Title>
+                            <Border StrokeShape="RoundRectangle 8"
+                            Stroke="#199CB3" BackgroundColor="#199CB3" StrokeThickness="3">
+                                <Label Text="Moves Performed Distribution" 
+                               HorizontalTextAlignment="Center" TextColor="White"
+                               FontSize="Medium" FontAttributes="Bold" />
+                            </Border>
+                        </Chart:SfCircularChart.Title>
+
+                        <Chart:SfCircularChart.TooltipBehavior>
+                            <Chart:ChartTooltipBehavior />
+                        </Chart:SfCircularChart.TooltipBehavior>
+
+                        <Chart:PieSeries ItemsSource="{Binding MovesPerformed}"
+                                 XBindingPath="Name" YBindingPath="TrainingLogCount"
+                                 ExplodeIndex="0" Stroke="White" StrokeWidth="2"
+                                 ShowDataLabels="True" EnableTooltip="True"
+                                 StartAngle="270" EndAngle="630">
+
+                            <Chart:PieSeries.DataLabelSettings>
+                                <Chart:CircularDataLabelSettings UseSeriesPalette="True" LabelPlacement="Outer">
+                                    <Chart:CircularDataLabelSettings.LabelStyle>
+                                        <Chart:ChartDataLabelStyle LabelFormat="0.##'%'"/>
+                                    </Chart:CircularDataLabelSettings.LabelStyle>
+                                </Chart:CircularDataLabelSettings>
+                            </Chart:PieSeries.DataLabelSettings>
+                        </Chart:PieSeries>
+                    </Chart:SfCircularChart>
+
 
                     <!-- Top Moves List -->
                     <CollectionView ItemsSource="{Binding TopMoves}" BackgroundColor="{StaticResource CardBackgroundColor}">
@@ -40,52 +85,46 @@
                 </VerticalStackLayout>
 
                 <!-- Training Information Section -->
-                <Frame BackgroundColor="{StaticResource CardBackgroundColor}" Padding="15" CornerRadius="10">
-                    <VerticalStackLayout>
-                        <Label Text="Training Summary" 
-                               FontSize="20" 
-                               FontAttributes="Bold" 
-                               TextColor="{StaticResource PrimaryTextColor}" />
-                        <Label Text="Total Training Logs: {Binding TotalTrainingLogs}" TextColor="{StaticResource SecondaryTextColor}" />
-                        <Label Text="Total Training Time: {Binding TotalTrainingTime}" TextColor="{StaticResource SecondaryTextColor}" />
-                        <Label Text="Average Training Time: {Binding AverageTrainingTime}" TextColor="{StaticResource SecondaryTextColor}" />
+                <Label Text="Training Summary" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
+
+                <Frame BorderColor="Gray" Padding="15" CornerRadius="10">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Weekly Training Hours:" FontAttributes="Bold" />
+                        <Label Text="{Binding WeeklyTrainingHours}" />
+
+                        <Label Text="Average Session Length (min):" FontAttributes="Bold" />
+                        <Label Text="{Binding AverageSessionLength}" />
+
+                        <Label Text="Favorite Move This Month:" FontAttributes="Bold" />
+                        <Label Text="{Binding FavoriteMoveThisMonth}" />
                     </VerticalStackLayout>
                 </Frame>
 
                 <!-- Goals Section -->
-                <Frame BackgroundColor="{StaticResource CardBackgroundColor}" Padding="15" CornerRadius="10">
-                    <VerticalStackLayout>
-                        <Label Text="Goals" 
-                               FontSize="20" 
-                               FontAttributes="Bold" 
-                               TextColor="{StaticResource PrimaryTextColor}" />
-                        <CollectionView ItemsSource="{Binding TrainingGoals}" SelectionMode="None">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Frame BackgroundColor="{StaticResource SecondaryBackgroundColor}" CornerRadius="8" Padding="10" Margin="5">
-                                        <VerticalStackLayout>
-                                            <Label Text="{Binding Notes}" TextColor="{StaticResource PrimaryTextColor}" />
-                                            <Label Text="Target Date: {Binding GoalDate}" TextColor="{StaticResource SecondaryTextColor}" />
-                                        </VerticalStackLayout>
-                                    </Frame>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </VerticalStackLayout>
-                </Frame>
-
-                <!-- User Progress Section -->
-                <Frame BackgroundColor="{StaticResource CardBackgroundColor}" Padding="15" CornerRadius="10">
-                    <VerticalStackLayout>
-                        <Label Text="User Progress" 
-                               FontSize="20" 
-                               FontAttributes="Bold" 
-                               TextColor="{StaticResource PrimaryTextColor}" />
-                        <Label Text="Total Goals Achieved: {Binding TotalGoalsAchieved}" TextColor="{StaticResource SecondaryTextColor}" />
-                        <Label Text="Total Moves Practiced: {Binding TotalMovesPracticed}" TextColor="{StaticResource SecondaryTextColor}" />
-                    </VerticalStackLayout>
-                </Frame>
-
+                <VerticalStackLayout Spacing="10" Padding="10">
+                    <Label Text="Training Goals" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <CollectionView ItemsSource="{Binding TrainingGoals}" SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame BorderColor="Gray" CornerRadius="10" Padding="10" Margin="5">
+                                    <VerticalStackLayout>
+                                        <Label Text="{Binding GoalDate, StringFormat='{0:MMMM dd, yyyy}'}" FontAttributes="Bold" FontSize="16" />
+                                        <Label Text="{Binding Notes}" FontSize="14" />
+                                        <Label Text="Moves:" FontAttributes="Bold" />
+                                        <CollectionView ItemsSource="{Binding UserTrainingGoalMoves}" SelectionMode="None">
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Label Text="{Binding Name}" FontSize="14" />
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+                                    </VerticalStackLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+                
             </VerticalStackLayout>
         </ScrollView>
     </ContentPage.Content>

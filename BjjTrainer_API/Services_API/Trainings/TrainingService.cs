@@ -57,62 +57,89 @@ namespace BjjTrainer_API.Services_API.Trainings
         {
             try
             {
-                // Fetch all necessary data in a single query
-                var userProgressData = await _context.TrainingLogs
+                var userLogs = await _context.TrainingLogs
                     .Where(log => log.ApplicationUserId == applicationUserId)
-                    .Select(log => new
-                    {
-                        log.TrainingTime,
-                        log.RoundsRolled,
-                        log.Submissions,
-                        log.Taps,
-                        Moves = log.TrainingLogMoves
-                            .GroupBy(tlm => tlm.MoveId)
-                            .Select(g => new
-                            {
-                                MoveId = g.Key,
-                                TrainingLogCount = g.Count(),
-                                MoveDetails = g.Select(tlm => tlm.Move).FirstOrDefault()
-                            })
-                    })
+                    .Include(log => log.TrainingLogMoves)
+                    .ThenInclude(tlm => tlm.Move)
                     .ToListAsync();
 
-                // Aggregate data from the query
-                var totalTrainingTime = userProgressData.Sum(log => log.TrainingTime);
-                var totalRoundsRolled = userProgressData.Sum(log => log.RoundsRolled);
-                var totalSubmissions = userProgressData.Sum(log => log.Submissions);
-                var totalTaps = userProgressData.Sum(log => log.Taps);
+                var trainingGoals = await _context.TrainingGoals
+                    .Where(goal => goal.ApplicationUserId == applicationUserId)
+                    .Include(goal => goal.UserTrainingGoalMoves)
+                    .ThenInclude(gtm => gtm.Move)
+                    .ToListAsync();
 
-                var movesPerformed = userProgressData
-                    .SelectMany(log => log.Moves)
-                    .GroupBy(move => move.MoveId)
+                if (!userLogs.Any() && !trainingGoals.Any())
+                {
+                    return new UserProgressDto
+                    {
+                        TotalGoalsAchieved = 0,
+                        TotalMoves = 0,
+                        TotalTrainingTime = 0,
+                        TotalRoundsRolled = 0,
+                        TotalSubmissions = 0,
+                        TotalTaps = 0,
+                        WeeklyTrainingHours = 0,
+                        AverageSessionLength = 0,
+                        FavoriteMoveThisMonth = "No data available",
+                        MovesPerformed = new List<MoveDto>()
+                    };
+                }
+
+                var totalTrainingTime = userLogs.Sum(log => log.TrainingTime);
+                var totalRoundsRolled = userLogs.Sum(log => log.RoundsRolled);
+                var totalSubmissions = userLogs.Sum(log => log.Submissions);
+                var totalTaps = userLogs.Sum(log => log.Taps);
+
+                var oneWeekAgo = DateTime.Now.AddDays(-7);
+                var weeklyTrainingHours = userLogs
+                    .Where(log => log.Date >= oneWeekAgo)
+                    .Sum(log => log.TrainingTime / 60);
+
+                var averageSessionLength = userLogs.Average(log => log.TrainingTime);
+
+                var currentMonth = DateTime.Now.Month;
+                var favoriteMove = userLogs
+                    .Where(log => log.Date.Month == currentMonth)
+                    .SelectMany(log => log.TrainingLogMoves)
+                    .GroupBy(tlm => tlm.Move.Name)
+                    .OrderByDescending(g => g.Count())
+                    .FirstOrDefault()?.Key ?? "No moves practiced";
+
+                var movesPerformed = userLogs
+                    .SelectMany(log => log.TrainingLogMoves)
+                    .GroupBy(tlm => tlm.Move.Id)
                     .Select(group => new MoveDto
                     {
                         Id = group.Key,
-                        Name = group.First().MoveDetails.Name,
-                        Description = group.First().MoveDetails.Description,
-                        SkillLevel = group.First().MoveDetails.SkillLevel,
-                        TrainingLogCount = group.Sum(m => m.TrainingLogCount)
+                        Name = group.First().Move.Name,
+                        Description = group.First().Move.Description,
+                        SkillLevel = group.First().Move.SkillLevel,
+                        TrainingLogCount = group.Count()
                     })
                     .ToList();
 
-                // Assign to the DTO
-                var userProgress = new UserProgressDto
+                var totalGoalsAchieved = trainingGoals.Count(goal => goal.GoalDate <= DateTime.Now);
+                var totalMoves = trainingGoals.SelectMany(goal => goal.UserTrainingGoalMoves).Select(gtm => gtm.Move).Distinct().Count();
+
+                return new UserProgressDto
                 {
                     TotalTrainingTime = totalTrainingTime,
                     TotalRoundsRolled = totalRoundsRolled,
                     TotalSubmissions = totalSubmissions,
                     TotalTaps = totalTaps,
-                    MovesPerformed = movesPerformed // Ensure type alignment
+                    WeeklyTrainingHours = weeklyTrainingHours,
+                    AverageSessionLength = averageSessionLength,
+                    FavoriteMoveThisMonth = favoriteMove,
+                    TotalGoalsAchieved = totalGoalsAchieved,
+                    TotalMoves = totalMoves,
+                    MovesPerformed = movesPerformed
                 };
-
-                return userProgress;
             }
             catch (Exception ex)
             {
                 throw new InvalidOperationException("An error occurred while fetching user progress.", ex);
             }
         }
-
     }
 }

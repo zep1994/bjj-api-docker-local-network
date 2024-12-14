@@ -14,6 +14,8 @@ using BjjTrainer.Views.Moves;
 using BjjTrainer.Views.Training;
 using BjjTrainer.Views.TrainingGoals;
 using BjjTrainer.Views.Users;
+using Syncfusion.Licensing;
+using Syncfusion.Maui.Core.Hosting;
 
 namespace BjjTrainer
 {
@@ -22,6 +24,9 @@ namespace BjjTrainer
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
+            builder.UseMauiApp<App>()
+                   .ConfigureSyncfusionCore();
+            SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NMaF5cXmBCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWH1fdHVURWRdVER0VkA=");
             builder
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>

@@ -7,7 +7,8 @@
     <!-- Primary Colors -->
     <Color x:Key="BackgroundColor">#000023</Color>
     <Color x:Key="CardBackgroundColor">#212121</Color>
-
+    <Color x:Key="ChartGradientStart">#1E88E5</Color>
+    <Color x:Key="ChartGradientEnd">#43A047</Color>
 
     <!-- Button Colors -->
     <Color x:Key="ButtonBackgroundColor">#03A9F4</Color>

@@ -1,8 +1,10 @@
-﻿using BjjTrainer.Models.TrainingGoal;
+﻿using BjjTrainer.Models.Move;
+using BjjTrainer.Models.TrainingGoal;
 using BjjTrainer.Services.Events;
+using BjjTrainer.Services.Moves;
+using BjjTrainer.Services.TrainingGoals;
 using BjjTrainer.Services.Trainings;
 using BjjTrainer.Services.Users;
-using BjjTrainer.Views.Moves;
 using MvvmHelpers;
 using System.Collections.ObjectModel;
 
@@ -13,79 +15,138 @@ namespace BjjTrainer.ViewModels
         private readonly TrainingService _trainingService;
         private readonly EventService _eventService;
         private readonly UserProgressService _userProgressService;
-        private TrainingSummaryModel _trainingSummary;
+        private readonly MoveService _moveService;
+        private readonly TrainingGoalService _trainingGoalService;
 
-
-        public ObservableCollection<TopMovesModel> TopMoves { get; set; } = new ObservableCollection<TopMovesModel>();
+        public ObservableCollection<MoveDto> MovesPerformed { get; set; } = new ObservableCollection<MoveDto>();
         public ObservableCollection<TrainingGoal> TrainingGoals { get; set; } = new ObservableCollection<TrainingGoal>();
 
-        public string TotalTrainingLogs { get; private set; }
-        public string TotalTrainingTime { get; private set; }
-        public string AverageTrainingTime { get; private set; }
-
-        public string TotalGoalsAchieved { get; private set; }
-        public string TotalMovesPracticed { get; private set; }
+        // Properties for User Progress
+        public double TotalTrainingTime { get; private set; }
+        public int TotalRoundsRolled { get; private set; }
+        public int TotalSubmissions { get; private set; }
+        public int TotalTaps { get; private set; }
+        public double WeeklyTrainingHours { get; private set; }
+        public double AverageSessionLength { get; private set; }
+        public string FavoriteMoveThisMonth { get; private set; }
+        public int TotalGoalsAchieved { get; private set; }
+        public int TotalMoves { get; private set; }
 
         public MainPageViewModel()
         {
             _trainingService = new TrainingService();
             _eventService = new EventService();
             _userProgressService = new UserProgressService();
+            _moveService = new MoveService();
+            _trainingGoalService = new TrainingGoalService(); 
 
             LoadData();
-            _ = LoadTopMovesAsync();
-
         }
-
-        public TrainingSummaryModel TrainingSummary
-        {
-            get => _trainingSummary;
-            set => SetProperty(ref _trainingSummary, value);
-        }
-
-        private async Task LoadTopMovesAsync()
-        {
-            try
-            {
-                // Replace "userId" with your actual logic to get the user's ID
-                var userId = Preferences.Get("UserId", string.Empty);
-                if (string.IsNullOrEmpty(userId))
-                {
-                    await Application.Current.MainPage.DisplayAlert("Error", "User not logged in.", "OK");
-                    return;
-                }
-
-                var topMoves = await _trainingService.GetTopMovesAsync();
-
-                TopMoves.Clear();
-                foreach (var move in topMoves)
-                {
-                    TopMoves.Add(move);
-                }
-            }
-            catch (Exception ex)
-            {
-                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load top moves: {ex.Message}", "OK");
-            }
-        }
-
 
         private async void LoadData()
         {
-            var moves = await _trainingService.GetTopMovesAsync();
-            foreach (var move in moves)
-                TopMoves.Add(move);
-
-            TrainingSummary = await _trainingService.GetTrainingSummaryAsync();
-
-
-            //var goals = await _eventService.GetUserGoalsAsync();
-            //foreach (var goal in goals)
-            //    TrainingGoals.Add(goal);
-
-            //var progress = await _userProgressService.GetUserProgressAsync();
-            //TotalGoalsAchieved = progress.GoalsAchieved.ToString();
-            //TotalMovesPracticed = progress.MovesPracticed.ToString();
+            try
+            {
+                IsBusy = true;
+                await LoadUserProgressAsync();
+                await LoadGoalsAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading data: {ex.Message}");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
+
+        private async Task LoadUserProgressAsync()
+        {
+            try
+            {
+                var userProgress = await _userProgressService.GetUserProgressAsync();
+
+                // Assign progress data
+                TotalTrainingTime = userProgress.TotalTrainingTime;
+                TotalRoundsRolled = userProgress.TotalRoundsRolled;
+                TotalSubmissions = userProgress.TotalSubmissions;
+                TotalTaps = userProgress.TotalTaps;
+                WeeklyTrainingHours = userProgress.WeeklyTrainingHours;
+                AverageSessionLength = userProgress.AverageSessionLength;
+                FavoriteMoveThisMonth = userProgress.FavoriteMoveThisMonth;
+                TotalGoalsAchieved = userProgress.TotalGoalsAchieved;
+                TotalMoves = userProgress.TotalMoves;
+
+                // Clear existing data
+                MovesPerformed.Clear();
+
+                // Add fetched moves to the collection
+                foreach (var move in userProgress.MovesPerformed)
+                {
+                    MovesPerformed.Add(move);
+                }
+
+                OnPropertyChanged(nameof(TotalTrainingTime));
+                OnPropertyChanged(nameof(TotalRoundsRolled));
+                OnPropertyChanged(nameof(TotalSubmissions));
+                OnPropertyChanged(nameof(TotalTaps));
+                OnPropertyChanged(nameof(WeeklyTrainingHours));
+                OnPropertyChanged(nameof(AverageSessionLength));
+                OnPropertyChanged(nameof(FavoriteMoveThisMonth));
+                OnPropertyChanged(nameof(TotalGoalsAchieved));
+                OnPropertyChanged(nameof(TotalMoves));
+                OnPropertyChanged(nameof(MovesPerformed));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading user progress: {ex.Message}");
+            }
+        }
+
+        private async Task LoadGoalsAsync()
+        {
+            try
+            {
+                IsBusy = true;
+                var goals = await _trainingGoalService.GetTrainingGoalsAsync();
+
+                Console.WriteLine($"Goals Count: {goals?.Count()}");
+
+                TrainingGoals.Clear();
+
+                foreach (var goal in goals)
+                {
+                    TrainingGoals.Add(goal);
+                }
+
+                OnPropertyChanged(nameof(TrainingGoals));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading training goals: {ex.Message}");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+
+
+        //private async void LoadTopMoves()
+        //{
+        //    try
+        //    {
+        //        var topMoves = _moveService.GetAllMovesAsync();
+        //        Console.WriteLine($"Top Moves: {topMoves}");
+
+        //        Tp
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Error: {ex.Message}");
+        //    }
+        //}
     }
 }

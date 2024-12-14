@@ -8,5 +8,6 @@
         public string Content { get; set; }
         public string? SkillLevel { get; set; }
         public List<string>? Tags { get; set; }
+        public int TrainingLogCount { get; set; }
     }
 }
