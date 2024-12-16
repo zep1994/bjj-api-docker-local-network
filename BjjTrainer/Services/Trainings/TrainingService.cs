@@ -9,6 +9,35 @@ namespace BjjTrainer.Services.Trainings
 {
     public class TrainingService : ApiService
     {
+        // GET ALL BY UserId
+        public async Task<List<TrainingLogDto>> GetTrainingLogsAsync(string userId)
+        {
+            try
+            {
+                var response = await HttpClient.GetFromJsonAsync<List<TrainingLogDto>>($"traininglog/list/{userId}");
+                return response ?? new List<TrainingLogDto>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error fetching training logs: {ex.Message}");
+            }
+        }
+
+        // GET BY UserId
+        public async Task<TrainingLogDto> GetTrainingLogByIdAsync(int logId)
+        {
+            try
+            {
+                return await HttpClient.GetFromJsonAsync<TrainingLogDto>($"traininglog/{logId}")
+                    ?? throw new Exception("Training log not found.");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error fetching training log: {ex.Message}");
+            }
+        }
+
+        // CREATE
         public async Task<bool> SubmitTrainingLogAsync(object trainingLog)
         {
             try
@@ -32,6 +61,42 @@ namespace BjjTrainer.Services.Trainings
             catch (Exception ex)
             {
                 throw new Exception($"Failed to submit training log: {ex.Message}");
+            }
+        }
+
+        // PUT
+        public async Task UpdateTrainingLogAsync(int logId, TrainingLogDto updatedLog)
+        {
+            try
+            {
+                var response = await HttpClient.PutAsJsonAsync($"traininglog/{logId}", updatedLog);
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Error updating training log: {error}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error updating training log: {ex.Message}");
+            }
+        }
+
+        // DELETE
+        public async Task DeleteTrainingLogAsync(int logId)
+        {
+            try
+            {
+                var response = await HttpClient.DeleteAsync($"traininglog/{logId}");
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Error deleting training log: {error}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error deleting training log: {ex.Message}");
             }
         }
     }
