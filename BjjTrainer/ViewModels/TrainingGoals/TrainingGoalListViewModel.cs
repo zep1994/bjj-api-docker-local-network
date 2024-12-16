@@ -18,7 +18,33 @@ public class TrainingGoalListViewModel : BaseViewModel
     {
         _trainingGoalService = new TrainingGoalService();
 
-        LoadGoalsAsync();
+        Task.Run(async () => await LoadGoalsAsync());
+    }
+
+    public async Task DeleteGoalAsync(int goalId)
+    {
+        IsBusy = true;
+
+        try
+        {
+            var success = await _trainingGoalService.DeleteTrainingGoalAsync(goalId);
+            if (success)
+            {
+                var goalToRemove = TrainingGoals.FirstOrDefault(g => g.Id == goalId);
+                if (goalToRemove != null)
+                {
+                    TrainingGoals.Remove(goalToRemove);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error deleting goal: {ex.Message}");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     public async Task LoadGoalsAsync()
@@ -28,6 +54,7 @@ public class TrainingGoalListViewModel : BaseViewModel
         try
         {
             var goals = await _trainingGoalService.GetTrainingGoalsAsync();
+            Console.WriteLine($"Loaded {goals.Count} training goals.");
 
             TrainingGoals.Clear();
             foreach (var goal in goals)
@@ -37,11 +64,12 @@ public class TrainingGoalListViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            // Handle exceptions if needed
+            Console.WriteLine($"Error loading training goals: {ex.Message}");
         }
         finally
         {
             IsBusy = false;
         }
     }
+
 }

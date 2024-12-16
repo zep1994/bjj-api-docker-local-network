@@ -11,15 +11,29 @@
             <CollectionView ItemsSource="{Binding TrainingGoals}" SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame BorderColor="LightGray" CornerRadius="8" Padding="10" Margin="0,5">
+                        <Frame CornerRadius="10" Padding="10" Margin="5" BackgroundColor="{StaticResource CardBackgroundColor}" BorderColor="{StaticResource BorderColor}">
                             <VerticalStackLayout>
-                                <Label Text="{Binding Notes}" FontSize="18" TextColor="#333" />
-                                <Label Text="{Binding GoalDate, StringFormat='{0:MMMM dd, yyyy}'}" FontSize="14" TextColor="#555" />
+                                <Label FontAttributes="Bold" FontSize="18" Text="{Binding Notes}" />
+                                <Label FontSize="14" Text="{Binding GoalDate, StringFormat='Goal Date: {0:yyyy-MM-dd}'}" />
+                                <Button Text="View"
+                                        CommandParameter="{Binding Id}"
+                                        Clicked="OnViewGoalClicked"
+                                        BackgroundColor="Green"
+                                        TextColor="White"
+                                        FontAttributes="Bold" />
+
+                                <Button Text="Delete"
+                                        CommandParameter="{Binding Id}"
+                                        Clicked="OnDeleteGoalClicked"
+                                        BackgroundColor="Red"
+                                        TextColor="White"
+                                        FontAttributes="Bold" />    
                             </VerticalStackLayout>
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
 
             <!-- Add New Goal Button -->
             <Button Text="Add New Goal"

@@ -67,6 +67,9 @@ namespace BjjTrainer
             builder.Services.AddTransient<TrainingGoalViewModel>();
             builder.Services.AddTransient<TrainingGoalListViewModel>();
             builder.Services.AddTransient<TrainingGoalListPage>();
+            builder.Services.AddTransient<UpdateTrainingGoalPage>();
+            builder.Services.AddTransient<UpdateTrainingGoalViewModel>();
+
             builder.Services.AddTransient<TrainingGoalPage>();
             builder.Services.AddTransient<TrainingLogFormPage>();
             builder.Services.AddTransient<TrainingGoalListPage>();

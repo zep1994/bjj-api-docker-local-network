@@ -15,6 +15,21 @@ namespace BjjTrainer_API.Controllers.Goals
             _goalService = goalService;
         }
 
+        [HttpGet("{goalId}")]
+        public async Task<IActionResult> GetGoalById(int goalId)
+        {
+            try
+            {
+                var goal = await _goalService.GetTrainingGoalByIdAsync(goalId);
+                return Ok(goal);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+
         [HttpPost("create")]
         public async Task<IActionResult> CreateGoal([FromBody] CreateTrainingGoalDto dto)
         {
@@ -32,7 +47,7 @@ namespace BjjTrainer_API.Controllers.Goals
             }
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetGoals(string userId)
         {
             try
@@ -45,5 +60,37 @@ namespace BjjTrainer_API.Controllers.Goals
                 return StatusCode(500, new { error = ex.Message });
             }
         }
+
+        [HttpPut("{goalId}")]
+        public async Task<IActionResult> UpdateGoal(int goalId, [FromBody] CreateTrainingGoalDto dto)
+        {
+            if (dto == null || !dto.MoveIds.Any())
+                return BadRequest("A training goal must include at least one move.");
+
+            try
+            {
+                await _goalService.UpdateTrainingGoalAsync(goalId, dto);
+                return Ok(new { message = "Training goal updated successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+        [HttpDelete("{goalId}")]
+        public async Task<IActionResult> DeleteGoal(int goalId)
+        {
+            try
+            {
+                await _goalService.DeleteTrainingGoalAsync(goalId);
+                return Ok(new { message = "Training goal deleted successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
     }
 }

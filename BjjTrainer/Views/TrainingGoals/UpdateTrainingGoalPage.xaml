@@ -1,0 +1,69 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:BjjTrainer.ViewModels.TrainingGoals"
+             x:Class="BjjTrainer.Views.TrainingGoals.UpdateTrainingGoalPage"
+             Title="Update Training Goal"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <ContentPage.Content>
+        <ScrollView>
+            <VerticalStackLayout Padding="20" Spacing="15">
+                <!-- Page Title -->
+                <Label Text="Update Training Goal"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       TextColor="{StaticResource PrimaryTextColor}" />
+
+                <!-- Goal Date -->
+                <VerticalStackLayout>
+                    <Label Text="Goal Date" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                    <DatePicker Date="{Binding GoalDate}" />
+                </VerticalStackLayout>
+
+                <!-- Notes -->
+                <VerticalStackLayout>
+                    <Label Text="Notes" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                    <Editor Placeholder="Enter notes here" Text="{Binding Notes}" AutoSize="TextChanges"
+                            BackgroundColor="{StaticResource FieldBackgroundColor}" />
+                </VerticalStackLayout>
+
+                <!-- Moves Selection -->
+                <Label Text="Select Moves" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                <CollectionView ItemsSource="{Binding Moves}" SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame CornerRadius="10" Padding="10" Margin="5"
+                                   BackgroundColor="{StaticResource CardBackgroundColor}"
+                                   BorderColor="{StaticResource BorderColor}">
+                                <HorizontalStackLayout>
+                                    <CheckBox IsChecked="{Binding IsSelected}" VerticalOptions="Center" />
+                                    <VerticalStackLayout>
+                                        <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                                        <Label Text="{Binding TrainingLogCount, StringFormat='Logged {0} times'}" FontSize="12" TextColor="Gray" />
+                                    </VerticalStackLayout>
+                                </HorizontalStackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Save Button -->
+                <Frame CornerRadius="10" Padding="0" BackgroundColor="{StaticResource PrimaryDark}">
+                    <Grid Padding="10">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSaveGoalClicked" />
+                        </Grid.GestureRecognizers>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Source="save.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" />
+                        <Label Text="Save Goal" Grid.Column="1" FontAttributes="Bold" FontSize="16" TextColor="{StaticResource PrimaryTextColor}"
+                               VerticalOptions="Center" HorizontalOptions="Center" />
+                    </Grid>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

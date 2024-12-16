@@ -1,4 +1,4 @@
-﻿using BjjTrainer.Models.DTO;
+﻿using BjjTrainer.Models.DTO.TrainingGoals;
 using BjjTrainer.Models.TrainingGoal;
 using System.Net.Http.Json;
 
@@ -40,7 +40,7 @@ namespace BjjTrainer.Services.TrainingGoals
                     return new List<TrainingGoal>();
                 }
 
-                var url = $"TrainingGoal/{userId}";
+                var url = $"TrainingGoal/user/{userId}";
                 Console.WriteLine($"Fetching goals from URL: {url}");
 
                 var response = await HttpClient.GetAsync(url);
@@ -64,6 +64,59 @@ namespace BjjTrainer.Services.TrainingGoals
             {
                 Console.WriteLine($"Error fetching training goals: {ex.Message}");
                 return new List<TrainingGoal>();
+            }
+        }
+
+        public async Task<TrainingGoalDto> GetTrainingGoalByIdAsync(int goalId)
+        {
+            try
+            {
+                return await HttpClient.GetFromJsonAsync<TrainingGoalDto>($"traininggoal/{goalId}")
+                    ?? throw new Exception("Training goal not found.");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error fetching training goal: {ex.Message}");
+            }
+        }
+
+        public async Task<bool> UpdateTrainingGoalAsync(int goalId, CreateTrainingGoalDto dto)
+        {
+            try
+            {
+                var response = await HttpClient.PutAsJsonAsync($"traininggoal/{goalId}", dto);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorDetails = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"API error: {response.StatusCode} - {errorDetails}");
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to update training goal: {ex.Message}");
+            }
+        }
+
+        public async Task<bool> DeleteTrainingGoalAsync(int goalId)
+        {
+            try
+            {
+                var response = await HttpClient.DeleteAsync($"traininggoal/{goalId}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorDetails = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"API error: {response.StatusCode} - {errorDetails}");
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to delete training goal: {ex.Message}");
             }
         }
 
