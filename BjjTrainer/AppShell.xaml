@@ -54,14 +54,14 @@
         </Tab>
 
         <Tab Title="Training" Icon="train.png">
-            <ShellContent Route="TrainingLogFormPage" ContentTemplate="{DataTemplate train:TrainingLogFormPage}" />
+            <ShellContent Route="TrainingLogListPage" ContentTemplate="{DataTemplate train:TrainingLogListPage}" />
         </Tab>
 
         <Tab Title="Goals" Icon="goal.png">
             <ShellContent Route="TrainingGoalListPage" ContentTemplate="{DataTemplate goals:TrainingGoalListPage}" />
         </Tab>
 
-        <Tab Title="Calendar" Icon="calendar.png">
+        <Tab Title="Events" Icon="calendar.png">
             <ShellContent Route="CalendarPage" ContentTemplate="{DataTemplate events:CalendarPage}" />
         </Tab>
 
@@ -76,10 +76,6 @@
         <Tab Title="Moves" Icon="moves.png">
             <ShellContent Route="MovesPage" ContentTemplate="{DataTemplate moves:MovesPage}" />
         </Tab>
-
-        <Tab Title="Your Training Log" Icon="train.png">
-            <ShellContent Route="TrainingLogListPage" ContentTemplate="{DataTemplate train:TrainingLogListPage}" />
-        </Tab>
     </TabBar>
 
     <!-- Unique routes for each page -->
@@ -91,4 +87,6 @@
     <ShellContent Title="Show Training Log" Route="ShowTrainingLogPage" ContentTemplate="{DataTemplate train:ShowTrainingLogPage}" />
     <ShellContent Title="Update Training Goal" Route="UpdateTrainingGoalPage" ContentTemplate="{DataTemplate goals:UpdateTrainingGoalPage}" />
     <ShellContent Title="Show Training Goal" Route="ShowTrainingGoalPage" ContentTemplate="{DataTemplate goals:ShowTrainingGoalPage}" />
+    <ShellContent Title="Show Event Page" Route="ShowEventPage" ContentTemplate="{DataTemplate events:ShowEventPage}" />
+    <ShellContent Title="Update Event" Route="UpdateEventPage" ContentTemplate="{DataTemplate events:UpdateEventPage}" />
 </Shell>

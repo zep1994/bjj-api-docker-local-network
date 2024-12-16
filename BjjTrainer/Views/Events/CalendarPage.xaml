@@ -1,94 +1,72 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:BjjTrainer.ViewModels.Events"
              x:Class="BjjTrainer.Views.Events.CalendarPage"
-             Title="Calendar"
-             BackgroundColor="#191919">
-
-    <ContentPage.BindingContext>
-        <local:CalendarViewModel />
-    </ContentPage.BindingContext>
-
-    <ContentPage.Resources>
-        <!-- Label Styles -->
-        <Style TargetType="Label">
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="TextColor" Value="#333" />
-        </Style>
-
-        <!-- Frame/Card Style -->
-        <Style TargetType="Frame">
-            <Setter Property="Padding" Value="15" />
-            <Setter Property="CornerRadius" Value="15" />
-            <Setter Property="HasShadow" Value="True" />
-            <Setter Property="BackgroundColor" Value="LightGrey" />
-            <Setter Property="Margin" Value="10,5" />
-        </Style>
-
-        <!-- Button Styles -->
-        <Style TargetType="Button">
-            <Setter Property="BackgroundColor" Value="#007AFF" />
-            <Setter Property="TextColor" Value="White" />
-            <Setter Property="CornerRadius" Value="10" />
-            <Setter Property="HeightRequest" Value="40" />
-            <Setter Property="FontSize" Value="16" />
-        </Style>
-    </ContentPage.Resources>
+             Title="Weekly Calendar"
+             BackgroundColor="{StaticResource BackgroundColor}">
 
     <ContentPage.Content>
-        <ScrollView>
-            <VerticalStackLayout Padding="20" Spacing="20">
-                <!-- Page Header -->
-                <Label Text="Events"
-                       FontSize="28"
-                       FontAttributes="Bold"
-                       TextColor="#007AFF"
-                       HorizontalOptions="Center" />
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <!-- Header Navigation -->
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                <Button Text="Previous Week" Clicked="OnPreviousWeekClicked"
+                        BackgroundColor="Gray" TextColor="White" FontAttributes="Bold" />
+                <DatePicker x:Name="WeekDatePicker"
+                            Date="{Binding SelectedDate, Mode=TwoWay}"
+                            TextColor="{StaticResource PrimaryTextColor}"
+                            MinimumDate="2000-01-01"
+                            MaximumDate="2100-12-31" />
+                <Button Text="Next Week" Clicked="OnNextWeekClicked"
+                        BackgroundColor="Gray" TextColor="White" FontAttributes="Bold" />
+            </HorizontalStackLayout>
 
-                <!-- Navigation Buttons -->
-                <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
-                    <Button Text="Previous"
-                            Command="{Binding ChangeYearMonthCommand}"
-                            CommandParameter="Previous" />
-                    <Button Text="Next"
-                            Command="{Binding ChangeYearMonthCommand}"
-                            CommandParameter="Next" />
-                </HorizontalStackLayout>
+            <!-- No Events Label -->
+            <Label Text="No Events Scheduled"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource PrimaryTextColor}"
+                   IsVisible="{Binding NoEventsThisWeek}" />
 
-                <!-- Event Cards -->
-                <CollectionView ItemsSource="{Binding Events}" 
-                                VerticalOptions="FillAndExpand"
-                                BackgroundColor="Transparent">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Frame>
-                                <VerticalStackLayout Spacing="10">
-                                    <!-- Event Title -->
-                                    <Label Text="{Binding Title}" 
-                                           FontSize="20" 
-                                           FontAttributes="Bold" 
-                                           TextColor="#333" />
+            <!-- Events By Day -->
+            <CollectionView ItemsSource="{Binding Days}" SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout Spacing="10">
+                            <!-- Day Header -->
+                            <Label Text="{Binding DayHeader}"
+                                   FontAttributes="Bold"
+                                   FontSize="16"
+                                   TextColor="{StaticResource PrimaryTextColor}" />
 
-                                    <!-- Event Start and End Dates -->
-                                    <HorizontalStackLayout Spacing="10">
-                                        <Label Text="Start:" FontSize="14" TextColor="#666" />
-                                        <Label Text="{Binding FormattedStartDate}" FontSize="14" TextColor="#007AFF" />
-                                        <Label Text="End:" FontSize="14" TextColor="#666" />
-                                        <Label Text="{Binding FormattedEndDate}" FontSize="14" TextColor="#007AFF" />
-                                    </HorizontalStackLayout>
-
-                                    <!-- Event Description -->
-                                    <Label Text="{Binding ShortDescription}"
-                                           FontSize="14"
-                                           TextColor="#555"
-                                           LineBreakMode="WordWrap" />
-                                </VerticalStackLayout>
-                            </Frame>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </VerticalStackLayout>
-        </ScrollView>
+                            <!-- Events List -->
+                            <CollectionView ItemsSource="{Binding Events}" SelectionMode="None" IsVisible="{Binding HasEvents}">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Frame BackgroundColor="{StaticResource CardBackgroundColor}" Padding="10" CornerRadius="10">
+                                            <VerticalStackLayout>
+                                                <Label Text="{Binding Title}"
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{StaticResource PrimaryTextColor}" />
+                                                <Label Text="{Binding FormattedDate}"
+                                                       FontSize="12"
+                                                       TextColor="Gray" />
+                                                <Label Text="{Binding ShortDescription}"
+                                                       FontSize="12"
+                                                       TextColor="{StaticResource SecondaryTextColor}" />
+                                                <Button Text="View Details"
+                                                        Clicked="OnEventClicked"
+                                                        CommandParameter="{Binding Id}"
+                                                        BackgroundColor="Blue"
+                                                        TextColor="White" />
+                                            </VerticalStackLayout>
+                                        </Frame>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -54,14 +54,13 @@ namespace BjjTrainer_API.Services_API.Calendars
             };
         }
 
-        public async Task<List<CalendarEventDto>> GetUserEventsAsync(string userId, int year, int month)
+        public async Task<List<CalendarEventDto>> GetUserEventsAsync(string userId)
         {
             try
             {
                 var events = await _context.CalendarEvents
                     .Where(e => e.ApplicationUserId == userId
-                                && e.StartDate.HasValue && e.StartDate.Value.Year == year
-                                && e.StartDate.Value.Month == month)
+                                && e.StartDate.HasValue)
                     .ToListAsync();
 
                 var eventDtos = events.Select(e => new CalendarEventDto

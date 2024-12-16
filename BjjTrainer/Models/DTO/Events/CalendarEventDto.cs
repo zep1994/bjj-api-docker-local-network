@@ -4,6 +4,9 @@ namespace BjjTrainer.Models.DTO.Events
 {
     public class CalendarEventDto
     {
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
+
         [JsonPropertyName("title")]
         public string Title { get; set; }
 
