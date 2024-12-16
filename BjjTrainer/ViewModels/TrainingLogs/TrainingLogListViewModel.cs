@@ -1,10 +1,10 @@
-﻿using System.Collections.ObjectModel;
-using BjjTrainer.Models.DTO;
+﻿using BjjTrainer.Models.DTO;
 using BjjTrainer.Services.Trainings;
 using BjjTrainer.Views.Training;
 using MvvmHelpers;
+using System.Collections.ObjectModel;
 
-namespace BjjTrainer.ViewModels.TrainingGoals
+namespace BjjTrainer.ViewModels.TrainingLogs
 {
     public class TrainingLogListViewModel : BaseViewModel
     {

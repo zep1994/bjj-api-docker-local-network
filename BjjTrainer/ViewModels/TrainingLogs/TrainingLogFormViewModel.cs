@@ -1,11 +1,11 @@
-﻿using System.Collections.ObjectModel;
-using BjjTrainer.Models.Move;
-using BjjTrainer.Models.DTO;
+﻿using BjjTrainer.Models.DTO.TrainingLog;
+using BjjTrainer.Models.Moves;
 using BjjTrainer.Services.Moves;
 using BjjTrainer.Services.Trainings;
 using MvvmHelpers;
+using System.Collections.ObjectModel;
 
-namespace BjjTrainer.ViewModels.TrainingGoals
+namespace BjjTrainer.ViewModels.TrainingLogs
 {
     public class TrainingLogFormViewModel : BaseViewModel
     {
@@ -20,6 +20,8 @@ namespace BjjTrainer.ViewModels.TrainingGoals
         public int? Submissions { get; set; }
         public int? Taps { get; set; }
         public string? Notes { get; set; }
+        public string? SelfAssessment { get; set; }
+
 
         public TrainingLogFormViewModel()
         {
@@ -56,17 +58,17 @@ namespace BjjTrainer.ViewModels.TrainingGoals
 
                 if (string.IsNullOrEmpty(userId))
                 {
-                    await App.Current.MainPage.DisplayAlert("Error", "User not authenticated. Please log in.", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Error", "User not authenticated. Please log in.", "OK");
                     return false;
                 }
 
                 var selectedMoves = Moves.Where(m => m.IsSelected).Select(m => m.Id).ToList();
                 if (!selectedMoves.Any())
                 {
-                    await App.Current.MainPage.DisplayAlert("Message", "Are you sure you did not train any moves?", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Message", "Are you sure you did not train any moves?", "OK");
                 }
 
-                var trainingLog = new TrainingLogDto
+                var trainingLog = new CreateTrainingLogDto
                 {
                     ApplicationUserId = userId,
                     Date = Date,
@@ -75,6 +77,7 @@ namespace BjjTrainer.ViewModels.TrainingGoals
                     Submissions = Submissions ?? 0,
                     Taps = Taps ?? 0,
                     Notes = Notes ?? "",
+                    SelfAssessment = SelfAssessment,
                     MoveIds = selectedMoves ?? []
                 };
 
@@ -82,13 +85,13 @@ namespace BjjTrainer.ViewModels.TrainingGoals
 
                 if (success)
                 {
-                    await App.Current.MainPage.DisplayAlert("Success", "Training log submitted successfully!", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Success", "Training log submitted successfully!", "OK");
                     return true;
                 }
             }
             catch (Exception ex)
             {
-                await App.Current.MainPage.DisplayAlert("Error", $"Failed to submit training log: {ex.Message}", "OK");
+                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to submit training log: {ex.Message}", "OK");
             }
             finally
             {

@@ -1,5 +1,5 @@
 ﻿using BjjTrainer.Models.DTO;
-using BjjTrainer.Models.Move;
+using BjjTrainer.Models.Moves;
 using BjjTrainer.Services.Lessons;
 using MvvmHelpers;
 using System.Diagnostics;

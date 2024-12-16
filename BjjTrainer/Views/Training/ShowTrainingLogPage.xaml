@@ -1,0 +1,93 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:BjjTrainer.ViewModels.TrainingLogs"
+             x:Class="BjjTrainer.Views.Training.ShowTrainingLogPage"
+             Title="Training Log Details"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <ContentPage.Content>
+        <ScrollView>
+            <VerticalStackLayout Padding="20" Spacing="15">
+                <!-- Page Title -->
+                <Label Text="Training Log Details"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       TextColor="{StaticResource PrimaryTextColor}" />
+
+                <!-- Date -->
+                <VerticalStackLayout>
+                    <Label Text="Date:" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                    <Label Text="{Binding Date, StringFormat='{0:yyyy-MM-dd}'}" FontSize="16" TextColor="{StaticResource PrimaryTextColor}" />
+                </VerticalStackLayout>
+
+                <!-- Training Time -->
+                <VerticalStackLayout>
+                    <Label Text="Training Time (hours):" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                    <Label Text="{Binding TrainingTime}" FontSize="16" TextColor="{StaticResource PrimaryTextColor}" />
+                </VerticalStackLayout>
+
+                <!-- Rounds Rolled -->
+                <VerticalStackLayout>
+                    <Label Text="Rounds Rolled:" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                    <Label Text="{Binding RoundsRolled}" FontSize="16" TextColor="{StaticResource PrimaryTextColor}" />
+                </VerticalStackLayout>
+
+                <!-- Submissions -->
+                <VerticalStackLayout>
+                    <Label Text="Submissions:" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                    <Label Text="{Binding Submissions}" FontSize="16" TextColor="{StaticResource PrimaryTextColor}" />
+                </VerticalStackLayout>
+
+                <!-- Taps -->
+                <VerticalStackLayout>
+                    <Label Text="Taps Received:" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                    <Label Text="{Binding Taps}" FontSize="16" TextColor="{StaticResource PrimaryTextColor}" />
+                </VerticalStackLayout>
+
+                <!-- Notes -->
+                <VerticalStackLayout>
+                    <Label Text="Notes:" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                    <Label Text="{Binding Notes}" FontSize="16" TextColor="{StaticResource PrimaryTextColor}" />
+                </VerticalStackLayout>
+
+                <!-- Self Assessment -->
+                <VerticalStackLayout>
+                    <Label Text="Self Assessment:" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                    <Label Text="{Binding SelfAssessment}" FontSize="16" TextColor="{StaticResource PrimaryTextColor}" />
+                </VerticalStackLayout>
+
+                <!-- Moves -->
+                <VerticalStackLayout>
+                    <Label Text="Moves Practiced:" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                    <CollectionView ItemsSource="{Binding Moves}" SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+
+                <!-- Navigation Buttons -->
+                <HorizontalStackLayout Spacing="10">
+                    <!-- Back Button -->
+                    <Button Text="Back"
+                            Clicked="OnBackButtonClicked"
+                            BackgroundColor="Gray"
+                            TextColor="White"
+                            FontAttributes="Bold" />
+
+                    <!-- Update Button -->
+                    <Button Text="Update"
+                            Clicked="OnUpdateButtonClicked"
+                            BackgroundColor="Blue"
+                            TextColor="White"
+                            FontAttributes="Bold" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,4 +1,4 @@
-﻿using BjjTrainer.Models.Move;
+﻿using BjjTrainer.Models.Moves;
 using System.Net.Http.Json;
 
 namespace BjjTrainer.Services.Moves

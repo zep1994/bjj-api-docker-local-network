@@ -38,7 +38,7 @@ namespace BjjTrainer
 
             // Register services and view models
             builder.Services.AddSingleton<ApiService>();
-            builder.Services.AddSingleton<UserService>();
+
             builder.Services.AddTransient<LessonsViewModel>();
             builder.Services.AddTransient<LessonSectionViewModel>();
             builder.Services.AddTransient<LessonsPage>();
@@ -47,30 +47,33 @@ namespace BjjTrainer
             builder.Services.AddTransient<FavoritesViewModel>();
             builder.Services.AddTransient<FavoritesPage>();
 
-            // Register Services
+            // Register SubLessons
             builder.Services.AddSingleton<SubLessonService>();
-
-            // Register ViewModels
             builder.Services.AddTransient<SubLessonViewModel>();
             builder.Services.AddTransient<SubLessonDetailsViewModel>();
-
-            builder.Services.AddTransient<MainPageViewModel>();
-
-            // Register Pages
             builder.Services.AddTransient<SubLessonPage>();
             builder.Services.AddTransient<SubLessonDetailsPage>();
 
-            //Register Training
+            builder.Services.AddTransient<MainPageViewModel>();
+
+            //Register Training Goal
             builder.Services.AddSingleton<TrainingService>();
             builder.Services.AddSingleton<TrainingGoalService>();
-            builder.Services.AddTransient<UserProgressViewModel>();
             builder.Services.AddTransient<TrainingGoalViewModel>();
             builder.Services.AddTransient<TrainingGoalListViewModel>();
             builder.Services.AddTransient<TrainingGoalListPage>();
+            builder.Services.AddTransient<UpdateTrainingGoalPage>();
+            builder.Services.AddTransient<UpdateTrainingGoalViewModel>();
             builder.Services.AddTransient<TrainingGoalPage>();
+            builder.Services.AddTransient<ShowTrainingGoalPage>();
+            builder.Services.AddTransient<ShowTrainingGoalViewModel>();
+
+            // Training Log
             builder.Services.AddTransient<TrainingLogFormPage>();
-            builder.Services.AddTransient<TrainingGoalListPage>();
-            builder.Services.AddTransient<TrainingGoalListViewModel>();
+            builder.Services.AddTransient<TrainingLogListPage>();
+            builder.Services.AddTransient<TrainingLogListViewModel>();
+            builder.Services.AddTransient<ShowTrainingLogViewModel>();
+            builder.Services.AddTransient<ShowTrainingLogPage>();
             builder.Services.AddTransient<UpdateTrainingLogPage>();
             builder.Services.AddTransient<UpdateTrainingLogViewModel>();
 
@@ -82,6 +85,7 @@ namespace BjjTrainer
             builder.Services.AddSingleton<UserProgressService>();
             builder.Services.AddTransient<UserProgressViewModel>();
             builder.Services.AddTransient<UserProgressPage>();
+            builder.Services.AddSingleton<UserService>();
 
             // Register Moves
             builder.Services.AddSingleton<MoveService>();

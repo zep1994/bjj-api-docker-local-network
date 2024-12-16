@@ -1,4 +1,4 @@
-﻿using BjjTrainer.Models.Move;
+﻿using BjjTrainer.Models.Moves;
 
 namespace BjjTrainer.Models.Users
 {

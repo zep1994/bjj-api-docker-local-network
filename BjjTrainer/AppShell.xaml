@@ -88,4 +88,7 @@
     <ShellContent Title="My Lessons" Route="FavoritesPage" ContentTemplate="{DataTemplate users:FavoritesPage}" />
     <ShellContent Title="My Goals" Route="TrainingGoalPage" ContentTemplate="{DataTemplate goals:TrainingGoalPage}" />
     <ShellContent Title="Update Training Log" Route="UpdateTrainingLogPage" ContentTemplate="{DataTemplate train:UpdateTrainingLogPage}" />
+    <ShellContent Title="Show Training Log" Route="ShowTrainingLogPage" ContentTemplate="{DataTemplate train:ShowTrainingLogPage}" />
+    <ShellContent Title="Update Training Goal" Route="UpdateTrainingGoalPage" ContentTemplate="{DataTemplate goals:UpdateTrainingGoalPage}" />
+    <ShellContent Title="Show Training Goal" Route="ShowTrainingGoalPage" ContentTemplate="{DataTemplate goals:ShowTrainingGoalPage}" />
 </Shell>

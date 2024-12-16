@@ -71,6 +71,12 @@
                     <Editor Placeholder="Enter additional notes" Text="{Binding Notes}" AutoSize="TextChanges" />
                 </VerticalStackLayout>
 
+                <!-- Self Assessment Field -->
+                <VerticalStackLayout>
+                    <Label Text="Notes" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                    <Editor Placeholder="Self Assessment" Text="{Binding SelfAssessment}" AutoSize="TextChanges" />
+                </VerticalStackLayout>
+
                 <!-- Moves Selection -->
                 <Label Text="Select Moves" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
                 <CollectionView ItemsSource="{Binding Moves}" SelectionMode="None">
@@ -81,7 +87,10 @@
                                    BorderColor="{StaticResource BorderColor}">
                                 <HorizontalStackLayout>
                                     <CheckBox IsChecked="{Binding IsSelected}" VerticalOptions="Center" />
-                                    <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                                    <VerticalStackLayout>
+                                        <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                                        <Label Text="{Binding TrainingLogCount, StringFormat='Logged {0} times'}" FontSize="12" TextColor="Gray" />
+                                    </VerticalStackLayout>
                                 </HorizontalStackLayout>
                             </Frame>
                         </DataTemplate>

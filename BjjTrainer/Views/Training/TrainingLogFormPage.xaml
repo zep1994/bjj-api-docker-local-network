@@ -86,6 +86,19 @@
                     </Grid>
                 </Frame>
 
+                <!-- Self Assessment Field -->
+                <Frame CornerRadius="10" HasShadow="False" Padding="10" BackgroundColor="{StaticResource BackgroundColor}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Source="default_profile.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" />
+                        <Entry Grid.Column="1" Text="{Binding SelfAssessment}" Keyboard="Text" Placeholder="Self Assessment"
+                               TextColor="{StaticResource PrimaryTextColor}" />
+                    </Grid>
+                </Frame>
+
                 <!-- Moves Selection -->
                 <Label Text="Select Moves" FontAttributes="Bold" />
                 <CollectionView ItemsSource="{Binding Moves}" SelectionMode="Multiple">
