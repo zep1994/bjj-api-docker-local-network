@@ -1,0 +1,29 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BjjTrainer.Views.Events.UpdateEventPage"
+             Title="Update Event"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <ContentPage.Content>
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <Label Text="Update Event" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" />
+
+            <Entry Placeholder="Title" Text="{Binding Title}" BackgroundColor="{StaticResource BackgroundColor}" />
+            <Editor Placeholder="Description" Text="{Binding Description}" AutoSize="TextChanges" BackgroundColor="{StaticResource BackgroundColor}" />
+            <DatePicker Date="{Binding StartDate}" TextColor="{StaticResource PrimaryTextColor}" />
+            <DatePicker Date="{Binding EndDate}" TextColor="{StaticResource PrimaryTextColor}"/>
+
+            <!-- Save and Delete Buttons -->
+            <HorizontalStackLayout Spacing="10">
+                <Button Text="Save"
+                        Clicked="OnSaveEventClicked"
+                        BackgroundColor="Green"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+                <Button Text="Delete"
+                        Clicked="OnDeleteEventClicked"
+                        BackgroundColor="Red"
+                        TextColor="{StaticResource PrimaryTextColor}" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ContentPage.Content>
+</ContentPage>

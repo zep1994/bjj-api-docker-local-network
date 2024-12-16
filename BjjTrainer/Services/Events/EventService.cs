@@ -101,11 +101,11 @@ namespace BjjTrainer.Services.Events
             }
         }
 
-        public async Task<List<CalendarEventDto>> GetUserEventsAsync(string userId, int year, int month)
+        public async Task<List<CalendarEventDto>> GetAllUserEventsAsync(string userId)
         {
             try
             {
-                var response = await HttpClient.GetAsync($"calendar/user/{userId}/{year}/{month}");
+                var response = await HttpClient.GetAsync($"calendar/user/{userId}");
 
                 if (response.IsSuccessStatusCode)
                 {

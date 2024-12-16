@@ -43,15 +43,12 @@ namespace BjjTrainer_API.Controllers.Calendar
             return Ok(eventDto);
         }
 
-        [HttpGet("user/{userId}/{year}/{month}")]
-        public async Task<IActionResult> GetUserEventsAsync(string userId, int year, int month)
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetUserEventsAsync(string userId)
         {
-            // Log the received parameters for debugging
-            Console.WriteLine($"Received: userId = {userId}, year = {year}, month = {month}");
-
             try
             {
-                var events = await _calendarService.GetUserEventsAsync(userId, year, month);
+                var events = await _calendarService.GetUserEventsAsync(userId);
                 return Ok(events);
             }
             catch (Exception ex)

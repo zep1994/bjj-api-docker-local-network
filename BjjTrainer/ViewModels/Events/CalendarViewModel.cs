@@ -1,101 +1,90 @@
 ﻿using BjjTrainer.Models.DTO.Events;
+using BjjTrainer.Models.Util;
 using BjjTrainer.Services.Events;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 
 namespace BjjTrainer.ViewModels.Events
 {
-    public class CalendarViewModel : BindableObject
+    public partial class CalendarViewModel : BindableObject
     {
         private readonly EventService _eventService;
-        private int _year;
-        private int _month;
+        private DateTime _selectedDate;
 
-        public ObservableCollection<CalendarEventDto> Events { get; set; } = new ObservableCollection<CalendarEventDto>();
+        public ObservableCollection<DayEvents> Days { get; set; } = new ObservableCollection<DayEvents>();
+        public bool NoEventsThisWeek { get; set; }
 
-        public ICommand ChangeYearMonthCommand { get; }
+        public DateTime SelectedDate
+        {
+            get => _selectedDate;
+            set
+            {
+                _selectedDate = value;
+                OnPropertyChanged(nameof(SelectedDate));
+                Task.Run(async () => await LoadEventsForWeekAsync());
+            }
+        }
+
+        public bool IsBusy { get; private set; }
 
         public CalendarViewModel()
         {
-            _eventService = new EventService(); // Or inject via dependency injection.
-            _year = DateTime.Now.Year;
-            _month = DateTime.Now.Month;
-
-            // Command to handle navigation
-            ChangeYearMonthCommand = new Command<string>(ChangeYearMonth);
-
-            // Temporary hardcoded events for testing
-            Events.Add(new CalendarEventDto
-            {
-                Title = "Sample Event 1",
-                Description = "This is a sample description for event 1.",
-                StartDate = DateTime.Now,
-                EndDate = DateTime.Now.AddDays(1)
-            });
-            Events.Add(new CalendarEventDto
-            {
-                Title = "Sample Event 2",
-                Description = "This is another sample description for event 2.",
-                StartDate = DateTime.Now.AddDays(2),
-                EndDate = DateTime.Now.AddDays(3)
-            });
-
-            // Load actual events from the API
-            LoadEvents();
+            _eventService = new EventService();
+            _selectedDate = DateTime.Now; // Default to the current date
+            Task.Run(async () => await LoadEventsForWeekAsync());
         }
 
-        private async void LoadEvents()
+        public async Task LoadEventsForWeekAsync()
         {
+            IsBusy = true;
+
             try
             {
                 var userId = Preferences.Get("UserId", string.Empty);
                 if (string.IsNullOrWhiteSpace(userId))
-                {
                     throw new Exception("UserId not found in preferences.");
-                }
 
-                var events = await _eventService.GetUserEventsAsync(userId, _year, _month);
-                foreach (var calendarEvent in events)
+                var startOfWeek = SelectedDate.AddDays(-(int)SelectedDate.DayOfWeek);
+                var endOfWeek = startOfWeek.AddDays(7);
+
+                var events = await _eventService.GetAllUserEventsAsync(userId);
+
+                Days.Clear();
+
+                for (var date = startOfWeek; date < endOfWeek; date = date.AddDays(1))
                 {
-                    Console.WriteLine($"Title: {calendarEvent.Title}, Start: {calendarEvent.StartDate}, End: {calendarEvent.EndDate}");
+                    var dayEvents = new DayEvents
+                    {
+                        DayHeader = date.ToString("dddd, MMM dd"),
+                        Events = new ObservableCollection<CalendarEventDto>(
+                            events.Where(e => e.StartDate.Date == date.Date).ToList())
+                    };
+
+                    dayEvents.HasEvents = dayEvents.Events.Any();
+                    Days.Add(dayEvents);
                 }
 
-                Events.Clear();
-
-                foreach (var calendarEvent in events)
-                {
-                    Events.Add(calendarEvent);
-                }
+                NoEventsThisWeek = !Days.Any(d => d.HasEvents);
+                OnPropertyChanged(nameof(Days));
+                OnPropertyChanged(nameof(NoEventsThisWeek));
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Failed to load events: {ex.Message}");
-                // You can add UI feedback for errors here.
+                Console.WriteLine($"Error loading events: {ex.Message}");
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
-        private void ChangeYearMonth(string direction)
+        public void NavigateToPreviousWeek()
         {
-            if (direction == "Previous")
-            {
-                _month--;
-                if (_month < 1)
-                {
-                    _month = 12;
-                    _year--;
-                }
-            }
-            else if (direction == "Next")
-            {
-                _month++;
-                if (_month > 12)
-                {
-                    _month = 1;
-                    _year++;
-                }
-            }
+            SelectedDate = SelectedDate.AddDays(-7);
+        }
 
-            LoadEvents();
+        public void NavigateToNextWeek()
+        {
+            SelectedDate = SelectedDate.AddDays(7);
         }
     }
 }

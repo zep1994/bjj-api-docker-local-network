@@ -13,6 +13,22 @@
                    FontAttributes="Bold"
                    HorizontalOptions="Center" />
 
+            <!-- Add New Log Button -->
+            <Frame CornerRadius="10" Padding="0" BackgroundColor="#007AFF">
+                <Grid Padding="10">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnAddLogTapped" />
+                    </Grid.GestureRecognizers>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Image Source="add.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" />
+                    <Label Text="Add Training Log" Grid.Column="1" FontAttributes="Bold" FontSize="16" TextColor="White" 
+                           VerticalOptions="Center" HorizontalOptions="Center" />
+                </Grid>
+            </Frame>
+
             <!-- Collection of Logs -->
             <CollectionView ItemsSource="{Binding TrainingLogs}" SelectionMode="None">
                 <CollectionView.ItemsLayout>
@@ -48,22 +64,6 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-
-            <!-- Add New Log Button -->
-            <Frame CornerRadius="10" Padding="0" BackgroundColor="#007AFF">
-                <Grid Padding="10">
-                    <Grid.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnAddLogTapped" />
-                    </Grid.GestureRecognizers>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Image Source="add.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" />
-                    <Label Text="Add Training Log" Grid.Column="1" FontAttributes="Bold" FontSize="16" TextColor="White" 
-                           VerticalOptions="Center" HorizontalOptions="Center" />
-                </Grid>
-            </Frame>
         </VerticalStackLayout>
     </ContentPage.Content>
 </ContentPage>
