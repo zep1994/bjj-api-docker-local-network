@@ -1,5 +1,4 @@
-﻿using BjjTrainer.Views.Users;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace BjjTrainer
 {

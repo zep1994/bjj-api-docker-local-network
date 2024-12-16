@@ -1,6 +1,5 @@
 ﻿using BjjTrainer.Models.DTO;
-using BjjTrainer.Models.TrainingGoal;
-using BjjTrainer.Views.Moves;
+using BjjTrainer.Models.DTO.TrainingLog;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
@@ -65,7 +64,7 @@ namespace BjjTrainer.Services.Trainings
         }
 
         // PUT
-        public async Task UpdateTrainingLogAsync(int logId, TrainingLogDto updatedLog)
+        public async Task UpdateTrainingLogAsync(int logId, UpdateTrainingLogDto updatedLog)
         {
             try
             {

@@ -1,9 +1,9 @@
-﻿using System.Collections.ObjectModel;
-using BjjTrainer.Models.DTO;
-using BjjTrainer.Models.Move;
+﻿using BjjTrainer.Models.DTO.TrainingLog;
+using BjjTrainer.Models.Moves;
 using BjjTrainer.Services.Moves;
 using BjjTrainer.Services.Trainings;
 using MvvmHelpers;
+using System.Collections.ObjectModel;
 
 namespace BjjTrainer.ViewModels.TrainingLogs
 {
@@ -58,15 +58,16 @@ namespace BjjTrainer.ViewModels.TrainingLogs
                     RoundsRolled = log.RoundsRolled;
                     Submissions = log.Submissions;
                     Taps = log.Taps;
-                    Notes = log.Notes;
+                    Notes = log.Notes ?? string.Empty;
 
-                    // Fetch and populate moves
+                    // Load and match moves
                     var allMoves = await _moveService.GetAllMovesAsync();
                     Moves.Clear();
 
                     foreach (var move in allMoves)
                     {
-                        move.IsSelected = log.MoveIds.Contains(move.Id);
+                        move.IsSelected = log.Moves.Any(m => m.Id == move.Id);
+                        move.TrainingLogCount = log.Moves.FirstOrDefault(m => m.Id == move.Id)?.TrainingLogCount ?? 0;
                         Moves.Add(move);
                     }
 
@@ -98,7 +99,7 @@ namespace BjjTrainer.ViewModels.TrainingLogs
             try
             {
                 var updatedMoves = Moves.Where(m => m.IsSelected).Select(m => m.Id).ToList();
-                var updatedLog = new TrainingLogDto
+                var updatedLog = new UpdateTrainingLogDto
                 {
                     Id = _logId,
                     Date = Date,
@@ -108,6 +109,7 @@ namespace BjjTrainer.ViewModels.TrainingLogs
                     Taps = Taps,
                     Notes = Notes,
                     MoveIds = updatedMoves,
+                    SelfAssessment = string.Empty,
                     ApplicationUserId = Preferences.Get("UserId", string.Empty)
                 };
 

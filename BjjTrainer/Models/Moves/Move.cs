@@ -1,4 +1,4 @@
-﻿namespace BjjTrainer.Models.Move
+﻿namespace BjjTrainer.Models.Moves
 {
     public class Move
     {

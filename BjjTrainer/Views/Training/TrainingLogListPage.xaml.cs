@@ -1,6 +1,4 @@
-using BjjTrainer.Models.DTO;
-using BjjTrainer.Views.Training;
-using BjjTrainer.ViewModels.TrainingGoals;
+using BjjTrainer.ViewModels.TrainingLogs;
 
 namespace BjjTrainer.Views.Training
 {

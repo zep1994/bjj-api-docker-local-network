@@ -28,10 +28,17 @@ namespace BjjTrainer.Views.Training
 
         private async void OnUpdateButtonClicked(object sender, EventArgs e)
         {
-            var success = await _viewModel.UpdateLogAsync();
-            if (success)
+            try
             {
-                await Shell.Current.GoToAsync("..");
+                var success = await _viewModel.UpdateLogAsync();
+                if (success)
+                {
+                    await Shell.Current.GoToAsync("//TrainingLogListPage");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message} ");
             }
         }
     }

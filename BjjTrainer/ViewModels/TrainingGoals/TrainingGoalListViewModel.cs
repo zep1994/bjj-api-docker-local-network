@@ -1,6 +1,5 @@
 ﻿using BjjTrainer.Models.TrainingGoal;
 using BjjTrainer.Services.TrainingGoals;
-using BjjTrainer.Views.TrainingGoals;
 using MvvmHelpers;
 using System.Collections.ObjectModel;
 using Command = Microsoft.Maui.Controls.Command; // Specify the Command namespace to resolve ambiguity
