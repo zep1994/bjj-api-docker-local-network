@@ -10,8 +10,5 @@ namespace BjjTrainer_API.Models.Joins
 
         public int MoveId { get; set; }
         public Move Move { get; set; }
-
-        // Optional: Allow tracking self-assessment per move in a session
-        public string SelfAssessment { get; set; } = "Learning";
     }
 }

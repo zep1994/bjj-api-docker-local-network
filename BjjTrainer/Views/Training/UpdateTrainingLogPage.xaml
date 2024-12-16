@@ -1,0 +1,109 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BjjTrainer.Views.Training.UpdateTrainingLogPage"
+             Title="Update Training Log"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <ContentPage.Content>
+        <ScrollView>
+            <VerticalStackLayout Padding="20" Spacing="15">
+                <!-- Page Title -->
+                <Label Text="Update Training Log"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       TextColor="{StaticResource PrimaryTextColor}" />
+
+                <!-- Date Picker -->
+                <VerticalStackLayout>
+                    <Label Text="Date" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                    <Frame CornerRadius="10" Padding="10" BackgroundColor="{StaticResource FieldBackgroundColor}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <!-- Display Selected Date -->
+                            <Label Text="{Binding SelectedDateDisplay}" FontSize="16" VerticalOptions="Center" TextColor="{StaticResource PrimaryTextColor}" />
+                            <!-- Calendar Icon -->
+                            <Image Source="calendar.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" Grid.Column="1">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnCalendarIconTapped" />
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Grid>
+                    </Frame>
+                </VerticalStackLayout>
+
+                <!-- Date Picker Hidden -->
+                <DatePicker x:Name="DatePickerField" 
+                            IsVisible="False" 
+                            Date="{Binding Date}" 
+                            DateSelected="OnDateSelected" />
+
+                <!-- Training Time -->
+                <VerticalStackLayout>
+                    <Label Text="Training Time (minutes)" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                    <Entry Placeholder="Enter training time" Text="{Binding TrainingTime}" Keyboard="Numeric" />
+                </VerticalStackLayout>
+
+                <!-- Rounds Rolled -->
+                <VerticalStackLayout>
+                    <Label Text="Rounds Rolled" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                    <Entry Placeholder="Enter rounds rolled" Text="{Binding RoundsRolled}" Keyboard="Numeric" />
+                </VerticalStackLayout>
+
+                <!-- Submissions -->
+                <VerticalStackLayout>
+                    <Label Text="Submissions" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                    <Entry Placeholder="Enter submissions" Text="{Binding Submissions}" Keyboard="Numeric" />
+                </VerticalStackLayout>
+
+                <!-- Taps -->
+                <VerticalStackLayout>
+                    <Label Text="Taps Received" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                    <Entry Placeholder="Enter taps received" Text="{Binding Taps}" Keyboard="Numeric" />
+                </VerticalStackLayout>
+
+                <!-- Notes -->
+                <VerticalStackLayout>
+                    <Label Text="Notes" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                    <Editor Placeholder="Enter additional notes" Text="{Binding Notes}" AutoSize="TextChanges" />
+                </VerticalStackLayout>
+
+                <!-- Moves Selection -->
+                <Label Text="Select Moves" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                <CollectionView ItemsSource="{Binding Moves}" SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame CornerRadius="10" Padding="10" Margin="5"
+                                   BackgroundColor="{StaticResource CardBackgroundColor}"
+                                   BorderColor="{StaticResource BorderColor}">
+                                <HorizontalStackLayout>
+                                    <CheckBox IsChecked="{Binding IsSelected}" VerticalOptions="Center" />
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                                </HorizontalStackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Update Button -->
+                <Frame CornerRadius="10" Padding="0" BackgroundColor="{StaticResource PrimaryDark}">
+                    <Grid Padding="10">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnUpdateButtonClicked" />
+                        </Grid.GestureRecognizers>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Source="save.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" />
+                        <Label Text="Update Log" Grid.Column="1" FontAttributes="Bold" FontSize="16" TextColor="{StaticResource PrimaryTextColor}"
+                               VerticalOptions="Center" HorizontalOptions="Center" />
+                    </Grid>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

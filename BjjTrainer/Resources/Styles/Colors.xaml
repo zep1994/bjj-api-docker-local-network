@@ -6,7 +6,7 @@
 
     <!-- Primary Colors -->
     <Color x:Key="BackgroundColor">#000023</Color>
-    <Color x:Key="CardBackgroundColor">#212121</Color>
+    <Color x:Key="CardBackgroundColor">#2C2C2C</Color>
     <Color x:Key="ChartGradientStart">#1E88E5</Color>
     <Color x:Key="ChartGradientEnd">#43A047</Color>
 
