@@ -20,6 +20,8 @@ namespace BjjTrainer.ViewModels.TrainingLogs
         public int? Submissions { get; set; }
         public int? Taps { get; set; }
         public string? Notes { get; set; }
+        public string? SelfAssessment { get; set; }
+
 
         public TrainingLogFormViewModel()
         {
@@ -75,7 +77,7 @@ namespace BjjTrainer.ViewModels.TrainingLogs
                     Submissions = Submissions ?? 0,
                     Taps = Taps ?? 0,
                     Notes = Notes ?? "",
-                    SelfAssessment = string.Empty,
+                    SelfAssessment = SelfAssessment,
                     MoveIds = selectedMoves ?? []
                 };
 

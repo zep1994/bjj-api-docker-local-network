@@ -40,7 +40,7 @@
                     BackgroundColor="#007AFF"
                     TextColor="White"
                     CornerRadius="8"
-                    Clicked="OnNewGoalClicked" />
+                    Clicked="OnViewGoalClicked" />
         </VerticalStackLayout>
     </ContentPage.Content>
 </ContentPage>

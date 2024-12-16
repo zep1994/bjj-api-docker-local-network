@@ -8,7 +8,7 @@
     <ContentPage.Content>
         <VerticalStackLayout Padding="20" Spacing="15">
             <!-- Goal Date Picker -->
-            <DatePicker x:Name="GoalDatePicker" />
+            <DatePicker x:Name="GoalDatePicker" TextColor="{StaticResource PrimaryTextColor}" />
 
             <!-- Notes Entry -->
             <Editor x:Name="NotesEditor" 

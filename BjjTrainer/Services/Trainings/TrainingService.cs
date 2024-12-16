@@ -27,11 +27,17 @@ namespace BjjTrainer.Services.Trainings
         {
             try
             {
-                return await HttpClient.GetFromJsonAsync<TrainingLogDto>($"traininglog/{logId}")
-                    ?? throw new Exception("Training log not found.");
+                var log = await HttpClient.GetFromJsonAsync<TrainingLogDto>($"traininglog/{logId}");
+
+                if (log == null)
+                {
+                    throw new Exception("Training log not found.");
+                }
+                return log;
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Error fetching training log from API: {ex.Message}");
                 throw new Exception($"Error fetching training log: {ex.Message}");
             }
         }

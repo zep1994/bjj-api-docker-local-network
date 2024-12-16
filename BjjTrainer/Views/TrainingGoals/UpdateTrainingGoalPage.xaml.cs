@@ -2,28 +2,15 @@ using BjjTrainer.ViewModels.TrainingGoals;
 
 namespace BjjTrainer.Views.TrainingGoals;
 
-[QueryProperty(nameof(GoalId), "goalId")]
 public partial class UpdateTrainingGoalPage : ContentPage
 {
-    public int GoalId { get; set; }
     private readonly UpdateTrainingGoalViewModel _viewModel;
 
-    public UpdateTrainingGoalPage()
+    public UpdateTrainingGoalPage(int goalId)
     {
         InitializeComponent();
-        _viewModel = new UpdateTrainingGoalViewModel(GoalId);
+        _viewModel = new UpdateTrainingGoalViewModel(goalId);
         BindingContext = _viewModel;
-    }
-
-    protected override async void OnNavigatedTo(NavigatedToEventArgs args)
-    {
-        base.OnNavigatedTo(args);
-
-        // Load goal details when the page appears
-        if (GoalId > 0)
-        {
-            await _viewModel.LoadGoalDetailsAsync();
-        }
     }
 
     private async void OnSaveGoalClicked(object sender, EventArgs e)
@@ -32,7 +19,7 @@ public partial class UpdateTrainingGoalPage : ContentPage
         if (success)
         {
             await DisplayAlert("Success", "Training goal updated successfully.", "OK");
-            await Shell.Current.GoToAsync("..");
+            await Navigation.PopAsync(); // Navigate back to the previous page
         }
         else
         {

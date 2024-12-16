@@ -19,7 +19,8 @@ namespace BjjTrainer.Views.Training
         {
             if (sender is Button button && button.CommandParameter is int logId)
             {
-                await Navigation.PushAsync(new UpdateTrainingLogPage(logId));
+                Console.WriteLine($"Navigating to ShowTrainingLogPage with logId: {logId}");
+                await Shell.Current.GoToAsync($"///ShowTrainingLogPage?logId={logId}");
             }
         }
     }

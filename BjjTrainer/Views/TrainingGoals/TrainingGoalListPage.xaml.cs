@@ -33,13 +33,8 @@ public partial class TrainingGoalListPage : ContentPage
     {
         if (sender is Button button && button.CommandParameter is int goalId)
         {
-            await Shell.Current.GoToAsync($"///UpdateTrainingGoalPage?goalId={goalId}");
+            await Navigation.PushAsync(new ShowTrainingGoalPage(goalId));
         }
-    }
-
-    private async void OnNewGoalClicked(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("//TrainingGoalPage");
     }
 
     protected override void OnAppearing()

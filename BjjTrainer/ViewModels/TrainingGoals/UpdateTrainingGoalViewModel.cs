@@ -11,17 +11,17 @@ public class UpdateTrainingGoalViewModel : BaseViewModel
 {
     private readonly TrainingGoalService _trainingGoalService;
     private readonly MoveService _moveService;
+    private readonly int _goalId;
 
-    public int GoalId { get; private set; }
     public DateTime GoalDate { get; set; }
     public string Notes { get; set; } = string.Empty;
     public ObservableCollection<Move> Moves { get; set; } = new();
 
     public UpdateTrainingGoalViewModel(int goalId)
     {
+        _goalId = goalId;
         _trainingGoalService = new TrainingGoalService();
         _moveService = new MoveService();
-        GoalId = goalId;
 
         Task.Run(async () => await LoadGoalDetailsAsync());
     }
@@ -32,7 +32,7 @@ public class UpdateTrainingGoalViewModel : BaseViewModel
 
         try
         {
-            var goal = await _trainingGoalService.GetTrainingGoalByIdAsync(GoalId);
+            var goal = await _trainingGoalService.GetTrainingGoalByIdAsync(_goalId);
             if (goal != null)
             {
                 GoalDate = goal.GoalDate;
@@ -77,7 +77,7 @@ public class UpdateTrainingGoalViewModel : BaseViewModel
                 MoveIds = selectedMoveIds
             };
 
-            await _trainingGoalService.UpdateTrainingGoalAsync(GoalId, dto);
+            await _trainingGoalService.UpdateTrainingGoalAsync(_goalId, dto);
             return true;
         }
         catch (Exception ex)

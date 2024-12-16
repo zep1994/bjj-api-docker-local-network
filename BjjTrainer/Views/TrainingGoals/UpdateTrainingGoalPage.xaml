@@ -18,7 +18,14 @@
                 <!-- Goal Date -->
                 <VerticalStackLayout>
                     <Label Text="Goal Date" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
-                    <DatePicker Date="{Binding GoalDate}" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Source="calendar.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" />
+                        <DatePicker Grid.Column="1" Date="{Binding GoalDate}" TextColor="{StaticResource PrimaryTextColor}" />
+                    </Grid>
                 </VerticalStackLayout>
 
                 <!-- Notes -->

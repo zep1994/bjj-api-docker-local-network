@@ -13,14 +13,15 @@ namespace BjjTrainer.ViewModels.TrainingLogs
         private readonly MoveService _moveService;
         private readonly int _logId;
 
-        public ObservableCollection<Move> Moves { get; private set; } = new ObservableCollection<Move>();
+        public ObservableCollection<Move> Moves { get; private set; } = [];
 
         public DateTime Date { get; set; }
         public double TrainingTime { get; set; }
         public int RoundsRolled { get; set; }
         public int Submissions { get; set; }
         public int Taps { get; set; }
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
+        public string? SelfAssessment { get; set; }
 
         private string _selectedDateDisplay;
         public string SelectedDateDisplay
@@ -59,6 +60,7 @@ namespace BjjTrainer.ViewModels.TrainingLogs
                     Submissions = log.Submissions;
                     Taps = log.Taps;
                     Notes = log.Notes ?? string.Empty;
+                    SelfAssessment = log.SelfAssessment;
 
                     // Load and match moves
                     var allMoves = await _moveService.GetAllMovesAsync();
@@ -79,6 +81,7 @@ namespace BjjTrainer.ViewModels.TrainingLogs
                     OnPropertyChanged(nameof(Submissions));
                     OnPropertyChanged(nameof(Taps));
                     OnPropertyChanged(nameof(Notes));
+                    OnPropertyChanged(nameof(SelfAssessment));
                     OnPropertyChanged(nameof(Moves));
                 }
             }
@@ -107,9 +110,9 @@ namespace BjjTrainer.ViewModels.TrainingLogs
                     RoundsRolled = RoundsRolled,
                     Submissions = Submissions,
                     Taps = Taps,
-                    Notes = Notes,
+                    Notes = Notes ?? string.Empty,
+                    SelfAssessment = SelfAssessment ?? string.Empty,
                     MoveIds = updatedMoves,
-                    SelfAssessment = string.Empty,
                     ApplicationUserId = Preferences.Get("UserId", string.Empty)
                 };
 

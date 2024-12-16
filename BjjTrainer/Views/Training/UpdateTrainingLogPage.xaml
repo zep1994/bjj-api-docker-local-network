@@ -71,14 +71,20 @@
                     <Editor Placeholder="Enter additional notes" Text="{Binding Notes}" AutoSize="TextChanges" />
                 </VerticalStackLayout>
 
+                <!-- Self Assessment Field -->
+                <VerticalStackLayout>
+                    <Label Text="Notes" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
+                    <Editor Placeholder="Self Assessment" Text="{Binding SelfAssessment}" AutoSize="TextChanges" />
+                </VerticalStackLayout>
+
                 <!-- Moves Selection -->
                 <Label Text="Select Moves" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
                 <CollectionView ItemsSource="{Binding Moves}" SelectionMode="None">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame CornerRadius="10" Padding="10" Margin="5"
-                   BackgroundColor="{StaticResource CardBackgroundColor}"
-                   BorderColor="{StaticResource BorderColor}">
+                                   BackgroundColor="{StaticResource CardBackgroundColor}"
+                                   BorderColor="{StaticResource BorderColor}">
                                 <HorizontalStackLayout>
                                     <CheckBox IsChecked="{Binding IsSelected}" VerticalOptions="Center" />
                                     <VerticalStackLayout>
