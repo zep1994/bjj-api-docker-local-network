@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BjjTrainer_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241207034627_FixTrainingGoalRelationships")]
-    partial class FixTrainingGoalRelationships
+    [Migration("20241217050137_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -85,7 +85,7 @@ namespace BjjTrainer_API.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateOnly>("GoalDate")
+                    b.Property<DateTime>("GoalDate")
                         .HasColumnType("date");
 
                     b.Property<string>("Notes")
@@ -121,10 +121,6 @@ namespace BjjTrainer_API.Migrations
 
                     b.Property<int>("MoveId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("SelfAssessment")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.HasKey("TrainingLogId", "MoveId");
 
@@ -392,6 +388,9 @@ namespace BjjTrainer_API.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<DateOnly?>("LastLoginDate")
+                        .HasColumnType("date");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
 
@@ -413,6 +412,14 @@ namespace BjjTrainer_API.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("PreferredTrainingStyle")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProfilePictureUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
@@ -428,8 +435,11 @@ namespace BjjTrainer_API.Migrations
                     b.Property<double>("TotalTrainingTime")
                         .HasColumnType("double precision");
 
-                    b.Property<DateTime?>("TrainingStartDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("TrainingHoursThisWeek")
+                        .HasColumnType("integer");
+
+                    b.Property<DateOnly?>("TrainingStartDate")
+                        .HasColumnType("date");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
@@ -479,13 +489,13 @@ namespace BjjTrainer_API.Migrations
                     b.HasOne("BjjTrainer_API.Models.Users.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("BjjTrainer_API.Models.Lessons.Lesson", null)
                         .WithMany()
                         .HasForeignKey("LessonId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 

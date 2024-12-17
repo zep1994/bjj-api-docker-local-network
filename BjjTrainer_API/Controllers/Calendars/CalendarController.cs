@@ -16,6 +16,21 @@ namespace BjjTrainer_API.Controllers.Calendar
             _calendarService = calendarService;
         }
 
+        [HttpGet("user/{userId}/all")]
+        public async Task<IActionResult> GetAllUserEvents(string userId)
+        {
+            try
+            {
+                var events = await _calendarService.GetAllUserEventsAsync(userId);
+                return Ok(events);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error retrieving events: {ex.Message}");
+            }
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> CreateEvent([FromBody] CalendarEventCreateDTO newEventDto)
         {
@@ -59,7 +74,7 @@ namespace BjjTrainer_API.Controllers.Calendar
 
         // Update an existing event
         [HttpPut("{eventId}")]
-        public async Task<IActionResult> UpdateEvent(int eventId, [FromBody] CalendarEvent updatedEvent)
+        public async Task<IActionResult> UpdateEvent(int eventId, [FromBody] CalendarEventDto updatedEvent)
         {
             if (updatedEvent == null || updatedEvent.Id != eventId)
             {
@@ -68,12 +83,12 @@ namespace BjjTrainer_API.Controllers.Calendar
 
             try
             {
-                var eventToUpdate = await _calendarService.UpdateEvent(updatedEvent);
-                if (eventToUpdate == null)
+                var updatedEventDto = await _calendarService.UpdateEvent(eventId, updatedEvent);
+                if (updatedEventDto == null)
                 {
                     return NotFound($"Event with ID {eventId} not found.");
                 }
-                return Ok(eventToUpdate);
+                return Ok(updatedEventDto);
             }
             catch (Exception ex)
             {

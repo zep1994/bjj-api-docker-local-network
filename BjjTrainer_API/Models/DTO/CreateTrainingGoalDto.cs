@@ -8,6 +8,6 @@ namespace BjjTrainer_API.Models.DTO
         [Column(TypeName = "date")]
         public DateTime GoalDate { get; set; }
         public string Notes { get; set; } = string.Empty;
-        public List<int> MoveIds { get; set; } = new List<int>();
+        public List<int> MoveIds { get; set; } = [];
     }
 }

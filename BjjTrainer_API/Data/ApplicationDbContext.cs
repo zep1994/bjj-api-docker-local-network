@@ -68,19 +68,19 @@ namespace BjjTrainer_API.Data
 
             modelBuilder.Entity<ApplicationUser>()
                 .HasMany(u => u.Lessons)
-                .WithMany(l => l.ApplicationUser)
+                .WithMany()
                 .UsingEntity<Dictionary<string, object>>(
                     "ApplicationUserLessonJoin",
                     j => j
                         .HasOne<Lesson>()
                         .WithMany()
                         .HasForeignKey("LessonId")
-                        .OnDelete(DeleteBehavior.Cascade),
+                        .OnDelete(DeleteBehavior.NoAction),
                     j => j
                         .HasOne<ApplicationUser>()
                         .WithMany()
                         .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                 );
 
 

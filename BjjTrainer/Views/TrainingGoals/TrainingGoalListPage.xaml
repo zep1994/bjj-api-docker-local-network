@@ -21,7 +21,6 @@
                                         BackgroundColor="Green"
                                         TextColor="White"
                                         FontAttributes="Bold" />
-
                                 <Button Text="Delete"
                                         CommandParameter="{Binding Id}"
                                         Clicked="OnDeleteGoalClicked"
@@ -40,7 +39,7 @@
                     BackgroundColor="#007AFF"
                     TextColor="White"
                     CornerRadius="8"
-                    Clicked="OnViewGoalClicked" />
+                    Clicked="OnSaveGoalClicked" />
         </VerticalStackLayout>
     </ContentPage.Content>
 </ContentPage>

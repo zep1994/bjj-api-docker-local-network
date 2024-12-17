@@ -1,4 +1,5 @@
 ﻿using BjjTrainer_API.Models.DTO;
+using BjjTrainer_API.Models.Moves;
 using BjjTrainer_API.Services_API.Moves;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,9 +39,9 @@ namespace BjjTrainer_API.Controllers.Moves
 
         // Create a new Move
         [HttpPost]
-        public async Task<ActionResult<MoveDto>> CreateMove([FromBody] MoveDto moveDto)
+        public async Task<ActionResult<Move>> CreateMove([FromBody] Move move)
         {
-            var createdMove = await _moveService.CreateMoveAsync(moveDto);
+            var createdMove = await _moveService.CreateMoveAsync(move);
             return CreatedAtAction(nameof(GetMoveById), new { id = createdMove.Id }, createdMove);
         }
 

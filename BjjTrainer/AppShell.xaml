@@ -38,8 +38,12 @@
                    HorizontalOptions="End" 
                    VerticalOptions="Center"
                    Margin="0,0,10,0"
-                   IsVisible="True" />
-            
+                   IsVisible="True">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnProfileIconTapped" />
+                </Image.GestureRecognizers>
+            </Image>
+
         </Grid>
     </Shell.TitleView>
 
@@ -76,9 +80,14 @@
         <Tab Title="Moves" Icon="moves.png">
             <ShellContent Route="MovesPage" ContentTemplate="{DataTemplate moves:MovesPage}" />
         </Tab>
-    </TabBar>
 
-    <!-- Unique routes for each page -->
+        <!-- User Profile Tab -->
+        <ShellContent Title="Profile"
+               Icon="profile_icon.png"
+               ContentTemplate="{DataTemplate users:UserProfilePage}"
+               Route="UserProfilePage" />
+    </TabBar>
+    
     <ShellContent Title="Lessons" Route="SubLessonPage" ContentTemplate="{DataTemplate lessons:SubLessonPage}" />
     <ShellContent Title="SubLessons" Route="SubLessonDetailsPage" ContentTemplate="{DataTemplate lessons:SubLessonDetailsPage}" />
     <ShellContent Title="My Lessons" Route="FavoritesPage" ContentTemplate="{DataTemplate users:FavoritesPage}" />
@@ -89,4 +98,5 @@
     <ShellContent Title="Show Training Goal" Route="ShowTrainingGoalPage" ContentTemplate="{DataTemplate goals:ShowTrainingGoalPage}" />
     <ShellContent Title="Show Event Page" Route="ShowEventPage" ContentTemplate="{DataTemplate events:ShowEventPage}" />
     <ShellContent Title="Update Event" Route="UpdateEventPage" ContentTemplate="{DataTemplate events:UpdateEventPage}" />
+    <ShellContent Title="Create Event" Route="CreateEventPage" ContentTemplate="{DataTemplate events:CreateEventPage}" />
 </Shell>

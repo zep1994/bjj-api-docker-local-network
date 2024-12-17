@@ -29,7 +29,7 @@ namespace BjjTrainer
             var builder = MauiApp.CreateBuilder();
             builder.UseMauiApp<App>()
                    .ConfigureSyncfusionCore();
-            SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NMaF5cXmBCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWH1fdHVURWRdVER0VkA=");
+            SyncfusionLicenseProvider.RegisterLicense("MzYzMTg4OEAzMjM4MmUzMDJlMzBoT0NzMTFjZkl2L2hyU1RTTDRrTTZIODVLRFdHclNNVndSdTRSRTd1dUtBPQ==");
             builder
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
@@ -87,6 +87,7 @@ namespace BjjTrainer
             builder.Services.AddTransient<UpdateEventViewModel>();
             builder.Services.AddTransient<ShowEventPage>();
             builder.Services.AddTransient<UpdateEventPage>();
+            builder.Services.AddTransient<CreateEventPage>();
             // Register Users
             builder.Services.AddSingleton<UserProgressService>();
             builder.Services.AddTransient<UserProgressViewModel>();

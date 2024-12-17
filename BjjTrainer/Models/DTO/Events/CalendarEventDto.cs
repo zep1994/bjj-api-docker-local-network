@@ -7,6 +7,8 @@ namespace BjjTrainer.Models.DTO.Events
         [JsonPropertyName("id")]
         public int Id { get; set; }
 
+        public string ApplicationUserId { get; set; }
+
         [JsonPropertyName("title")]
         public string Title { get; set; }
 
@@ -18,6 +20,9 @@ namespace BjjTrainer.Models.DTO.Events
 
         [JsonPropertyName("endDate")]
         public DateTime EndDate { get; set; }
+
+        public bool IsAllDay { get; set; }
+
 
         // Property to format the date to MM/dd/yyyy
         public string FormattedDate => StartDate.ToString("MM/dd/yyyy");

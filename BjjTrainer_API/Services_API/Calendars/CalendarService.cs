@@ -1,6 +1,7 @@
 ﻿using BjjTrainer_API.Data;
 using BjjTrainer_API.Models.Calendars;
 using BjjTrainer_API.Models.DTO;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace BjjTrainer_API.Services_API.Calendars
@@ -81,23 +82,54 @@ namespace BjjTrainer_API.Services_API.Calendars
             }
         }
 
+        public async Task<List<CalendarEventDto>> GetAllUserEventsAsync(string userId)
+        {
+            var events = await _context.CalendarEvents
+                .Where(e => e.ApplicationUserId == userId)
+                .ToListAsync();
+
+            return events.Select(e => new CalendarEventDto
+            {
+                Id = e.Id,
+                Title = e.Title,
+                Description = e.Description,
+                StartDate = e.StartDate,
+                EndDate = e.EndDate,
+                IsAllDay = e.IsAllDay,
+                RecurrenceRule = e.RecurrenceRule
+            }).ToList();
+        }
+
 
         // Update an existing event
-        public async Task<CalendarEvent> UpdateEvent(CalendarEvent updatedEvent)
+        public async Task<CalendarEventDto> UpdateEvent(int id, CalendarEventDto updatedEvent)
         {
-            var existingEvent = await _context.CalendarEvents.FindAsync(updatedEvent.Id);
-            if (existingEvent == null)
+            var eventToUpdate = await _context.CalendarEvents.FindAsync(id);
+            if (eventToUpdate == null) return null;
+
+            if (eventToUpdate.ApplicationUserId != updatedEvent.ApplicationUserId)
             {
-                return null; // Event not found
+                return null;
             }
 
-            existingEvent.Title = updatedEvent.Title;
-            existingEvent.Description = updatedEvent.Description;
-            existingEvent.StartDate = updatedEvent.StartDate;
-            existingEvent.EndDate = updatedEvent.EndDate;
+            // Update properties
+            eventToUpdate.Title = updatedEvent.Title;
+            eventToUpdate.Description = updatedEvent.Description;
+            eventToUpdate.StartDate = updatedEvent.StartDate;
+            eventToUpdate.EndDate = updatedEvent.EndDate;
 
             await _context.SaveChangesAsync();
-            return existingEvent;
+
+            // Map the updated entity to a DTO
+            return new CalendarEventDto
+            {
+                Id = eventToUpdate.Id,
+                Title = eventToUpdate.Title,
+                Description = eventToUpdate.Description,
+                StartDate = eventToUpdate.StartDate,
+                EndDate = eventToUpdate.EndDate,
+                ApplicationUserId = eventToUpdate.ApplicationUserId
+            };
         }
 
         // Delete an event

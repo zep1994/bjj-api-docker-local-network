@@ -21,7 +21,7 @@ public class TrainingGoalViewModel : BaseViewModel
         _trainingGoalService = new TrainingGoalService();
         _moveService = new MoveService();
 
-        LoadMovesAsync();
+        Task.Run(async () => await LoadMovesAsync());
     }
 
     private async Task LoadMovesAsync()
@@ -55,7 +55,7 @@ public class TrainingGoalViewModel : BaseViewModel
     try
     {
         // Validate data
-        if (string.IsNullOrWhiteSpace(Notes) || GoalDate == default)
+        if (string.IsNullOrWhiteSpace(Notes) || GoalDate == DateTime.Today)
         {
             await Application.Current.MainPage.DisplayAlert("Validation Error", "Please fill in all required fields.", "OK");
             return false;

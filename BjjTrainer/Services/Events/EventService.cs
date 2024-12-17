@@ -1,4 +1,5 @@
 ﻿using BjjTrainer.Models.DTO.Events;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 
@@ -59,26 +60,15 @@ namespace BjjTrainer.Services.Events
         {
             try
             {
-                // Serialize updated event data
-                var json = JsonSerializer.Serialize(updatedEvent);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                // Send PUT request to update the event
-                var response = await HttpClient.PutAsync($"calendar/{eventId}", content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    return true;
-                }
-
-                var errorMessage = await response.Content.ReadAsStringAsync();
-                throw new Exception($"Server error: {errorMessage}");
+                var response = await HttpClient.PutAsJsonAsync($"events/{eventId}", updatedEvent);
+                return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Failed to update event: {ex.Message}");
+                throw new Exception($"Error: {ex.Message}");
             }
         }
+
 
         public async Task<bool> DeleteEventAsync(int eventId)
         {

@@ -56,6 +56,12 @@ namespace BjjTrainer_API.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("date");
 
+                    b.Property<bool>("IsAllDay")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("RecurrenceRule")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("date");
 
@@ -83,7 +89,7 @@ namespace BjjTrainer_API.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("GoalDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("date");
 
                     b.Property<string>("Notes")
                         .IsRequired()
@@ -486,13 +492,13 @@ namespace BjjTrainer_API.Migrations
                     b.HasOne("BjjTrainer_API.Models.Users.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("BjjTrainer_API.Models.Lessons.Lesson", null)
                         .WithMany()
                         .HasForeignKey("LessonId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
