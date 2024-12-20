@@ -11,11 +11,11 @@ namespace BjjTrainer.ViewModels
             set => SetProperty(ref _profileImage, value);
         }
 
-        private string _pageTitle;
-        public string PageTitle
+        private string _title;
+        public string Title
         {
-            get => _pageTitle;
-            set => SetProperty(ref _pageTitle, value);
+            get => _title;
+            set => SetProperty(ref _title, value);
         }
 
         private bool _isProfileVisible;

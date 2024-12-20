@@ -1,4 +1,5 @@
 using BjjTrainer.ViewModels.Events;
+using Syncfusion.Maui.Scheduler;
 
 namespace BjjTrainer.Views.Events;
 
@@ -12,30 +13,32 @@ public partial class CalendarPage : ContentPage
         _viewModel = new CalendarViewModel();
         BindingContext = _viewModel;
 
-        // Initialize the date picker with the current date
-        WeekDatePicker.Date = _viewModel.SelectedDate;
+        EventScheduler.AppointmentsSource = _viewModel.Events;
     }
 
-    private void OnPreviousWeekClicked(object sender, EventArgs e)
+    // Corrected Tapped Handler
+    private async void OnSchedulerTapped(object sender, SchedulerTappedEventArgs e)
     {
-        _viewModel.NavigateToPreviousWeek();
-    }
+        // Check if any appointment was tapped
+        var appointment = e.Appointments?.FirstOrDefault() as SchedulerAppointment;
 
-    private void OnNextWeekClicked(object sender, EventArgs e)
-    {
-        _viewModel.NavigateToNextWeek();
-    }
-
-    private async void OnEventClicked(object sender, EventArgs e)
-    {
-        if (sender is Button button && button.CommandParameter is int eventId)
+        if (appointment != null)
         {
-            Console.WriteLine($"Navigating to ShowEventPage with EventId: {eventId}");
-            await Navigation.PushAsync(new ShowEventPage(eventId));
+            // Edit the existing event
+            await Navigation.PushAsync(new CreateEventPage(appointment));
         }
         else
         {
-            Console.WriteLine("Invalid Event ID");
+            // Create a new event
+            await Navigation.PushAsync(new CreateEventPage());
+        }
+    }
+
+    private async void OnAppointmentDrop(object sender, AppointmentDropEventArgs e)
+    {
+        if (e.Appointment is SchedulerAppointment appointment)
+        {
+            await _viewModel.UpdateDroppedEventAsync(appointment);
         }
     }
 }

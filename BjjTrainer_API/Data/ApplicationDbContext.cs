@@ -25,6 +25,7 @@ namespace BjjTrainer_API.Data
         public DbSet<CalendarEvent> CalendarEvents { get; set; }
         public DbSet<TrainingGoal> TrainingGoals { get; set; }
         public DbSet<UserTrainingGoalMove> UserTrainingGoalMoves { get; set; }
+        public DbSet<School> Schools { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -68,19 +69,19 @@ namespace BjjTrainer_API.Data
 
             modelBuilder.Entity<ApplicationUser>()
                 .HasMany(u => u.Lessons)
-                .WithMany(l => l.ApplicationUser)
+                .WithMany()
                 .UsingEntity<Dictionary<string, object>>(
                     "ApplicationUserLessonJoin",
                     j => j
                         .HasOne<Lesson>()
                         .WithMany()
                         .HasForeignKey("LessonId")
-                        .OnDelete(DeleteBehavior.Cascade),
+                        .OnDelete(DeleteBehavior.NoAction),
                     j => j
                         .HasOne<ApplicationUser>()
                         .WithMany()
                         .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                 );
 
 
@@ -150,6 +151,13 @@ namespace BjjTrainer_API.Data
                 .HasOne(tg => tg.ApplicationUser)
                 .WithMany(au => au.TrainingGoals)
                 .HasForeignKey(tg => tg.ApplicationUserId);
+
+            // Configure the School entity
+            modelBuilder.Entity<School>()
+                        .HasMany(s => s.Users)
+                        .WithOne(u => u.School)
+                        .HasForeignKey(u => u.SchoolId)
+                        .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

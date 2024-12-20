@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BjjTrainer_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241207062839_AddNewFieldsToApplicationUser")]
-    partial class AddNewFieldsToApplicationUser
+    [Migration("20241217191727_UpdateCalendarEventModel")]
+    partial class UpdateCalendarEventModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,6 +59,12 @@ namespace BjjTrainer_API.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("date");
 
+                    b.Property<bool>("IsAllDay")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("RecurrenceRule")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("date");
 
@@ -85,7 +91,7 @@ namespace BjjTrainer_API.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateOnly>("GoalDate")
+                    b.Property<DateTime>("GoalDate")
                         .HasColumnType("date");
 
                     b.Property<string>("Notes")
@@ -121,10 +127,6 @@ namespace BjjTrainer_API.Migrations
 
                     b.Property<int>("MoveId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("SelfAssessment")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.HasKey("TrainingLogId", "MoveId");
 
@@ -493,13 +495,13 @@ namespace BjjTrainer_API.Migrations
                     b.HasOne("BjjTrainer_API.Models.Users.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("BjjTrainer_API.Models.Lessons.Lesson", null)
                         .WithMany()
                         .HasForeignKey("LessonId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 

@@ -1,75 +1,47 @@
-﻿using BjjTrainer.Models.DTO.Events;
-using BjjTrainer.Models.Util;
+﻿using System.Collections.ObjectModel;
+using BjjTrainer.Models.DTO.Events;
 using BjjTrainer.Services.Events;
-using System.Collections.ObjectModel;
+using MvvmHelpers;
+using Syncfusion.Maui.Scheduler;
 
 namespace BjjTrainer.ViewModels.Events
 {
-    public partial class CalendarViewModel : BindableObject
+    public class CalendarViewModel : BaseViewModel
     {
         private readonly EventService _eventService;
-        private DateTime _selectedDate;
 
-        public ObservableCollection<DayEvents> Days { get; set; } = new ObservableCollection<DayEvents>();
-        public bool NoEventsThisWeek { get; set; }
-
-        public DateTime SelectedDate
-        {
-            get => _selectedDate;
-            set
-            {
-                _selectedDate = value;
-                OnPropertyChanged(nameof(SelectedDate));
-                Task.Run(async () => await LoadEventsForWeekAsync());
-            }
-        }
-
-        public bool IsBusy { get; private set; }
+        public ObservableCollection<SchedulerAppointment> Events { get; set; }
 
         public CalendarViewModel()
         {
             _eventService = new EventService();
-            _selectedDate = DateTime.Now; // Default to the current date
-            Task.Run(async () => await LoadEventsForWeekAsync());
+            Events = new ObservableCollection<SchedulerAppointment>();
+
+            Task.Run(async () => await LoadEventsAsync());
         }
 
-        public async Task LoadEventsForWeekAsync()
+        public async Task LoadEventsAsync()
         {
             IsBusy = true;
 
             try
             {
                 var userId = Preferences.Get("UserId", string.Empty);
-                if (string.IsNullOrWhiteSpace(userId))
-                    throw new Exception("UserId not found in preferences.");
-
-                var startOfWeek = SelectedDate.AddDays(-(int)SelectedDate.DayOfWeek);
-                var endOfWeek = startOfWeek.AddDays(7);
-
                 var events = await _eventService.GetAllUserEventsAsync(userId);
 
-                Days.Clear();
+                Events.Clear();
 
-                for (var date = startOfWeek; date < endOfWeek; date = date.AddDays(1))
+                foreach (var evt in events)
                 {
-                    var dayEvents = new DayEvents
+                    Events.Add(new SchedulerAppointment
                     {
-                        DayHeader = date.ToString("dddd, MMM dd"),
-                        Events = new ObservableCollection<CalendarEventDto>(
-                            events.Where(e => e.StartDate.Date == date.Date).ToList())
-                    };
-
-                    dayEvents.HasEvents = dayEvents.Events.Any();
-                    Days.Add(dayEvents);
+                        StartTime = evt.StartDate,
+                        EndTime = evt.EndDate,
+                        Subject = evt.Title,
+                        Notes = evt.Description,
+                        IsAllDay = evt.IsAllDay
+                    });
                 }
-
-                NoEventsThisWeek = !Days.Any(d => d.HasEvents);
-                OnPropertyChanged(nameof(Days));
-                OnPropertyChanged(nameof(NoEventsThisWeek));
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading events: {ex.Message}");
             }
             finally
             {
@@ -77,14 +49,20 @@ namespace BjjTrainer.ViewModels.Events
             }
         }
 
-        public void NavigateToPreviousWeek()
+        public async Task UpdateDroppedEventAsync(SchedulerAppointment appointment)
         {
-            SelectedDate = SelectedDate.AddDays(-7);
-        }
-
-        public void NavigateToNextWeek()
-        {
-            SelectedDate = SelectedDate.AddDays(7);
+            var updatedEvent = new CalendarEventDto
+            {
+                Id = appointment.Id != null ? Convert.ToInt32(appointment.Id) : 0,
+                Title = appointment.Subject,
+                Description = appointment.Notes,
+                StartDate = appointment.StartTime,
+                EndDate = appointment.EndTime,
+                IsAllDay = appointment.IsAllDay,
+                ApplicationUserId = Preferences.Get("UserId", string.Empty)
+            };
+            await _eventService.UpdateEventAsync(updatedEvent.Id, updatedEvent);
+            await LoadEventsAsync();
         }
     }
 }

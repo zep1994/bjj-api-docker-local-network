@@ -1,72 +1,18 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Scheduler;assembly=Syncfusion.Maui.Scheduler"
              x:Class="BjjTrainer.Views.Events.CalendarPage"
              Title="Weekly Calendar"
              BackgroundColor="{StaticResource BackgroundColor}">
 
     <ContentPage.Content>
-        <VerticalStackLayout Padding="20" Spacing="15">
-            <!-- Header Navigation -->
-            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                <Button Text="Previous Week" Clicked="OnPreviousWeekClicked"
-                        BackgroundColor="Gray" TextColor="White" FontAttributes="Bold" />
-                <DatePicker x:Name="WeekDatePicker"
-                            Date="{Binding SelectedDate, Mode=TwoWay}"
-                            TextColor="{StaticResource PrimaryTextColor}"
-                            MinimumDate="2000-01-01"
-                            MaximumDate="2100-12-31" />
-                <Button Text="Next Week" Clicked="OnNextWeekClicked"
-                        BackgroundColor="Gray" TextColor="White" FontAttributes="Bold" />
-            </HorizontalStackLayout>
+        <Grid Padding="10">
+            <syncfusion:SfScheduler x:Name="EventScheduler"
+                        View="Week"
+                        AppointmentsSource="{Binding Events}"
+                        Tapped="OnSchedulerTapped"
+                        AppointmentDrop="OnAppointmentDrop" />
 
-            <!-- No Events Label -->
-            <Label Text="No Events Scheduled"
-                   FontSize="18"
-                   FontAttributes="Bold"
-                   TextColor="{StaticResource PrimaryTextColor}"
-                   IsVisible="{Binding NoEventsThisWeek}" />
-
-            <!-- Events By Day -->
-            <CollectionView ItemsSource="{Binding Days}" SelectionMode="None">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <VerticalStackLayout Spacing="10">
-                            <!-- Day Header -->
-                            <Label Text="{Binding DayHeader}"
-                                   FontAttributes="Bold"
-                                   FontSize="16"
-                                   TextColor="{StaticResource PrimaryTextColor}" />
-
-                            <!-- Events List -->
-                            <CollectionView ItemsSource="{Binding Events}" SelectionMode="None" IsVisible="{Binding HasEvents}">
-                                <CollectionView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Frame BackgroundColor="{StaticResource CardBackgroundColor}" Padding="10" CornerRadius="10">
-                                            <VerticalStackLayout>
-                                                <Label Text="{Binding Title}"
-                                                       FontSize="14"
-                                                       FontAttributes="Bold"
-                                                       TextColor="{StaticResource PrimaryTextColor}" />
-                                                <Label Text="{Binding FormattedDate}"
-                                                       FontSize="12"
-                                                       TextColor="Gray" />
-                                                <Label Text="{Binding ShortDescription}"
-                                                       FontSize="12"
-                                                       TextColor="{StaticResource SecondaryTextColor}" />
-                                                <Button Text="View Details"
-                                                        Clicked="OnEventClicked"
-                                                        CommandParameter="{Binding Id}"
-                                                        BackgroundColor="Blue"
-                                                        TextColor="White" />
-                                            </VerticalStackLayout>
-                                        </Frame>
-                                    </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                            </CollectionView>
-                        </VerticalStackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </VerticalStackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

@@ -1,11 +1,13 @@
 ﻿using BjjTrainer_API.Models.Joins;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BjjTrainer_API.Models.Moves
 {
     public class Move
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Required]

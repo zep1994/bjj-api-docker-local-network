@@ -60,6 +60,7 @@
 	  <None Remove="Resources\Images\bjjlogo.png" />
 	  <None Remove="Resources\Images\calendar.png" />
 	  <None Remove="Resources\Images\default_profile.png" />
+	  <None Remove="Resources\Images\forward_arrow.png" />
 	  <None Remove="Resources\Images\goal.png" />
 	  <None Remove="Resources\Images\home.png" />
 	  <None Remove="Resources\Images\lessons.png" />
@@ -83,9 +84,10 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
-		<PackageReference Include="Syncfusion.Maui.Calendar" Version="27.2.5" />
+		<PackageReference Include="Syncfusion.Maui.Calendar" Version="28.1.33" />
 		<PackageReference Include="Syncfusion.Maui.Charts" Version="28.1.33" />
 		<PackageReference Include="Syncfusion.Maui.Core" Version="28.1.33" />
+		<PackageReference Include="Syncfusion.Maui.Scheduler" Version="28.1.33" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.2.0" />
 		<PackageReference Include="System.Net.Http.Json" Version="8.0.1" />
 	</ItemGroup>
@@ -95,6 +97,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Events\CalendarPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Events\CreateEventPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Events\ShowEventPage.xaml">

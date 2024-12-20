@@ -32,6 +32,29 @@ namespace BjjTrainer_API.Services_API.Users
             return user?.Lessons.ToList() ?? new List<Lesson>();
         }
 
+        // GET SCHOOL
+        public async Task<List<ApplicationUser>> GetUsersBySchoolAsync(int schoolId)
+        {
+            return await _context.ApplicationUsers
+                .Where(u => u.SchoolId == schoolId)
+                .ToListAsync();
+        }
+
+        public async Task<bool> UpdateUserSchoolAsync(string userId, int schoolId)
+        {
+            var user = await _context.ApplicationUsers.FindAsync(userId);
+            if (user == null) return false;
+
+            var school = await _context.Schools.FindAsync(schoolId);
+            if (school == null) return false;
+
+            user.SchoolId = schoolId;
+            _context.ApplicationUsers.Update(user);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+
         // Add lesson to user's favorites
         public async Task<bool> AddLessonToFavoritesAsync(string userId, int lessonId)
         {

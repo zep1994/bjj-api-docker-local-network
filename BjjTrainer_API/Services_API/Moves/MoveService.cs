@@ -42,22 +42,28 @@ namespace BjjTrainer_API.Services_API.Moves
         }
 
         // Create a new move
-        public async Task<MoveDto> CreateMoveAsync(MoveDto moveDto)
+        public async Task<Move> CreateMoveAsync(Move move)
         {
-            var move = new Move
+            var moveResult = new Move
             {
-                Name = moveDto.Name,
-                Description = moveDto.Description,
-                Content = moveDto.Content,
-                SkillLevel = moveDto.SkillLevel,
-                Tags = moveDto.Tags
+                Name = move.Name,
+                Description = move.Description,
+                Content = move.Content,
+                SkillLevel = move.SkillLevel,
+                Category = move.Category,
+                StartingPosition = move.StartingPosition,
+                History = move.History,
+                Scenarios = move.Scenarios,
+                CounterStrategies = move.CounterStrategies,
+                Tags = move.Tags,
+                LegalInCompetitions = move.LegalInCompetitions
             };
 
             _context.Moves.Add(move);
             await _context.SaveChangesAsync();
 
-            moveDto.Id = move.Id;
-            return moveDto;
+            move.Id = moveResult.Id;
+            return move;
         }
 
         // Update an existing move

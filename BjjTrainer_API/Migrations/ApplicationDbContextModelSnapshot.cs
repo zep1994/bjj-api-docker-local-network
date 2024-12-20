@@ -56,6 +56,12 @@ namespace BjjTrainer_API.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("date");
 
+                    b.Property<bool>("IsAllDay")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("RecurrenceRule")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("date");
 
@@ -83,7 +89,7 @@ namespace BjjTrainer_API.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("GoalDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("date");
 
                     b.Property<string>("Notes")
                         .IsRequired()
@@ -385,6 +391,9 @@ namespace BjjTrainer_API.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsCoach")
+                        .HasColumnType("boolean");
+
                     b.Property<DateOnly?>("LastLoginDate")
                         .HasColumnType("date");
 
@@ -417,6 +426,9 @@ namespace BjjTrainer_API.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int?>("SchoolId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
@@ -445,6 +457,8 @@ namespace BjjTrainer_API.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SchoolId");
 
                     b.ToTable("ApplicationUsers");
                 });
@@ -481,18 +495,46 @@ namespace BjjTrainer_API.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
+            modelBuilder.Entity("BjjTrainer_API.Models.Users.School", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Schools");
+                });
+
             modelBuilder.Entity("ApplicationUserLessonJoin", b =>
                 {
                     b.HasOne("BjjTrainer_API.Models.Users.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("BjjTrainer_API.Models.Lessons.Lesson", null)
                         .WithMany()
                         .HasForeignKey("LessonId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -615,6 +657,16 @@ namespace BjjTrainer_API.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
+            modelBuilder.Entity("BjjTrainer_API.Models.Users.ApplicationUser", b =>
+                {
+                    b.HasOne("BjjTrainer_API.Models.Users.School", "School")
+                        .WithMany("Users")
+                        .HasForeignKey("SchoolId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("School");
+                });
+
             modelBuilder.Entity("BjjTrainer_API.Models.Users.RefreshToken", b =>
                 {
                     b.HasOne("BjjTrainer_API.Models.Users.ApplicationUser", "User")
@@ -669,6 +721,11 @@ namespace BjjTrainer_API.Migrations
                     b.Navigation("TrainingGoals");
 
                     b.Navigation("TrainingLogs");
+                });
+
+            modelBuilder.Entity("BjjTrainer_API.Models.Users.School", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

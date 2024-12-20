@@ -32,8 +32,12 @@ namespace BjjTrainer_API.Controllers.Users
         [HttpPost("signup")]
         public async Task<IActionResult> SignUp([FromBody] RegisterModel model)
         {
-            var user = new ApplicationUser { UserName = model.Username, Email = model.Email };
-            var result = await _userManager.CreateAsync(user, model.Password);
+            var user = new ApplicationUser
+            {
+                UserName = model.Username,
+                Email = model.Email,
+                SchoolId = model.SchoolId
+            }; var result = await _userManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)
             {
@@ -98,6 +102,7 @@ namespace BjjTrainer_API.Controllers.Users
         public string Username { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public int? SchoolId { get; set; }
     }
 
     public class LoginModel

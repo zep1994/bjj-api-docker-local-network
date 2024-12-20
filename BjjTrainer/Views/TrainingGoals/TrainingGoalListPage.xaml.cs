@@ -28,6 +28,10 @@ public partial class TrainingGoalListPage : ContentPage
             }
         }
     }
+    private async void OnSaveGoalClicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new TrainingGoalPage());
+    }
 
     private async void OnViewGoalClicked(object sender, EventArgs e)
     {

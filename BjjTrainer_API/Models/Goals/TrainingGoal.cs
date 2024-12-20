@@ -7,6 +7,7 @@ namespace BjjTrainer_API.Models.Goals
     public class TrainingGoal
     {
         public int Id { get; set; }
+        [Column(TypeName = "date")]
         public DateTime GoalDate { get; set; }
         public string Notes { get; set; } = string.Empty;
 

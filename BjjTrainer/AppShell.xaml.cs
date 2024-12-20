@@ -18,9 +18,6 @@ namespace BjjTrainer
             bool isLoggedIn = Preferences.Get("IsLoggedIn", false);
             var currentRoute = Shell.Current?.CurrentItem?.Route;
 
-            // Set every page title to "Roll Call"
-            Title = "Roll Call";
-
             if (currentRoute == "IMPL_LoginPage" || currentRoute == "IMPL_SignupPage")
             {
                 // Enable FlyoutHeader for logged-in pages
@@ -35,9 +32,10 @@ namespace BjjTrainer
             }
         }
 
-        private async void OnProfileClicked()
+        private async void OnProfileIconTapped(object sender, EventArgs e)
         {
             await Shell.Current.GoToAsync("//UserProfilePage");
         }
+
     }
 }

@@ -31,34 +31,26 @@
 
             <!-- Collection of Logs -->
             <CollectionView ItemsSource="{Binding TrainingLogs}" SelectionMode="None">
-                <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Vertical" />
-                </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame CornerRadius="10" Padding="10" Margin="5" BackgroundColor="{StaticResource CardBackgroundColor}" BorderColor="#E0E0E0">
-                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
-                                <!-- Log Details -->
-                                <VerticalStackLayout Grid.Column="0">
-                                    <Label FontAttributes="Bold" FontSize="18" Text="{Binding Date, StringFormat='{0:yyyy-MM-dd}'}" />
-                                    <Label FontSize="14" Text="{Binding TrainingTime, StringFormat='Training Time: {0} mins'}" />
-                                    <Label FontSize="14" Text="{Binding RoundsRolled, StringFormat='Rounds Rolled: {0}'}" />
-                                    <Label FontSize="14" Text="{Binding Submissions, StringFormat='Submissions: {0}'}" />
-                                    <Label FontSize="14" Text="{Binding Taps, StringFormat='Taps: {0}'}" />
-                                </VerticalStackLayout>
+                        <Frame Padding="10" CornerRadius="8" BorderColor="{Binding DayColor}" BackgroundColor="Transparent">
+                            <Grid ColumnDefinitions="50, *, Auto" RowDefinitions="Auto, Auto" RowSpacing="10" ColumnSpacing="10">
 
-                                <!-- View Button -->
-                                <Button Text="View"
-                                        BackgroundColor="Green"
-                                        TextColor="White"
-                                        FontAttributes="Bold"
-                                        CornerRadius="10"
-                                        Padding="10"
-                                        WidthRequest="80"
-                                        Grid.Column="1"
-                                        VerticalOptions="Center"
-                                        CommandParameter="{Binding Id}"
-                                        Clicked="OnViewLogClicked" />
+                                <!-- Day Icon -->
+                                <Frame WidthRequest="40" HeightRequest="40" CornerRadius="20" BackgroundColor="{Binding DayColor}" VerticalOptions="Center">
+                                    <Label Text="{Binding DayInitial}" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                                </Frame>
+
+                                <!-- Log Details -->
+                                <StackLayout Grid.Column="1" Spacing="5">
+                                    <Label Text="Training Date:" FontAttributes="Bold" FontSize="Small" TextColor="{StaticResource PrimaryTextColor}" />
+                                    <Label Text="{Binding Date}" FontSize="14" TextColor="{StaticResource PrimaryTextColor}"/>
+                                    <Label Text="Duration:" FontAttributes="Bold" FontSize="Small" TextColor="{StaticResource PrimaryTextColor}" />
+                                    <Label Text="{Binding TrainingTime}" FontSize="16" TextColor="{StaticResource PrimaryTextColor}" />
+                                </StackLayout>
+
+                                <!-- Forward Arrow -->
+                                <ImageButton Grid.Column="2" Source="forward_arrow.png" BackgroundColor="Transparent" CommandParameter="{Binding Id}" Clicked="OnViewLogClicked" />
                             </Grid>
                         </Frame>
                     </DataTemplate>

@@ -41,8 +41,10 @@ namespace BjjTrainer.ViewModels.Events
                 Title = Title,
                 Description = Description,
                 StartDate = StartDate,
-                EndDate = EndDate
+                EndDate = EndDate,
+                ApplicationUserId = Preferences.Get("UserId", string.Empty)
             };
+
             return await _eventService.UpdateEventAsync(EventId, updatedEvent);
         }
 

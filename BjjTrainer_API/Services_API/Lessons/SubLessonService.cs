@@ -112,10 +112,31 @@ namespace BjjTrainer_API.Services_API.Lessons
         }
 
         // Create a new SubLesson
-        public async Task<SubLesson> CreateSubLessonAsync(SubLesson subLesson)
+        public async Task<SubLesson> CreateSubLessonAsync(SubLesson subLesson, int? moveId)
         {
+            // Save the SubLesson first
             _context.SubLessons.Add(subLesson);
             await _context.SaveChangesAsync();
+
+            // If MoveId is provided, validate and add the relationship
+            if (moveId.HasValue)
+            {
+                var moveExists = await _context.Moves.AnyAsync(m => m.Id == moveId.Value);
+                if (!moveExists)
+                {
+                    throw new InvalidOperationException($"Move with Id {moveId.Value} does not exist.");
+                }
+
+                var subLessonMove = new SubLessonMove
+                {
+                    SubLessonId = subLesson.Id,
+                    MoveId = moveId.Value
+                };
+
+                _context.SubLessonMoves.Add(subLessonMove);
+                await _context.SaveChangesAsync();
+            }
+
             return subLesson;
         }
 

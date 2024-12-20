@@ -17,9 +17,6 @@ namespace BjjTrainer_API.Models.Lessons
         public string Description { get; set; } = string.Empty;
 
         public ICollection<LessonSection>? LessonSections { get; set; } = new List<LessonSection>();
-
-        // Many-to-many relationship with ApplicationUser
-        public ICollection<ApplicationUser> ApplicationUser { get; set; } = new List<ApplicationUser>();
     }
 
 

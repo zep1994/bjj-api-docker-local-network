@@ -20,6 +20,6 @@ namespace BjjTrainer_API.Models.Lessons
 
         // Navigation property for the related LessonSection
         public LessonSection? LessonSection { get; set; }
-        public ICollection<SubLessonMove> SubLessonMoves { get; set; } = new List<SubLessonMove>();
+        public ICollection<SubLessonMove>? SubLessonMoves { get; set; }
     }
 }

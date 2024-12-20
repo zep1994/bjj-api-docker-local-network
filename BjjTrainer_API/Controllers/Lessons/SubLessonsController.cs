@@ -1,4 +1,5 @@
 ﻿using BjjTrainer_API.Models.DTO;
+using BjjTrainer_API.Models.DTO.Lessons;
 using BjjTrainer_API.Models.Lessons;
 using BjjTrainer_API.Services_API.Lessons;
 using Microsoft.AspNetCore.Mvc;
@@ -44,24 +45,36 @@ namespace BjjTrainer_API.Controllers.Lessons
 
         // Create a new SubLesson
         [HttpPost]
-        public async Task<ActionResult<SubLesson>> CreateSubLesson([FromBody] SubLesson subLesson)
+        public async Task<ActionResult<SubLesson>> CreateSubLesson([FromBody] SubLessonCreateDto subLessonDto)
         {
-            if (subLesson == null)
+            if (subLessonDto == null)
             {
                 return BadRequest("SubLesson data is required.");
             }
 
-            var createdSubLesson = await _subLessonService.CreateSubLessonAsync(subLesson);
-            return CreatedAtAction(nameof(GetSubLesson), new { id = createdSubLesson.Id }, createdSubLesson);
-        }
+            // Map DTO to SubLesson model
+            var subLesson = new SubLesson
+            {
+                Title = subLessonDto.Title,
+                Content = subLessonDto.Content,
+                Duration = subLessonDto.Duration,
+                VideoUrl = subLessonDto.VideoUrl,
+                DocumentUrl = subLessonDto.DocumentUrl,
+                Tags = subLessonDto.Tags,
+                SkillLevel = subLessonDto.SkillLevel,
+                Notes = subLessonDto.Notes,
+                LessonSectionId = subLessonDto.LessonSectionId
+            };
 
-        // Update an existing SubLesson
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateSubLesson(int id, SubLesson subLesson)
-        {
-            if (id != subLesson.Id) return BadRequest();
-            await _subLessonService.UpdateSubLessonAsync(subLesson);
-            return NoContent();
+            try
+            {
+                var createdSubLesson = await _subLessonService.CreateSubLessonAsync(subLesson, subLessonDto.MoveId);
+                return CreatedAtAction(nameof(GetSubLesson), new { id = createdSubLesson.Id }, createdSubLesson);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // Delete a SubLesson

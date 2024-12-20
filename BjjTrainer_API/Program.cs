@@ -33,6 +33,7 @@ builder.Services.AddScoped<MoveService>();
 builder.Services.AddScoped<TrainingService>();
 builder.Services.AddScoped<TrainingGoalService>();
 builder.Services.AddScoped<CalendarService>();
+builder.Services.AddScoped<SchoolService>();
 
 // In Program.cs or wherever you configure JSON serialization
 builder.Services.AddControllers()
