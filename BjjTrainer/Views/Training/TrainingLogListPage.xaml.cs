@@ -17,7 +17,7 @@ namespace BjjTrainer.Views.Training
 
         private async void OnViewLogClicked(object sender, EventArgs e)
         {
-            if (sender is Button button && button.CommandParameter is int logId)
+            if (sender is ImageButton button && button.CommandParameter is int logId)
             {
                 Console.WriteLine($"Navigating to ShowTrainingLogPage with logId: {logId}");
                 await Shell.Current.GoToAsync($"///ShowTrainingLogPage?logId={logId}");

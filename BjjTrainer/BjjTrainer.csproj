@@ -60,6 +60,7 @@
 	  <None Remove="Resources\Images\bjjlogo.png" />
 	  <None Remove="Resources\Images\calendar.png" />
 	  <None Remove="Resources\Images\default_profile.png" />
+	  <None Remove="Resources\Images\forward_arrow.png" />
 	  <None Remove="Resources\Images\goal.png" />
 	  <None Remove="Resources\Images\home.png" />
 	  <None Remove="Resources\Images\lessons.png" />

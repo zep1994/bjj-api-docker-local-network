@@ -31,9 +31,17 @@ namespace BjjTrainer.Services.Users
             throw new Exception("Login failed.");
         }
 
-        public async Task<string> SignupAsync(string username, string email, string password)
+        public async Task<string> SignupAsync(string username, string email, string password, int schoolId, bool isCoach)
         {
-            var signupModel = new { Username = username, Email = email, Password = password };
+            var signupModel = new
+            {
+                Username = username,
+                Email = email,
+                Password = password,
+                SchoolId = schoolId,
+                IsCoach = isCoach
+            };
+
             var response = await HttpClient.PostAsJsonAsync("auth/signup", signupModel);
 
             if (response.IsSuccessStatusCode)
@@ -50,6 +58,21 @@ namespace BjjTrainer.Services.Users
                 throw new Exception(errorMessage);
             }
         }
+
+        public async Task<List<School>> GetAllSchoolsAsync()
+        {
+            var response = await HttpClient.GetAsync("school");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<List<School>>() ?? new List<School>();
+            }
+            else
+            {
+                throw new Exception("Failed to retrieve schools.");
+            }
+        }
+
 
         //GET FAVORITES
         public async Task<List<Lesson>> GetUserFavoritesAsync(string userId)

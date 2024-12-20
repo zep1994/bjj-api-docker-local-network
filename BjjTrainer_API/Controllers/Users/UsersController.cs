@@ -95,5 +95,22 @@ namespace BjjTrainer_API.Controllers.Users
             return Ok(result);
         }
 
+        [HttpPut("{userId}/school/{schoolId}")]
+        public async Task<IActionResult> UpdateUserSchool(string userId, int schoolId)
+        {
+            var success = await _userService.UpdateUserSchoolAsync(userId, schoolId);
+            if (success)
+                return Ok("User's school updated successfully.");
+
+            return BadRequest("Failed to update user's school. Ensure user and school exist.");
+        }
+
+
+        [HttpGet("school/{schoolId}/users")]
+        public async Task<IActionResult> GetUsersBySchool(int schoolId)
+        {
+            var users = await _userService.GetUsersBySchoolAsync(schoolId);
+            return Ok(users);
+        }
     }
 }

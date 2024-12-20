@@ -22,7 +22,6 @@ namespace BjjTrainer_API.Models.Users
         public ICollection<TrainingLog> TrainingLogs { get; set; } = new List<TrainingLog>();
         public ICollection<TrainingGoal> TrainingGoals { get; set; } = new List<TrainingGoal>();
 
-
         [Column(TypeName = "date")]
         public DateOnly? TrainingStartDate { get; set; }
         public int TotalSubmissions { get; set; } = 0;
@@ -35,6 +34,9 @@ namespace BjjTrainer_API.Models.Users
         public int TrainingHoursThisWeek { get; set; } = 0; 
         [Column(TypeName = "date")]
         public DateOnly? LastLoginDate { get; set; } 
-        public string PreferredTrainingStyle { get; set; } = "Half-Gaurd"; 
+        public string PreferredTrainingStyle { get; set; } = "Half-Gaurd";
+        public bool IsCoach { get; set; } = false; 
+        public int? SchoolId { get; set; } 
+        public School? School { get; set; } 
     }
 }
