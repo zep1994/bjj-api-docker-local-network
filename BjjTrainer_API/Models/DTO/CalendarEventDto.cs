@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
-
-namespace BjjTrainer_API.Models.DTO
+﻿namespace BjjTrainer_API.Models.DTO
 {
     public class CalendarEventDto
     {

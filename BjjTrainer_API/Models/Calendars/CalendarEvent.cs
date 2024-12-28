@@ -12,10 +12,12 @@ namespace BjjTrainer_API.Models.Calendars
         public DateTime? StartDate { get; set; }
         [Column(TypeName = "date")]
         public DateTime? EndDate { get; set; }
-        public bool IsAllDay { get; set; } = false; // For all-day events
-        public string? RecurrenceRule { get; set; } // For recurring events
+        public bool IsAllDay { get; set; } = false; 
+        public string? RecurrenceRule { get; set; }
+        public int? SchoolId { get; set; }  
+        public School? School { get; set; }
 
-        public string ApplicationUserId { get; set; }
-        public ApplicationUser? ApplicationUser { get; set; }
+        public ICollection<CalendarEventUser> CalendarEventUsers { get; set; } = [];
+        public ICollection<CalendarEventCheckIn> CalendarEventCheckIns { get; set; } = [];
     }
 }

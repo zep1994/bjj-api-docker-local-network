@@ -1,6 +1,8 @@
 ﻿using BjjTrainer_API.Models.Lessons;
 using BjjTrainer_API.Services_API.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BjjTrainer_API.Controllers.Users
 {
@@ -94,6 +96,21 @@ namespace BjjTrainer_API.Controllers.Users
 
             return Ok(result);
         }
+
+        [HttpPost("{schoolId}/add-users")]
+        [Authorize]
+        public async Task<IActionResult> AddUsersToSchool(int schoolId, [FromBody] List<string> emails)
+        {
+            var coachId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(coachId))
+            {
+                return Unauthorized("User not logged in.");
+            }
+
+            var result = await _userService.AddUsersToSchoolAsync(coachId, schoolId, emails);
+            return Ok(result);
+        }
+
 
         [HttpPut("{userId}/school/{schoolId}")]
         public async Task<IActionResult> UpdateUserSchool(string userId, int schoolId)

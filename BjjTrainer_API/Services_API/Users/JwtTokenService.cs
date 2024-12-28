@@ -22,52 +22,7 @@ namespace BjjTrainer_API.Services_API.Users
             _context = context;
         }
 
-        public (string accessToken, string refreshToken) GenerateTokens(string userId, string username)
-        {
-            var accessToken = GenerateToken(userId, username);
-            var refreshToken = CreateRefreshToken(userId);
-
-            return (accessToken, refreshToken.Token);
-        }
-
-        public string GenerateToken(string userId, string username)
-        {
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, userId),
-                new Claim(ClaimTypes.Name, username)
-            };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                _issuer,
-                _audience,
-                claims,
-                expires: DateTime.Now.AddMinutes(30), // Shorter expiration for access token
-                signingCredentials: creds
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-        private RefreshToken CreateRefreshToken(string userId)
-        {
-            var refreshToken = new RefreshToken
-            {
-                Token = Guid.NewGuid().ToString(),
-                UserId = userId,
-                Expires = DateTime.UtcNow.AddDays(7),
-                Created = DateTime.UtcNow
-            };
-
-            _context.RefreshTokens.Add(refreshToken);
-            _context.SaveChanges();
-
-            return refreshToken;
-        }
-
+        // Get the refresh token based on the token value
         public RefreshToken GetRefreshToken(string token) =>
             _context.RefreshTokens.SingleOrDefault(rt => rt.Token == token && rt.IsActive);
 
@@ -82,19 +37,64 @@ namespace BjjTrainer_API.Services_API.Users
             }
 
             // Revoke the old refresh token
-            existingRefreshToken.Revoked = DateTime.UtcNow;
+            existingRefreshToken.Revoked = DateTime.UtcNow; // Mark as revoked
             _context.RefreshTokens.Update(existingRefreshToken);
             await _context.SaveChangesAsync();
 
-            // Generate a new access and refresh token
-            var userId = existingRefreshToken.UserId;
-            var user = await _context.ApplicationUsers.FindAsync(userId);
-            if (user == null) return null;
+            // Generate new tokens
+            var user = await _context.ApplicationUsers.FindAsync(existingRefreshToken.UserId);
+            if (user == null)
+            {
+                return null; // User not found
+            }
 
-            var newAccessToken = GenerateToken(userId, user.UserName);
-            var newRefreshToken = CreateRefreshToken(userId);
+            // Generate new access token
+            var newAccessToken = GenerateToken(new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim("IsCoach", user.IsCoach.ToString()) // Add IsCoach claim
+            });
+
+            // Create a new refresh token
+            var newRefreshToken = CreateRefreshToken(user.Id);
+
+            // Save the new refresh token
+            _context.RefreshTokens.Add(newRefreshToken);
+            await _context.SaveChangesAsync();
 
             return (newAccessToken, newRefreshToken.Token);
+        }
+
+        // Helper method to generate an access token
+        public string GenerateToken(IEnumerable<Claim> claims)
+        {
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                _issuer,
+                _audience,
+                claims,
+                expires: DateTime.UtcNow.AddMinutes(30), // Access token validity
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        // Helper method to create a new refresh token
+        private RefreshToken CreateRefreshToken(string userId)
+        {
+            var refreshToken = new RefreshToken
+            {
+                Token = Guid.NewGuid().ToString(),
+                UserId = userId,
+                Expires = DateTime.UtcNow.AddDays(7), // Set refresh token expiration
+                Created = DateTime.UtcNow
+            };
+
+            return refreshToken;
         }
     }
 }

@@ -28,6 +28,6 @@ namespace BjjTrainer_API.Models.Trainings
         // Self-assessment options (Learning, Applicable, Proficient) for techniques learned
         public string SelfAssessment { get; set; } = "Learning";
         // Relationship with Moves
-        public ICollection<TrainingLogMove> TrainingLogMoves { get; set; } = new List<TrainingLogMove>();
+        public ICollection<TrainingLogMove> TrainingLogMoves { get; set; } = [];
     }
 }

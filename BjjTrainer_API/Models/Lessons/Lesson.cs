@@ -16,7 +16,7 @@ namespace BjjTrainer_API.Models.Lessons
         public string Difficulty { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
 
-        public ICollection<LessonSection>? LessonSections { get; set; } = new List<LessonSection>();
+        public ICollection<LessonSection>? LessonSections { get; set; } = [];
     }
 
 

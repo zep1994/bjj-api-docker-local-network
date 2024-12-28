@@ -1,8 +1,8 @@
-﻿using BjjTrainer_API.Models.DTO;
-using BjjTrainer_API.Models.Users;
+﻿using BjjTrainer_API.Models.Users;
 using BjjTrainer_API.Services_API.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 
 namespace BjjTrainer_API.Controllers.Users
@@ -36,16 +36,17 @@ namespace BjjTrainer_API.Controllers.Users
             {
                 UserName = model.Username,
                 Email = model.Email,
-                SchoolId = model.SchoolId
-            }; var result = await _userManager.CreateAsync(user, model.Password);
+                SchoolId = model.SchoolId,  // Associate user with a school
+                IsCoach = model.IsCoach     // Mark if the user is a coach
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)
             {
                 var errorMessages = result.Errors.Select(e => e.Description).ToList();
-                // Log each error with more context
                 foreach (var error in errorMessages)
                 {
-                    // Use warning level for signup failures and include user information
                     _logger.LogWarning("Signup failed for user: {Username}. Error: {Error}", model.Username, error);
                 }
                 return BadRequest(new { Errors = errorMessages });
@@ -53,7 +54,15 @@ namespace BjjTrainer_API.Controllers.Users
 
             try
             {
-                var token = _jwtTokenService.GenerateToken(user.Id, user.UserName);
+                var claims = new List<Claim>
+                {
+                new(ClaimTypes.NameIdentifier, user.Id),
+                new(ClaimTypes.Name, user.UserName),
+                new("IsCoach", user.IsCoach.ToString()),  // Pass the IsCoach claim
+                new("SchoolId", user.SchoolId?.ToString() ?? string.Empty)  // Include SchoolId if available
+                };
+
+                var token = _jwtTokenService.GenerateToken(claims);
                 _logger.LogInformation("User signed up successfully: {Username}", model.Username);
                 return Ok(new { Token = token });
             }
@@ -70,17 +79,25 @@ namespace BjjTrainer_API.Controllers.Users
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                _logger.LogWarning("Invalid login attempt for user: {Username}", model.Username);
                 return Unauthorized("Invalid login attempt");
             }
 
-            var token = _jwtTokenService.GenerateToken(user.Id, user.UserName);
-            _logger.LogInformation("User logged in successfully: {Username}", model.Username);
+            // Generate JWT token with the IsCoach claim
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Name, user.UserName),
+                new("IsCoach", user.IsCoach.ToString()) // Add the IsCoach claim
+            };
+
+            var token = _jwtTokenService.GenerateToken(claims); // Updated to pass claims
+
             return Ok(new { Token = token });
         }
 
+
         [HttpPost("refresh")]
-        public async Task<IActionResult> Refresh([FromBody] RefreshTokenDto refreshTokenDto)
+        public async Task<IActionResult> Refresh([FromBody] RefreshToken refreshTokenDto)
         {
             var newTokens = await _jwtTokenService.RefreshTokenAsync(refreshTokenDto.Token);
             if (newTokens == null)
@@ -102,7 +119,8 @@ namespace BjjTrainer_API.Controllers.Users
         public string Username { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public int? SchoolId { get; set; }
+        public int? SchoolId { get; set; } 
+        public bool IsCoach { get; set; }
     }
 
     public class LoginModel

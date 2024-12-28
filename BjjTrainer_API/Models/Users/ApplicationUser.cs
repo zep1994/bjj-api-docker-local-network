@@ -12,15 +12,15 @@ namespace BjjTrainer_API.Models.Users
     public class ApplicationUser : IdentityUser
     {
         // Navigation property for the one-to-many relationship
-        public ICollection<CalendarEvent> CalendarEvents { get; set; } = new HashSet<CalendarEvent>();
+        public ICollection<CalendarEventUser> CalendarEventUsers { get; set; } = [];
         // Track lessons the user has engaged with
-        public ICollection<Lesson> Lessons { get; set; } = new List<Lesson>();
+        public ICollection<Lesson> Lessons { get; set; } = [];
 
         // Track the moves the user has learned or practiced
-        public ICollection<Move> Moves { get; set; } = new List<Move>();
+        public ICollection<Move> Moves { get; set; } = [];
 
-        public ICollection<TrainingLog> TrainingLogs { get; set; } = new List<TrainingLog>();
-        public ICollection<TrainingGoal> TrainingGoals { get; set; } = new List<TrainingGoal>();
+        public ICollection<TrainingLog> TrainingLogs { get; set; } = [];
+        public ICollection<TrainingGoal> TrainingGoals { get; set; } = [];
 
         [Column(TypeName = "date")]
         public DateOnly? TrainingStartDate { get; set; }
@@ -37,6 +37,6 @@ namespace BjjTrainer_API.Models.Users
         public string PreferredTrainingStyle { get; set; } = "Half-Gaurd";
         public bool IsCoach { get; set; } = false; 
         public int? SchoolId { get; set; } 
-        public School? School { get; set; } 
+        public School School { get; set; } 
     }
 }

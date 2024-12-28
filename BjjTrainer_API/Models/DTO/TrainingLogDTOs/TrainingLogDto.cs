@@ -10,6 +10,6 @@
         public int Taps { get; set; }
         public string Notes { get; set; }
         public string SelfAssessment { get; set; }
-        public List<MoveDto> Moves { get; set; } = new List<MoveDto>();
+        public List<MoveDto> Moves { get; set; } = [];
     }
 }

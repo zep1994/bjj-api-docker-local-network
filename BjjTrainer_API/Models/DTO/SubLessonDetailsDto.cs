@@ -10,6 +10,6 @@ namespace BjjTrainer_API.Models.DTO
 
         public string Notes { get; set; } = string.Empty;
 
-        public List<Move> Moves { get; set; } = new List<Move>();
+        public List<Move> Moves { get; set; } = [];
     }
 }

@@ -29,7 +29,7 @@ namespace BjjTrainer_API.Services_API.Users
         public async Task<List<Lesson>> GetUserFavoritesAsync(string userId)
         {
             var user = await GetUserByIdAsync(userId);
-            return user?.Lessons.ToList() ?? new List<Lesson>();
+            return user?.Lessons.ToList() ?? [];
         }
 
         // GET SCHOOL
@@ -39,6 +39,57 @@ namespace BjjTrainer_API.Services_API.Users
                 .Where(u => u.SchoolId == schoolId)
                 .ToListAsync();
         }
+
+        public async Task<string> AddUsersToSchoolAsync(string coachId, int schoolId, List<string> emails)
+        {
+            var coach = await _context.ApplicationUsers.Include(u => u.School)
+                .FirstOrDefaultAsync(u => u.Id == coachId && u.IsCoach);
+
+            if (coach == null || coach.SchoolId != schoolId)
+            {
+                return "You are not authorized to add users to this school.";
+            }
+
+            var school = await _context.Schools.FindAsync(schoolId);
+            if (school == null)
+            {
+                return "School not found.";
+            }
+
+            var results = new List<string>();
+
+            foreach (var email in emails)
+            {
+                var user = await _context.ApplicationUsers.FirstOrDefaultAsync(u => u.Email == email);
+
+                if (user == null)
+                {
+                    results.Add($"User with email {email} not found.");
+                    continue;
+                }
+
+                if (user.SchoolId == schoolId)
+                {
+                    results.Add($"User {email} is already a member of this school.");
+                    continue;
+                }
+
+                if (user.SchoolId != null)
+                {
+                    var existingSchool = await _context.Schools.FindAsync(user.SchoolId);
+                    results.Add($"User {email} is already a member of \"{existingSchool?.Name}\". Add them anyway?");
+                    continue;
+                }
+
+                user.SchoolId = schoolId;
+                _context.ApplicationUsers.Update(user);
+                results.Add($"User {email} has been added to the school.");
+            }
+
+            await _context.SaveChangesAsync();
+            return string.Join("\n", results);
+        }
+
 
         public async Task<bool> UpdateUserSchoolAsync(string userId, int schoolId)
         {
