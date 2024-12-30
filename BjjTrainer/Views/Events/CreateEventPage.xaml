@@ -22,17 +22,17 @@
                     BackgroundColor="{StaticResource CardBackgroundColor}"
                     TextColor="{StaticResource PrimaryTextColor}" />
 
-            <Label Text="Start Date and Time" FontAttributes="Bold" />
-            <DatePicker Date="{Binding StartDate}" />
-            <TimePicker Time="{Binding StartDate, Mode=TwoWay}" />
+            <Label Text="Start Date and Time" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" />
+            <DatePicker Date="{Binding StartDate}"  TextColor="{StaticResource PrimaryTextColor}" />
+            <TimePicker Time="{Binding StartTime, Mode=TwoWay}" Format="hh:mm tt" TextColor="{StaticResource PrimaryTextColor}" />
 
-            <Label Text="End Date and Time" FontAttributes="Bold" />
-            <DatePicker Date="{Binding EndDate}" />
-            <TimePicker Time="{Binding EndDate, Mode=TwoWay}" />
+            <Label Text="End Date and Time" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" />
+            <DatePicker Date="{Binding EndDate}"  TextColor="{StaticResource PrimaryTextColor}" />
+            <TimePicker Time="{Binding EndTime, Mode=TwoWay}" Format="hh:mm tt" TextColor="{StaticResource PrimaryTextColor}" />
 
             <HorizontalStackLayout>
                 <CheckBox IsChecked="{Binding IsAllDay}" />
-                <Label Text="All Day Event" VerticalOptions="Center" />
+                <Label Text="All Day Event" VerticalOptions="Center"  TextColor="{StaticResource PrimaryTextColor}" />
             </HorizontalStackLayout>
 
             <!-- Save and Cancel Buttons -->

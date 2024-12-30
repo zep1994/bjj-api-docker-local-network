@@ -1,18 +1,23 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Scheduler;assembly=Syncfusion.Maui.Scheduler"
+             xmlns:scheduler="clr-namespace:Syncfusion.Maui.Scheduler;assembly=Syncfusion.Maui.Scheduler"
              x:Class="BjjTrainer.Views.Events.CalendarPage"
              Title="Weekly Calendar"
-             BackgroundColor="{StaticResource BackgroundColor}">
+             xmlns:vm="clr-namespace:BjjTrainer.ViewModels.Events"
+             BackgroundColor="{StaticResource PrimaryTextColor}">
+    
 
-    <ContentPage.Content>
-        <Grid Padding="10">
-            <syncfusion:SfScheduler x:Name="EventScheduler"
+
+            <scheduler:SfScheduler x:Name="EventScheduler"
                         View="Week"
-                        AppointmentsSource="{Binding Events}"
+                        AppointmentsSource="{Binding Appointments}"
                         Tapped="OnSchedulerTapped"
+                        ShowWeekNumber="True"
+                        AllowedViews="Month"
+                        TodayHighlightBrush="Red"
                         AppointmentDrop="OnAppointmentDrop" />
 
-        </Grid>
-    </ContentPage.Content>
+    <ContentPage.BindingContext>
+        <vm:CalendarViewModel/>
+    </ContentPage.BindingContext>
 </ContentPage>

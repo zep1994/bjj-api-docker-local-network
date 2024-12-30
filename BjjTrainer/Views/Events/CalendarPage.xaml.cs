@@ -7,38 +7,50 @@ public partial class CalendarPage : ContentPage
 {
     private readonly CalendarViewModel _viewModel;
 
-    public CalendarPage()
-    {
-        InitializeComponent();
-        _viewModel = new CalendarViewModel();
-        BindingContext = _viewModel;
+    public CalendarPage() => InitializeComponent();
 
-        EventScheduler.AppointmentsSource = _viewModel.Events;
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (BindingContext is CalendarViewModel vm)
+        {
+            await vm.LoadAppointments();
+        }
+        EventScheduler.View = SchedulerView.Month;
     }
 
-    // Corrected Tapped Handler
     private async void OnSchedulerTapped(object sender, SchedulerTappedEventArgs e)
     {
-        // Check if any appointment was tapped
         var appointment = e.Appointments?.FirstOrDefault() as SchedulerAppointment;
 
-        if (appointment != null)
+        if (appointment != null && appointment.Id != null)
         {
-            // Edit the existing event
-            await Navigation.PushAsync(new CreateEventPage(appointment));
+            int eventId = Convert.ToInt32(appointment.Id);
+            Console.WriteLine($"Navigating to ShowEventPage with EventId: {eventId}");
+
+            if (eventId > 0)  // Only navigate if the eventId is valid
+            {
+                await Navigation.PushAsync(new ShowEventPage(eventId));
+            }
+            else
+            {
+                Console.WriteLine("Invalid eventId detected. Navigation canceled.");
+            }
         }
         else
         {
-            // Create a new event
             await Navigation.PushAsync(new CreateEventPage());
         }
     }
 
     private async void OnAppointmentDrop(object sender, AppointmentDropEventArgs e)
     {
-        if (e.Appointment is SchedulerAppointment appointment)
+        if (e.Appointment is SchedulerAppointment appointment
+            && BindingContext is CalendarViewModel vm)
         {
-            await _viewModel.UpdateDroppedEventAsync(appointment);
+            await vm.UpdateDroppedEventAsync(appointment);
         }
     }
+
 }

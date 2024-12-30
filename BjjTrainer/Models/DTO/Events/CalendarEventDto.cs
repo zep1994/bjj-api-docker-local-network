@@ -18,19 +18,16 @@ namespace BjjTrainer.Models.DTO.Events
         [JsonPropertyName("startDate")]
         public DateTime StartDate { get; set; }
 
+        [JsonPropertyName("startTime")]
+        public string StartTime { get; set; }  // Keep as string for parsing
+
         [JsonPropertyName("endDate")]
         public DateTime EndDate { get; set; }
 
+        [JsonPropertyName("endTime")]
+        public string EndTime { get; set; }  // Keep as string for parsing
+
         public bool IsAllDay { get; set; }
-
-
-        // Property to format the date to MM/dd/yyyy
-        public string FormattedDate => StartDate.ToString("MM/dd/yyyy");
-        public string FormattedEndDate => EndDate.ToString("MM/dd/yyyy");
-
-        // Property to get a truncated description if available
-        public string ShortDescription => !string.IsNullOrEmpty(Description) && Description.Length > 50
-            ? Description.Substring(0, 50) + "..." // truncate to 50 characters
-            : Description;
+        public int? SchoolId { get; set; }
     }
 }

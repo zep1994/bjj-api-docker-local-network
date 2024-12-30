@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BjjTrainer_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241228180928_MakeSchoolNullableInCalendarEvent")]
-    partial class MakeSchoolNullableInCalendarEvent
+    [Migration("20241230142522_AddUserRoleToApplicationUser")]
+    partial class AddUserRoleToApplicationUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,6 +55,9 @@ namespace BjjTrainer_API.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("date");
 
+                    b.Property<TimeSpan?>("EndTime")
+                        .HasColumnType("time");
+
                     b.Property<bool>("IsAllDay")
                         .HasColumnType("boolean");
 
@@ -66,6 +69,9 @@ namespace BjjTrainer_API.Migrations
 
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("date");
+
+                    b.Property<TimeSpan?>("StartTime")
+                        .HasColumnType("time");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -398,11 +404,17 @@ namespace BjjTrainer_API.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<TimeSpan?>("StartTime")
+                        .HasColumnType("time");
+
                     b.Property<int>("Submissions")
                         .HasColumnType("integer");
 
                     b.Property<int>("Taps")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
 
                     b.Property<double>("TrainingTime")
                         .HasColumnType("double precision");
@@ -438,9 +450,6 @@ namespace BjjTrainer_API.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<bool>("IsCoach")
-                        .HasColumnType("boolean");
-
                     b.Property<DateOnly?>("LastLoginDate")
                         .HasColumnType("date");
 
@@ -472,6 +481,9 @@ namespace BjjTrainer_API.Migrations
                     b.Property<string>("ProfilePictureUrl")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
 
                     b.Property<int?>("SchoolId")
                         .HasColumnType("integer");

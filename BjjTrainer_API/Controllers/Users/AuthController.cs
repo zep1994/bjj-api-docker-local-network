@@ -14,17 +14,20 @@ namespace BjjTrainer_API.Controllers.Users
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly JwtTokenService _jwtTokenService;
+        private readonly UserService _userService;
         private readonly ILogger<AuthController> _logger;
 
 
         public AuthController(UserManager<ApplicationUser> userManager,
                               SignInManager<ApplicationUser> signInManager,
                               JwtTokenService jwtTokenService,
+                              UserService userService,
                               ILogger<AuthController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _jwtTokenService = jwtTokenService;
+            _userService = userService;
             _logger = logger;
 
         }
@@ -36,8 +39,8 @@ namespace BjjTrainer_API.Controllers.Users
             {
                 UserName = model.Username,
                 Email = model.Email,
-                SchoolId = model.SchoolId,  // Associate user with a school
-                IsCoach = model.IsCoach     // Mark if the user is a coach
+                SchoolId = model.SchoolId,
+                Role = model.Role
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -45,33 +48,26 @@ namespace BjjTrainer_API.Controllers.Users
             if (!result.Succeeded)
             {
                 var errorMessages = result.Errors.Select(e => e.Description).ToList();
-                foreach (var error in errorMessages)
-                {
-                    _logger.LogWarning("Signup failed for user: {Username}. Error: {Error}", model.Username, error);
-                }
                 return BadRequest(new { Errors = errorMessages });
             }
 
-            try
+            // Enroll the user in school events if a SchoolId is provided
+            if (model.SchoolId != null)
             {
-                var claims = new List<Claim>
-                {
+                await _userService.EnrollUserInSchoolEvents(user.Id, model.SchoolId.Value);
+            }
+
+            var token = _jwtTokenService.GenerateToken(new List<Claim>
+            {
                 new(ClaimTypes.NameIdentifier, user.Id),
                 new(ClaimTypes.Name, user.UserName),
-                new("IsCoach", user.IsCoach.ToString()),  // Pass the IsCoach claim
-                new("SchoolId", user.SchoolId?.ToString() ?? string.Empty)  // Include SchoolId if available
-                };
+                new(ClaimTypes.Role, user.Role.ToString()),
+                new("SchoolId", user.SchoolId?.ToString() ?? string.Empty)
+            });
 
-                var token = _jwtTokenService.GenerateToken(claims);
-                _logger.LogInformation("User signed up successfully: {Username}", model.Username);
-                return Ok(new { Token = token });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error generating token for user: {Username}", model.Username);
-                return StatusCode(500, "An error occurred during token generation.");
-            }
+            return Ok(new { Token = token });
         }
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
@@ -87,11 +83,10 @@ namespace BjjTrainer_API.Controllers.Users
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Name, user.UserName),
-                new("IsCoach", user.IsCoach.ToString()) // Add the IsCoach claim
+                new(ClaimTypes.Role, user.Role.ToString())
             };
 
-            var token = _jwtTokenService.GenerateToken(claims); // Updated to pass claims
-
+            var token = _jwtTokenService.GenerateToken(claims); 
             return Ok(new { Token = token });
         }
 
@@ -120,7 +115,8 @@ namespace BjjTrainer_API.Controllers.Users
         public string Email { get; set; }
         public string Password { get; set; }
         public int? SchoolId { get; set; } 
-        public bool IsCoach { get; set; }
+        public UserRole Role { get; set; } = UserRole.Student; 
+
     }
 
     public class LoginModel

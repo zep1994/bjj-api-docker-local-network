@@ -1,6 +1,8 @@
 ﻿using BjjTrainer_API.Data;
+using BjjTrainer_API.Models.Calendars;
 using BjjTrainer_API.Models.Lessons;
 using BjjTrainer_API.Models.Users;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -17,13 +19,14 @@ namespace BjjTrainer_API.Services_API.Users
         // Fetch user by ID
         public async Task<ApplicationUser> GetUserByIdAsync(string userId)
         {
-            return await _context.ApplicationUsers
+            var user = await _context.ApplicationUsers
                 .Include(u => u.Lessons)
                 .Include(u => u.Moves)
-                .Include(u => u.TrainingLogs)
-                .Include(u => u.TrainingGoals)
                 .FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null) Console.WriteLine("Error: The User Id could not be fuond");
+            return user;
         }
+
 
         // Get all favorite lessons for a user
         public async Task<List<Lesson>> GetUserFavoritesAsync(string userId)
@@ -40,10 +43,38 @@ namespace BjjTrainer_API.Services_API.Users
                 .ToListAsync();
         }
 
+        // ENROLL NEW STUDENTS IN EVENTS
+        public async Task EnrollUserInSchoolEvents(string userId, int schoolId)
+        {
+            var futureEvents = await _context.CalendarEvents
+                .Where(e => e.SchoolId == schoolId && e.StartDate >= DateTime.UtcNow)
+                .ToListAsync();
+
+            var existingEnrollments = await _context.CalendarEventUsers
+                .Where(eu => eu.UserId == userId && futureEvents.Select(e => e.Id).Contains(eu.CalendarEventId))
+                .Select(eu => eu.CalendarEventId)
+                .ToListAsync();
+
+            var newEnrollments = futureEvents
+                .Where(e => !existingEnrollments.Contains(e.Id))
+                .Select(e => new CalendarEventUser
+                {
+                    CalendarEventId = e.Id,
+                    UserId = userId
+                }).ToList();
+
+            if (newEnrollments.Any())
+            {
+                _context.CalendarEventUsers.AddRange(newEnrollments);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+
         public async Task<string> AddUsersToSchoolAsync(string coachId, int schoolId, List<string> emails)
         {
             var coach = await _context.ApplicationUsers.Include(u => u.School)
-                .FirstOrDefaultAsync(u => u.Id == coachId && u.IsCoach);
+                .FirstOrDefaultAsync(u => u.Id == coachId && u.Role == UserRole.Coach);
 
             if (coach == null || coach.SchoolId != schoolId)
             {
@@ -89,7 +120,6 @@ namespace BjjTrainer_API.Services_API.Users
             await _context.SaveChangesAsync();
             return string.Join("\n", results);
         }
-
 
         public async Task<bool> UpdateUserSchoolAsync(string userId, int schoolId)
         {

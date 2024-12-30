@@ -6,49 +6,63 @@ using Syncfusion.Maui.Scheduler;
 
 namespace BjjTrainer.ViewModels.Events
 {
-    public class CalendarViewModel : BaseViewModel
+    public partial class CalendarViewModel : BaseViewModel
     {
         private readonly EventService _eventService;
 
-        public ObservableCollection<SchedulerAppointment> Events { get; set; }
+        public ObservableCollection<SchedulerAppointment> Appointments { get; set; } = new();
+
 
         public CalendarViewModel()
         {
             _eventService = new EventService();
-            Events = new ObservableCollection<SchedulerAppointment>();
-
-            Task.Run(async () => await LoadEventsAsync());
+            LoadAppointments();
         }
 
-        public async Task LoadEventsAsync()
+        // LOAD EVENT
+        public async Task LoadAppointments()
         {
-            IsBusy = true;
+            var userId = Preferences.Get("UserId", string.Empty);
+            var schoolId = Preferences.Get("SchoolId", 0);
+            var userRole = Preferences.Get("UserRole", "Student");
 
-            try
+            var events = await _eventService.GetAllUserEventsAsync(userId);
+
+            if (events != null)
             {
-                var userId = Preferences.Get("UserId", string.Empty);
-                var events = await _eventService.GetAllUserEventsAsync(userId);
-
-                Events.Clear();
-
-                foreach (var evt in events)
+                Appointments.Clear();
+                foreach (var calendarEvent in events)
                 {
-                    Events.Add(new SchedulerAppointment
+                    var startTime = TimeSpan.TryParse(calendarEvent.StartTime, out var parsedStart)
+                        ? parsedStart
+                        : TimeSpan.Zero;
+
+                    var endTime = TimeSpan.TryParse(calendarEvent.EndTime, out var parsedEnd)
+                        ? parsedEnd
+                        : TimeSpan.Zero;
+
+                    var appointment = new SchedulerAppointment
                     {
-                        StartTime = evt.StartDate,
-                        EndTime = evt.EndDate,
-                        Subject = evt.Title,
-                        Notes = evt.Description,
-                        IsAllDay = evt.IsAllDay
-                    });
+                        Id = calendarEvent.Id,  // Ensure correct eventId is set
+                        Subject = calendarEvent.Title,
+                        Background = Colors.BlueViolet,
+                        IsAllDay = calendarEvent.IsAllDay,
+                        StartTime = calendarEvent.StartDate + startTime,
+                        EndTime = calendarEvent.EndDate + endTime
+                    };
+
+                    if (appointment.StartTime == appointment.EndTime)
+                    {
+                        appointment.EndTime = appointment.StartTime.Add(TimeSpan.FromMinutes(1));
+                    }
+
+                    Appointments.Add(appointment);
                 }
-            }
-            finally
-            {
-                IsBusy = false;
+
             }
         }
 
+        // DROP EVENT
         public async Task UpdateDroppedEventAsync(SchedulerAppointment appointment)
         {
             var updatedEvent = new CalendarEventDto
@@ -62,7 +76,7 @@ namespace BjjTrainer.ViewModels.Events
                 ApplicationUserId = Preferences.Get("UserId", string.Empty)
             };
             await _eventService.UpdateEventAsync(updatedEvent.Id, updatedEvent);
-            await LoadEventsAsync();
+            await LoadAppointments();
         }
     }
 }

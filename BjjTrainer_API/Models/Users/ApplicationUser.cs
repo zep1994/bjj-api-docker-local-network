@@ -8,19 +8,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BjjTrainer_API.Models.Users
 {
+    public enum UserRole
+    {
+        Student,
+        Coach,
+        Head_Coach,
+        Admin
+    }
+
     [Table("ApplicationUsers")]
     public class ApplicationUser : IdentityUser
     {
-        // Navigation property for the one-to-many relationship
         public ICollection<CalendarEventUser> CalendarEventUsers { get; set; } = [];
-        // Track lessons the user has engaged with
         public ICollection<Lesson> Lessons { get; set; } = [];
-
-        // Track the moves the user has learned or practiced
         public ICollection<Move> Moves { get; set; } = [];
-
         public ICollection<TrainingLog> TrainingLogs { get; set; } = [];
         public ICollection<TrainingGoal> TrainingGoals { get; set; } = [];
+
 
         [Column(TypeName = "date")]
         public DateOnly? TrainingStartDate { get; set; }
@@ -32,11 +36,15 @@ namespace BjjTrainer_API.Models.Users
         public int BeltStripes { get; set; } = 0;
         public string ProfilePictureUrl { get; set; } = string.Empty;  
         public int TrainingHoursThisWeek { get; set; } = 0; 
+
+
         [Column(TypeName = "date")]
         public DateOnly? LastLoginDate { get; set; } 
         public string PreferredTrainingStyle { get; set; } = "Half-Gaurd";
-        public bool IsCoach { get; set; } = false; 
+
+
+        public UserRole Role { get; set; } = UserRole.Student;
         public int? SchoolId { get; set; } 
-        public School School { get; set; } 
+        public School? School { get; set; } 
     }
 }

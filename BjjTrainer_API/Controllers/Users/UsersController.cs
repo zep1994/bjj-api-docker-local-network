@@ -65,37 +65,26 @@ namespace BjjTrainer_API.Controllers.Users
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(string id)
         {
-            if (string.IsNullOrEmpty(id))
-            {
-                return BadRequest("User ID cannot be empty.");
-            }
-
             var user = await _userService.GetUserByIdAsync(id);
             if (user == null)
             {
                 return NotFound($"User with ID {id} not found.");
             }
 
-            // Expose the updated user model
             var result = new
             {
                 user.Id,
                 user.UserName,
                 user.Email,
+                user.Role,
                 user.Belt,
                 user.BeltStripes,
-                user.TotalSubmissions,
-                user.TotalTaps,
-                user.TotalTrainingTime,
-                user.TotalRoundsRolled,
-                user.TrainingHoursThisWeek,
-                user.LastLoginDate,
-                user.ProfilePictureUrl,
-                user.PreferredTrainingStyle
+                user.TotalTrainingTime
             };
 
             return Ok(result);
         }
+
 
         [HttpPost("{schoolId}/add-users")]
         [Authorize]
@@ -117,9 +106,13 @@ namespace BjjTrainer_API.Controllers.Users
         {
             var success = await _userService.UpdateUserSchoolAsync(userId, schoolId);
             if (success)
-                return Ok("User's school updated successfully.");
+            {
+                // Enroll the user in future school events
+                await _userService.EnrollUserInSchoolEvents(userId, schoolId);
+                return Ok("User's school updated and enrolled in future events.");
+            }
 
-            return BadRequest("Failed to update user's school. Ensure user and school exist.");
+            return BadRequest("Failed to update user's school.");
         }
 
 

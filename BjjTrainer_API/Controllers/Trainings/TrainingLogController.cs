@@ -1,7 +1,9 @@
 ﻿using BjjTrainer_API.Models.DTO;
 using BjjTrainer_API.Models.Trainings;
+using BjjTrainer_API.Services_API.Calendars;
 using BjjTrainer_API.Services_API.Trainings;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BjjTrainer_API.Controllers.Training
 {
@@ -10,10 +12,12 @@ namespace BjjTrainer_API.Controllers.Training
     public class TrainingLogController : ControllerBase
     {
         private readonly TrainingService _trainingService;
+        private readonly CalendarService _calendarService;
 
-        public TrainingLogController(TrainingService trainingService)
+        public TrainingLogController(TrainingService trainingService, CalendarService calendarService)
         {
             _trainingService = trainingService;
+            _calendarService = calendarService;
         }
 
         [HttpGet("list/{userId}")]
@@ -72,8 +76,10 @@ namespace BjjTrainer_API.Controllers.Training
 
             var trainingLog = new TrainingLog
             {
+                Title = dto.Title,
                 ApplicationUserId = dto.ApplicationUserId,
                 Date = dto.Date,
+                StartTime = dto.StartTime,
                 TrainingTime = dto.TrainingTime,
                 RoundsRolled = dto.RoundsRolled,
                 Submissions = dto.Submissions,
@@ -93,6 +99,30 @@ namespace BjjTrainer_API.Controllers.Training
             }
         }
 
+        [HttpGet("events/{eventId}/traininglog")]
+        public async Task<IActionResult> GetPreFilledTrainingLog(int eventId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var calendarEvent = await _calendarService.GetEventByIdAsync(eventId);
+
+            if (calendarEvent == null)
+                return NotFound("Event not found.");
+
+            var trainingLogDto = new CreateTrainingLogDto
+            {
+                ApplicationUserId = userId,
+                Date = calendarEvent.StartDate ?? DateTime.UtcNow,
+                TrainingTime = 0,  // Set as 0 for now until filled in
+                RoundsRolled = 0,
+                Notes = $"Training log for: {calendarEvent.Title}",  // Use event title dynamically
+                SelfAssessment = ""
+            };
+
+            return Ok(trainingLogDto);
+        }
 
         [HttpDelete("{logId}")]
         public async Task<IActionResult> DeleteTrainingLog(int logId)

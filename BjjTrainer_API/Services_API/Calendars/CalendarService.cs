@@ -1,7 +1,6 @@
 ﻿using BjjTrainer_API.Data;
 using BjjTrainer_API.Models.Calendars;
-using BjjTrainer_API.Models.DTO;
-using Microsoft.AspNetCore.Http.HttpResults;
+using BjjTrainer_API.Models.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace BjjTrainer_API.Services_API.Calendars
@@ -15,6 +14,54 @@ namespace BjjTrainer_API.Services_API.Calendars
             _context = context;
         }
 
+        public async Task<CalendarEvent?> GetEventByIdAsync(int eventId)
+        {
+            return await _context.CalendarEvents
+                .Where(e => e.Id == eventId)
+                .Select(e => new CalendarEvent
+                {
+                    Id = e.Id,
+                    StartDate = e.StartDate,
+                    StartTime = e.StartTime,
+                    EndDate = e.EndDate,
+                    EndTime = e.EndTime,
+                    Title = e.Title
+                })
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<CalendarEvent> CreateEventAsync(string userId, CalendarEvent model)
+        {
+            var user = await _context.ApplicationUsers
+                .Include(u => u.School)
+                .FirstOrDefaultAsync(u => u.Id == userId) ?? throw new Exception("User not found.");
+
+            var calendarEvent = new CalendarEvent
+            {
+                Title = model.Title,
+                Description = model.Description,
+                StartDate = model.StartDate,
+                StartTime = model.StartTime,
+                EndDate = model.EndDate,
+                EndTime = model.EndTime,
+                IsAllDay = model.IsAllDay,
+                SchoolId = model.SchoolId
+            };
+
+            _context.CalendarEvents.Add(calendarEvent);
+            await _context.SaveChangesAsync();
+
+            _context.CalendarEventUsers.Add(new CalendarEventUser
+            {
+                CalendarEventId = calendarEvent.Id,
+                UserId = user.Id
+            });
+
+            await _context.SaveChangesAsync();
+            return calendarEvent;
+        }
+
+
         // Create event for a coach (linked to school)
         public async Task<CalendarEvent> CreateCoachEventAsync(string userId, CalendarEvent model)
         {
@@ -22,7 +69,7 @@ namespace BjjTrainer_API.Services_API.Calendars
                 .Include(u => u.School)
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
-            if (user == null || !user.IsCoach || user.SchoolId == null)
+            if (user == null || user.Role != UserRole.Coach || user.SchoolId == null)
                 throw new Exception("Only coaches with a school can create events.");
 
             var calendarEvent = new CalendarEvent
@@ -30,32 +77,20 @@ namespace BjjTrainer_API.Services_API.Calendars
                 Title = model.Title,
                 Description = model.Description,
                 StartDate = model.StartDate,
+                StartTime = model.StartTime,
                 EndDate = model.EndDate,
-                SchoolId = user.SchoolId 
+                EndTime = model.EndTime,
+                SchoolId = user.SchoolId
             };
 
             _context.CalendarEvents.Add(calendarEvent);
             await _context.SaveChangesAsync();
 
-            // Automatically enroll the coach and students in the event
             _context.CalendarEventUsers.Add(new CalendarEventUser
             {
                 CalendarEventId = calendarEvent.Id,
                 UserId = user.Id
             });
-
-            var students = await _context.ApplicationUsers
-                .Where(u => u.SchoolId == user.SchoolId && !u.IsCoach)
-                .ToListAsync();
-
-            foreach (var student in students)
-            {
-                _context.CalendarEventUsers.Add(new CalendarEventUser
-                {
-                    CalendarEventId = calendarEvent.Id,
-                    UserId = student.Id
-                });
-            }
 
             await _context.SaveChangesAsync();
             return calendarEvent;
@@ -65,7 +100,7 @@ namespace BjjTrainer_API.Services_API.Calendars
         public async Task<CalendarEvent> CreateStudentEventAsync(string userId, CalendarEvent model)
         {
             var user = await _context.ApplicationUsers.FindAsync(userId);
-            if (user == null || user.IsCoach)
+            if (user == null || user.Role != UserRole.Student)
                 throw new Exception("Only students can create personal events.");
 
             var calendarEvent = new CalendarEvent
@@ -90,21 +125,50 @@ namespace BjjTrainer_API.Services_API.Calendars
             return calendarEvent;
         }
 
-        // Update an existing event
-        public async Task UpdateEventAsync(int eventId, CalendarEvent model)
+        // GET USER SCHOOL
+        public async Task<int?> GetUserSchoolIdAsync(string userId)
         {
-            var calendarEvent = await _context.CalendarEvents.FindAsync(eventId);
-            if (calendarEvent == null)
-                throw new Exception("Event not found.");
+            return await _context.ApplicationUsers
+                .Where(u => u.Id == userId)
+                .Select(u => u.SchoolId)
+                .FirstOrDefaultAsync();
+        }
 
+        // Update an existing event
+        public async Task UpdateEventAsync(int eventId, CalendarEvent model, string userId)
+        {
+            var user = await _context.ApplicationUsers
+                .FirstOrDefaultAsync(u => u.Id == userId) ?? throw new Exception("User not found.");
+
+            var calendarEvent = await _context.CalendarEvents
+                .FirstOrDefaultAsync(e => e.Id == eventId) ?? throw new Exception("Event not found.");
+
+            // Restrict students from updating school-wide events
+            if (user.Role == UserRole.Student && calendarEvent.SchoolId != null)
+            {
+                throw new Exception("Students can only update their personal events.");
+            }
+
+            // Allow coaches to update school-wide events within their school
+            if (user.Role == UserRole.Coach && calendarEvent.SchoolId != user.SchoolId)
+            {
+                throw new Exception("You can only update events for your school.");
+            }
+
+            // Update event details
             calendarEvent.Title = model.Title;
             calendarEvent.Description = model.Description;
             calendarEvent.StartDate = model.StartDate;
+            calendarEvent.StartTime = model.StartTime;
             calendarEvent.EndDate = model.EndDate;
+            calendarEvent.EndTime = model.EndTime;
+            calendarEvent.IsAllDay = model.IsAllDay;
 
             await _context.SaveChangesAsync();
         }
 
+
+        // DELETE
         public async Task DeleteEventAsync(int eventId, string userId)
         {
             var user = await _context.ApplicationUsers.FindAsync(userId);
@@ -115,27 +179,23 @@ namespace BjjTrainer_API.Services_API.Calendars
             if (calendarEvent == null)
                 throw new Exception("Event not found.");
 
-            // Prevent deletion of past events
             if (calendarEvent.EndDate < DateTime.UtcNow)
                 throw new Exception("Cannot delete past events.");
 
-            // If user is a coach, allow full deletion of event
-            if (user != null && user.IsCoach)
+            if (user != null && user.Role == UserRole.Coach)
             {
                 _context.CalendarEventUsers.RemoveRange(calendarEvent.CalendarEventUsers);
                 _context.CalendarEvents.Remove(calendarEvent);
             }
             else
             {
-                // Students can only delete their personal events
                 var userEvent = calendarEvent.CalendarEventUsers
-                    .FirstOrDefault(ceu => ceu.UserId == userId && !ceu.User.IsCoach);
+                    .FirstOrDefault(ceu => ceu.UserId == userId && ceu.User.Role == UserRole.Student);
 
                 if (userEvent != null)
                 {
                     _context.CalendarEventUsers.Remove(userEvent);
 
-                    // If the event is now empty (no users), delete the event itself
                     if (!calendarEvent.CalendarEventUsers.Any())
                     {
                         _context.CalendarEvents.Remove(calendarEvent);

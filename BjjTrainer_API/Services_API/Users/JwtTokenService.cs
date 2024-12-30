@@ -26,6 +26,8 @@ namespace BjjTrainer_API.Services_API.Users
         public RefreshToken GetRefreshToken(string token) =>
             _context.RefreshTokens.SingleOrDefault(rt => rt.Token == token && rt.IsActive);
 
+
+
         // New method to handle refreshing the token
         public async Task<(string accessToken, string refreshToken)?> RefreshTokenAsync(string token)
         {
@@ -51,9 +53,9 @@ namespace BjjTrainer_API.Services_API.Users
             // Generate new access token
             var newAccessToken = GenerateToken(new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim("IsCoach", user.IsCoach.ToString()) // Add IsCoach claim
+                new(ClaimTypes.NameIdentifier, user.Id),
+                new(ClaimTypes.Name, user.UserName),
+                new(ClaimTypes.Role, user.Role.ToString())
             });
 
             // Create a new refresh token
@@ -65,6 +67,8 @@ namespace BjjTrainer_API.Services_API.Users
 
             return (newAccessToken, newRefreshToken.Token);
         }
+
+
 
         // Helper method to generate an access token
         public string GenerateToken(IEnumerable<Claim> claims)
@@ -82,6 +86,8 @@ namespace BjjTrainer_API.Services_API.Users
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+
 
         // Helper method to create a new refresh token
         private RefreshToken CreateRefreshToken(string userId)
