@@ -35,6 +35,27 @@
                 <Label Text="All Day Event" VerticalOptions="Center"  TextColor="{StaticResource PrimaryTextColor}" />
             </HorizontalStackLayout>
 
+            <HorizontalStackLayout>
+                <CheckBox x:Name="IncludeTrainingLogCheckBox" IsChecked="{Binding IncludeTrainingLog, Mode=TwoWay}" />
+                <Label Text="Include Training Log" VerticalOptions="Center"  TextColor="{StaticResource PrimaryTextColor}" />
+            </HorizontalStackLayout>
+            
+            <!-- Show moves only when IncludeTrainingLog is checked -->
+            <StackLayout IsVisible="{Binding IncludeTrainingLog}">
+                <Label Text="Select Moves (Optional):" FontSize="18" />
+                <CollectionView x:Name="MovesCollectionView"
+                    ItemsSource="{Binding AvailableMoves}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Orientation="Horizontal">
+                                <CheckBox IsChecked="{Binding IsSelected}" />
+                                <Label Text="{Binding Name}" VerticalOptions="Center" />
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+
             <!-- Save and Cancel Buttons -->
             <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
                 <Button Text="Save"

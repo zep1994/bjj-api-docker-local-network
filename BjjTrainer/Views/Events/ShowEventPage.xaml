@@ -26,11 +26,27 @@
                 <Label Text="End Time" TextColor="{StaticResource PrimaryTextColor}" FontSize="Medium"/>
                 <Label Text="{Binding FormattedEndTime}" TextColor="{StaticResource PrimaryTextColor}" FontSize="Small"/>
 
-                <Label Text="All Day Event" TextColor="{StaticResource PrimaryTextColor}" FontSize="Medium"/>
-                <Switch IsToggled="{Binding IsAllDay}" IsEnabled="False"/>
 
-                <Button Text="Back" Clicked="OnBackButtonClicked" />
-                <Button Text="Edit" Clicked="OnUpdateButtonClicked" />
+                <VerticalStackLayout>
+                    <!-- Button to View Training Log -->
+                    <!--<Button Text="View Training Log"
+                            IsVisible="{Binding HasTrainingLog}"  
+                            Clicked="OnShowTrainingLogClicked"
+                            BackgroundColor="DodgerBlue"
+                            TextColor="White"
+                            Margin="0,20,0,10"/>-->     
+                    <Button Text="Update Event"
+                            Clicked="OnUpdateButtonClicked"
+                            BackgroundColor="DodgerBlue"
+                            TextColor="White"
+                            Margin="0,20,0,10"/>
+                    <Button Text="Back"
+                            Clicked="OnBackButtonClicked"
+                            BackgroundColor="DodgerBlue"
+                            TextColor="White"
+                            Margin="0,20,0,10"/>
+                </VerticalStackLayout>
+
             </StackLayout>
         </VerticalStackLayout>
     </ContentPage.Content>

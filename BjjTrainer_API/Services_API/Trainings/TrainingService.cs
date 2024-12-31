@@ -19,7 +19,7 @@ namespace BjjTrainer_API.Services_API.Trainings
         public async Task<List<TrainingLogDto>> GetTrainingLogsAsync(string userId)
         {
             return await _context.TrainingLogs
-                .Where(log => log.ApplicationUserId == userId)
+                .Where(log => log.ApplicationUserId == userId)  
                 .Include(log => log.TrainingLogMoves)
                 .ThenInclude(tlm => tlm.Move)
                 .Select(log => new TrainingLogDto
@@ -31,17 +31,8 @@ namespace BjjTrainer_API.Services_API.Trainings
                     Submissions = log.Submissions,
                     Taps = log.Taps,
                     Notes = log.Notes,
-                    SelfAssessment = log.SelfAssessment,
-                    Moves = log.TrainingLogMoves.Select(tlm => new MoveDto
-                    {
-                        Id = tlm.Move.Id,
-                        Name = tlm.Move.Name,
-                        Description = tlm.Move.Description,
-                        Content = tlm.Move.Content,
-                        SkillLevel = tlm.Move.SkillLevel,
-                        Tags = tlm.Move.Tags,
-                        TrainingLogCount = tlm.Move.TrainingLogCount
-                    }).ToList()
+                    SelfAssessment = log.SelfAssessment,          
+                    MoveIds = log.TrainingLogMoves.Select(tlm => tlm.Move.Id).ToList()
                 }).ToListAsync();
         }
 
@@ -61,16 +52,7 @@ namespace BjjTrainer_API.Services_API.Trainings
                     Taps = log.Taps,
                     Notes = log.Notes,
                     SelfAssessment = log.SelfAssessment,
-                    Moves = log.TrainingLogMoves.Select(tlm => new MoveDto
-                    {
-                        Id = tlm.Move.Id,
-                        Name = tlm.Move.Name,
-                        Description = tlm.Move.Description,
-                        Content = tlm.Move.Content,
-                        SkillLevel = tlm.Move.SkillLevel,
-                        Tags = tlm.Move.Tags,
-                        TrainingLogCount = tlm.Move.TrainingLogCount
-                    }).ToList()
+                    MoveIds = log.TrainingLogMoves.Select(tlm => tlm.Move.Id).ToList()
                 }).FirstOrDefaultAsync();
         }
 
@@ -102,7 +84,19 @@ namespace BjjTrainer_API.Services_API.Trainings
                     MoveId = moveId
                 });
             }
+            await _context.SaveChangesAsync();
+        }
 
+        // ******************************** Sharing a Student Log  ************************************************
+        public async Task ToggleTrainingLogSharingAsync(int logId, string userId)
+        {
+            var trainingLog = await _context.TrainingLogs
+                .FirstOrDefaultAsync(tl => tl.Id == logId && tl.ApplicationUserId == userId);
+
+            if (trainingLog == null)
+                throw new Exception("Training log not found.");
+
+            trainingLog.IsShared = !trainingLog.IsShared;
             await _context.SaveChangesAsync();
         }
 

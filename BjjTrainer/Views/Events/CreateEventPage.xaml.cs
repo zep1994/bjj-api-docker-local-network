@@ -7,26 +7,20 @@ namespace BjjTrainer.Views.Events
     {
         private readonly CreateEventViewModel _viewModel;
 
-        public CreateEventPage(SchedulerAppointment? appointment = null)
+        public CreateEventPage(DateTime start, DateTime end)
         {
             InitializeComponent();
-            _viewModel = new CreateEventViewModel();
-
-            // Populate fields if editing an existing appointment
-            if (appointment != null)
+            _viewModel = new CreateEventViewModel
             {
-                _viewModel.Title = appointment.Subject;
-                _viewModel.Description = appointment.Notes;
-                _viewModel.StartDate = appointment.StartTime;
-                _viewModel.StartTime = appointment.StartTime.TimeOfDay;  
-                _viewModel.EndDate = appointment.EndTime;
-                _viewModel.EndTime = appointment.EndTime.TimeOfDay;  
-                _viewModel.IsAllDay = appointment.IsAllDay;
-            }
-
+                StartDate = start,
+                StartTime = start.TimeOfDay,
+                EndDate = end,
+                EndTime = end.TimeOfDay
+            };
 
             BindingContext = _viewModel;
         }
+
 
         protected override async void OnAppearing()
         {

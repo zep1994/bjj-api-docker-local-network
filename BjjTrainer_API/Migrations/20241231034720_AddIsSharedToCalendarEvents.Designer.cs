@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using BjjTrainer_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BjjTrainer_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241231034720_AddIsSharedToCalendarEvents")]
+    partial class AddIsSharedToCalendarEvents
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,12 +61,12 @@ namespace BjjTrainer_API.Migrations
                         .HasColumnType("time")
                         .HasAnnotation("Relational:JsonPropertyName", "endTime");
 
-                    b.Property<bool>("IncludeTrainingLog")
-                        .HasColumnType("boolean");
-
                     b.Property<bool>("IsAllDay")
                         .HasColumnType("boolean")
                         .HasAnnotation("Relational:JsonPropertyName", "isAllDay");
+
+                    b.Property<bool>("IsTrainingSession")
+                        .HasColumnType("boolean");
 
                     b.Property<int?>("SchoolId")
                         .HasColumnType("integer")
@@ -187,6 +190,9 @@ namespace BjjTrainer_API.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int>("MoveId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Id")
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsCoachSelected")
@@ -418,6 +424,10 @@ namespace BjjTrainer_API.Migrations
 
                     b.Property<bool>("IsShared")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("MovesCovered")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Notes")
                         .IsRequired()

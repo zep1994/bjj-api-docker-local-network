@@ -15,6 +15,7 @@ namespace BjjTrainer.ViewModels.Events
         public string FormattedEndDate { get; set; }
         public string FormattedStartTime { get; set; }
         public string FormattedEndTime { get; set; }
+        public string TrainingLogId { get; set; }
 
         public bool IsAllDay { get; set; }
 

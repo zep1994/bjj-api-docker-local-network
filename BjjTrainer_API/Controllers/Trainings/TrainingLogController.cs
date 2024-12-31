@@ -20,6 +20,7 @@ namespace BjjTrainer_API.Controllers.Training
             _calendarService = calendarService;
         }
 
+        // ******************************** GET LOG ************************************************
         [HttpGet("list/{userId}")]
         public async Task<IActionResult> GetTrainingLogs(string userId)
         {
@@ -51,6 +52,7 @@ namespace BjjTrainer_API.Controllers.Training
             }
         }
 
+        // ******************************** UPDATE ************************************************
         [HttpPut("{logId}")]
         public async Task<IActionResult> UpdateTrainingLog(int logId, [FromBody] CreateTrainingLogDto dto)
         {
@@ -68,6 +70,7 @@ namespace BjjTrainer_API.Controllers.Training
             }
         }
 
+        // ******************************** CREATE LOG ************************************************
         [HttpPost("log")]
         public async Task<IActionResult> CreateTrainingLog([FromBody] CreateTrainingLogDto dto)
         {
@@ -99,6 +102,27 @@ namespace BjjTrainer_API.Controllers.Training
             }
         }
 
+        // ******************************** Sharing a Student Log  ************************************************
+        [HttpPost("traininglog/{logId}/share")]
+        public async Task<IActionResult> ShareTrainingLog(int logId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            try
+            {
+                await _trainingService.ToggleTrainingLogSharingAsync(logId, userId);
+                return Ok(new
+                {
+                    message = "Training log sharing status updated."
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
+
+        // ******************************** PREFILLED LOG  ************************************************
         [HttpGet("events/{eventId}/traininglog")]
         public async Task<IActionResult> GetPreFilledTrainingLog(int eventId)
         {

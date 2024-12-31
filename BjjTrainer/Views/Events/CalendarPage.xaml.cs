@@ -22,9 +22,7 @@ public partial class CalendarPage : ContentPage
 
     private async void OnSchedulerTapped(object sender, SchedulerTappedEventArgs e)
     {
-        var appointment = e.Appointments?.FirstOrDefault() as SchedulerAppointment;
-
-        if (appointment != null && appointment.Id != null)
+        if (e.Appointments?.FirstOrDefault() is SchedulerAppointment appointment && appointment.Id != null)
         {
             int eventId = Convert.ToInt32(appointment.Id);
             Console.WriteLine($"Navigating to ShowEventPage with EventId: {eventId}");
@@ -40,9 +38,20 @@ public partial class CalendarPage : ContentPage
         }
         else
         {
-            await Navigation.PushAsync(new CreateEventPage());
+            await Navigation.PushAsync(new CalendarPage());
         }
     }
+
+    // Navigate to CreateEventPage instead of triggering ShowAppointmentEditor
+    private async void OnAddEventClicked(object sender, EventArgs e)
+    {
+        var now = DateTime.Now.Date;
+        var startTime = now.AddHours(18);
+        var endTime = startTime.AddHours(1);
+
+        await Navigation.PushAsync(new CreateEventPage(startTime, endTime));
+    }
+
 
     private async void OnAppointmentDrop(object sender, AppointmentDropEventArgs e)
     {
@@ -52,5 +61,4 @@ public partial class CalendarPage : ContentPage
             await vm.UpdateDroppedEventAsync(appointment);
         }
     }
-
 }

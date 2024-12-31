@@ -10,18 +10,8 @@ namespace BjjTrainer.Services.Events
     {
         public EventService() : base() { }
 
-        public async Task<bool> CreateCoachEventAsync(CalendarEventCreateDTO newEvent)
-        {
-            return await CreateEventAsync("calendar/coach/events/create", newEvent);
-        }
-
-        public async Task<bool> CreateStudentEventAsync(CalendarEventCreateDTO newEvent)
-        {
-            return await CreateEventAsync("calendar/student/events/create", newEvent);
-        }
-
         // CREATE
-        public async Task<bool> CreateEventAsync(string url, CalendarEventCreateDTO newEvent)
+        public async Task<bool> CreateEventAsync(CalendarEventCreateDTO newEvent)
         {
             try
             {
@@ -30,7 +20,7 @@ namespace BjjTrainer.Services.Events
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 // Send POST request to the specified URL
-                var response = await HttpClient.PostAsync(url, content);
+                var response = await HttpClient.PostAsync("calendar/events/create", content);
 
                 if (response.IsSuccessStatusCode)
                 {

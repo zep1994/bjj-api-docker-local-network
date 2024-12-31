@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using BjjTrainer_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BjjTrainer_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241231022851_UpdateCalendarEventWithTrainingLogFix")]
+    partial class UpdateCalendarEventWithTrainingLogFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,12 +61,12 @@ namespace BjjTrainer_API.Migrations
                         .HasColumnType("time")
                         .HasAnnotation("Relational:JsonPropertyName", "endTime");
 
-                    b.Property<bool>("IncludeTrainingLog")
-                        .HasColumnType("boolean");
-
                     b.Property<bool>("IsAllDay")
                         .HasColumnType("boolean")
                         .HasAnnotation("Relational:JsonPropertyName", "isAllDay");
+
+                    b.Property<bool>("IsTrainingSession")
+                        .HasColumnType("boolean");
 
                     b.Property<int?>("SchoolId")
                         .HasColumnType("integer")
@@ -89,8 +92,7 @@ namespace BjjTrainer_API.Migrations
 
                     b.HasIndex("SchoolId");
 
-                    b.HasIndex("TrainingLogId")
-                        .IsUnique();
+                    b.HasIndex("TrainingLogId");
 
                     b.ToTable("CalendarEvents");
                 });
@@ -188,9 +190,6 @@ namespace BjjTrainer_API.Migrations
 
                     b.Property<int>("MoveId")
                         .HasColumnType("integer");
-
-                    b.Property<bool>("IsCoachSelected")
-                        .HasColumnType("boolean");
 
                     b.HasKey("TrainingLogId", "MoveId");
 
@@ -416,8 +415,12 @@ namespace BjjTrainer_API.Migrations
                     b.Property<bool>("IsCoachLog")
                         .HasColumnType("boolean");
 
-                    b.Property<bool>("IsShared")
+                    b.Property<bool>("IsImported")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("MovesCovered")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Notes")
                         .IsRequired()
@@ -632,8 +635,8 @@ namespace BjjTrainer_API.Migrations
                         .HasForeignKey("SchoolId");
 
                     b.HasOne("BjjTrainer_API.Models.Trainings.TrainingLog", "TrainingLog")
-                        .WithOne("CalendarEvent")
-                        .HasForeignKey("BjjTrainer_API.Models.Calendars.CalendarEvent", "TrainingLogId");
+                        .WithMany()
+                        .HasForeignKey("TrainingLogId");
 
                     b.Navigation("School");
 
@@ -851,8 +854,6 @@ namespace BjjTrainer_API.Migrations
 
             modelBuilder.Entity("BjjTrainer_API.Models.Trainings.TrainingLog", b =>
                 {
-                    b.Navigation("CalendarEvent");
-
                     b.Navigation("TrainingLogMoves");
                 });
 
