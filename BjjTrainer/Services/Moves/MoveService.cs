@@ -9,11 +9,13 @@ namespace BjjTrainer.Services.Moves
         {
             try
             {
-                return await HttpClient.GetFromJsonAsync<List<Move>>("moves") ?? new List<Move>();
+                var moves = await HttpClient.GetFromJsonAsync<List<Move>>("moves");
+                return moves ?? new List<Move>();
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error fetching moves: {ex.Message}");
+                Console.WriteLine($"Error fetching moves: {ex.Message}");
+                return new List<Move>();
             }
         }
     }

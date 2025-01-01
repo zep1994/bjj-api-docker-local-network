@@ -18,10 +18,15 @@ public partial class ShowTrainingLogPage : ContentPage
 
             if (_viewModel != null && _logId > 0)
             {
-                Task.Run(async () => await _viewModel.LoadLogDetailsAsync(_logId));
+                // Directly await the async call to ensure UI updates correctly
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    await _viewModel.LoadLogDetailsAsync(_logId);
+                });
             }
         }
     }
+
 
     public ShowTrainingLogPage()
     {
@@ -32,20 +37,21 @@ public partial class ShowTrainingLogPage : ContentPage
 
     protected override async void OnAppearing()
     {
-        base.OnAppearing();
-
-        Console.WriteLine($"LogId received: {LogId}"); // Debugging output
+        Console.WriteLine($"LogId received: {LogId}");
 
         if (LogId > 0)
         {
-            Console.WriteLine("Calling LoadLogDetailsAsync..."); // Debugging output
+            Console.WriteLine("Loading data...");
             await _viewModel.LoadLogDetailsAsync(LogId);
+            base.OnAppearing();
         }
         else
         {
-            Console.WriteLine("LogId is invalid or missing."); // Debugging output
+            Console.WriteLine("Invalid LogId");
         }
     }
+
+
     private async void OnUpdateButtonClicked(object sender, EventArgs e)
     {
         if (BindingContext is ShowTrainingLogViewModel viewModel)

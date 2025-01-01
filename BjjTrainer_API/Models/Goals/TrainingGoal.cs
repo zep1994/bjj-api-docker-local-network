@@ -12,7 +12,7 @@ namespace BjjTrainer_API.Models.Goals
         public string Notes { get; set; } = string.Empty;
 
         // Navigation properties
-        public ICollection<UserTrainingGoalMove> UserTrainingGoalMoves { get; set; } = new List<UserTrainingGoalMove>();
+        public ICollection<UserTrainingGoalMove> UserTrainingGoalMoves { get; set; } = [];
 
         // Foreign key for the ApplicationUser
         public string ApplicationUserId { get; set; } = string.Empty;

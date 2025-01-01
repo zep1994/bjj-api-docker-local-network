@@ -1,5 +1,4 @@
-﻿using BjjTrainer.Models.DTO;
-using BjjTrainer.Models.DTO.TrainingLog;
+﻿using BjjTrainer.Models.DTO.TrainingLog;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
@@ -22,7 +21,7 @@ namespace BjjTrainer.Services.Trainings
             }
         }
 
-        // GET BY UserId
+        // GET BY ID
         public async Task<TrainingLogDto> GetTrainingLogByIdAsync(int logId)
         {
             try
@@ -31,8 +30,11 @@ namespace BjjTrainer.Services.Trainings
 
                 if (log == null)
                 {
+                    Console.WriteLine("Training log not found in API response.");
                     throw new Exception("Training log not found.");
                 }
+
+                Console.WriteLine($"Training log from API: {log.Date} - {log.TrainingTime} hrs");
                 return log;
             }
             catch (Exception ex)
@@ -70,15 +72,27 @@ namespace BjjTrainer.Services.Trainings
         }
 
         // PUT
-        public async Task UpdateTrainingLogAsync(int logId, UpdateTrainingLogDto updatedLog)
+        public async Task UpdateTrainingLogAsync(int logId, UpdateTrainingLogDto updatedLog, bool isCoachLog)
         {
             try
             {
                 var response = await HttpClient.PutAsJsonAsync($"traininglog/{logId}", updatedLog);
+
                 if (!response.IsSuccessStatusCode)
                 {
                     var error = await response.Content.ReadAsStringAsync();
                     throw new Exception($"Error updating training log: {error}");
+                }
+
+                // If this is a coach's log, apply updates to students
+                if (isCoachLog)
+                {
+                    var shareResponse = await HttpClient.PostAsync($"traininglog/{logId}/share", null);
+                    if (!shareResponse.IsSuccessStatusCode)
+                    {
+                        var shareError = await shareResponse.Content.ReadAsStringAsync();
+                        throw new Exception($"Error sharing log with students: {shareError}");
+                    }
                 }
             }
             catch (Exception ex)

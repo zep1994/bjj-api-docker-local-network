@@ -2,6 +2,7 @@
 using BjjTrainer.Models.Users;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Json;
+using System.Security.Claims;
 
 namespace BjjTrainer.Services.Users
 {
@@ -12,7 +13,7 @@ namespace BjjTrainer.Services.Users
 
         public async Task<string> LoginAsync(string username, string password)
         {
-            username = "newuser2";
+            username = "Coach1";
             password = "securePassword1!";
             var loginModel = new { Username = username, Password = password };
             //var loginModel = new { Username = username, Password = password };
@@ -24,6 +25,9 @@ namespace BjjTrainer.Services.Users
                 if (result != null)
                 {
                     SetAuthToken(result.Token);
+
+                    // Fetch SchoolId after successful login
+                    await FetchAndStoreSchoolId(result.Token);
 
                     return result.Token;
                 }
@@ -113,6 +117,15 @@ namespace BjjTrainer.Services.Users
                 Preferences.Set("UserId", userId);
                 Preferences.Set("IsLoggedIn", true);
 
+                // Extract user role from the token if available
+                var handler = new JwtSecurityTokenHandler();
+                var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
+                var role = jsonToken?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+                if (!string.IsNullOrEmpty(role))
+                {
+                    Preferences.Set("UserRole", role);
+                }
             }
         }
 
@@ -203,6 +216,28 @@ namespace BjjTrainer.Services.Users
             else
             {
                 throw new Exception("Failed to refresh token");
+            }
+        }
+
+        private async Task FetchAndStoreSchoolId(string token)
+        {
+            try
+            {
+                AttachAuthorizationHeader();  // Attach the token
+                var response = await HttpClient.GetAsync("calendar/user/schoolId");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<SchoolResponse>();
+                    if (result != null && result.SchoolId.HasValue)
+                    {
+                        Preferences.Set("SchoolId", result.SchoolId.Value);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to fetch SchoolId: {ex.Message}");
             }
         }
     }

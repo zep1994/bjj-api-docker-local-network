@@ -36,14 +36,14 @@ namespace BjjTrainer_API.Models.Moves
 
         [StringLength(1000, ErrorMessage = "Counter strategies cannot exceed 1000 characters.")]
         public string? CounterStrategies { get; set; } = string.Empty; // How to counter or defend against this move
-        public List<string>? Tags { get; set; } = new List<string>(); // Keywords for filtering
+        public List<string>? Tags { get; set; } = []; // Keywords for filtering
         public bool? LegalInCompetitions { get; set; } // Legal in Comp?                                             
         public int TrainingLogCount { get; set; } = 0;  // Track how many training logs include this move
 
-        public ICollection<SubLessonMove> SubLessonMoves { get; set; } = new List<SubLessonMove>();
+        public ICollection<SubLessonMove> SubLessonMoves { get; set; } = [];
         // Relationship with TrainingLogs
-        public ICollection<TrainingLogMove> TrainingLogMoves { get; set; } = new List<TrainingLogMove>();
-        public ICollection<UserTrainingGoalMove> UserTrainingGoalMoves { get; set; } = new List<UserTrainingGoalMove>();
+        public ICollection<TrainingLogMove> TrainingLogMoves { get; set; } = [];
+        public ICollection<UserTrainingGoalMove> UserTrainingGoalMoves { get; set; } = [];
 
     }
 }

@@ -7,7 +7,7 @@
         public string Description { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
         public string? SkillLevel { get; set; }
-        public List<string>? Tags { get; set; } = new List<string>();
+        public List<string>? Tags { get; set; } = [];
         public int TrainingLogCount { get; set; }
     }
 }

@@ -26,7 +26,8 @@ namespace BjjTrainer_API.Data
         public DbSet<TrainingGoal> TrainingGoals { get; set; }
         public DbSet<UserTrainingGoalMove> UserTrainingGoalMoves { get; set; }
         public DbSet<School> Schools { get; set; }
-
+        public DbSet<CalendarEventUser> CalendarEventUsers { get; set; }
+        public DbSet<CalendarEventCheckIn> CalendarEventCheckIns { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -125,11 +126,29 @@ namespace BjjTrainer_API.Data
                 .HasForeignKey(t => t.ApplicationUserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<CalendarEvent>()
-                    .HasOne(e => e.ApplicationUser)        
-                    .WithMany(u => u.CalendarEvents)     
-                    .HasForeignKey(e => e.ApplicationUserId) 
-                    .OnDelete(DeleteBehavior.Cascade);
+            // Defining the many-to-many relationship between CalendarEvent and ApplicationUser
+            modelBuilder.Entity<CalendarEventUser>()
+                .HasKey(eu => new { eu.CalendarEventId, eu.UserId }); 
+
+            // Configure CalendarEvent and ApplicationUser
+            modelBuilder.Entity<CalendarEventUser>()
+                .HasOne(eu => eu.CalendarEvent)
+                .WithMany(ce => ce.CalendarEventUsers)
+                .HasForeignKey(eu => eu.CalendarEventId)
+                .OnDelete(DeleteBehavior.Cascade);  // Deleting event removes join entries, but not users
+
+            modelBuilder.Entity<CalendarEventUser>()
+                .HasOne(eu => eu.User)
+                .WithMany(u => u.CalendarEventUsers)
+                .HasForeignKey(eu => eu.UserId)
+                .OnDelete(DeleteBehavior.Restrict);  // Users won't be deleted if the event is deleted
+
+            // Configure CalendarEventCheckIn relationship to CalendarEvent
+            modelBuilder.Entity<CalendarEventCheckIn>()
+                .HasOne(c => c.CalendarEvent)
+                .WithMany(e => e.CalendarEventCheckIns)
+                .HasForeignKey(c => c.CalendarEventId)
+                .OnDelete(DeleteBehavior.Restrict);  // Prevent event deletion
 
             // TrainingGoal -> Move
             // Configure many-to-many relationship

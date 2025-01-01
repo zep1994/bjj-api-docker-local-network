@@ -1,4 +1,5 @@
-﻿using BjjTrainer_API.Models.Users;
+﻿using BjjTrainer_API.Models.DTO.UserDtos;
+using BjjTrainer_API.Models.Users;
 using BjjTrainer_API.Services_API.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -22,36 +23,25 @@ namespace BjjTrainer_API.Controllers.Users
             _httpContextAccessor = httpContextAccessor;
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         [Authorize]
-        public async Task<IActionResult> CreateSchool([FromBody] School school)
+        public async Task<IActionResult> CreateSchool([FromBody] SchoolCreateRequest request)
         {
-            // Get the currently logged-in user
+            // Get the currently logged-in user (the coach)
             var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId))
             {
                 return Unauthorized("User not logged in.");
             }
 
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
+            var result = await _schoolService.CreateSchoolAndAddCoachAsync(userId, request.Name, request.Address, request.Phone);
+
+            if (result.Contains("already a member"))
             {
-                return Unauthorized("User not found.");
+                return Conflict(result); // Send conflict if user is already a member of another school
             }
 
-            // Check if the user is a coach
-            if (!user.IsCoach)
-            {
-                return Forbid("Only coaches can create schools.");
-            }
-
-            if (string.IsNullOrWhiteSpace(school.Name) || string.IsNullOrWhiteSpace(school.Phone))
-            {
-                return BadRequest("School name and phone are required.");
-            }
-
-            var createdSchool = await _schoolService.CreateSchoolAsync(school.Name, school.Address, school.Phone);
-            return Ok(createdSchool);
+            return Ok(result);
         }
     }
 }

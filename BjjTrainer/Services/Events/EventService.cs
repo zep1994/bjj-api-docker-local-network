@@ -1,4 +1,5 @@
 ﻿using BjjTrainer.Models.DTO.Events;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
@@ -9,16 +10,17 @@ namespace BjjTrainer.Services.Events
     {
         public EventService() : base() { }
 
+        // CREATE
         public async Task<bool> CreateEventAsync(CalendarEventCreateDTO newEvent)
         {
             try
             {
-                // Serialize the event data
+                AttachAuthorizationHeader();
                 var json = JsonSerializer.Serialize(newEvent);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                // Send POST request to the API
-                var response = await HttpClient.PostAsync("calendar", content);
+                // Send POST request to the specified URL
+                var response = await HttpClient.PostAsync("calendar/events/create", content);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -34,11 +36,12 @@ namespace BjjTrainer.Services.Events
             }
         }
 
+        // SHOW
         public async Task<CalendarEventDto> GetEventByIdAsync(int eventId)
         {
             try
             {
-                // Send GET request to fetch event by ID
+                AttachAuthorizationHeader();
                 var response = await HttpClient.GetAsync($"calendar/{eventId}");
 
                 if (response.IsSuccessStatusCode)
@@ -52,14 +55,17 @@ namespace BjjTrainer.Services.Events
             }
             catch (Exception ex)
             {
-                throw new Exception($"Failed to fetch event: {ex.Message}");
+                Console.WriteLine($"Error fetching event: {ex.Message}");
+                throw;
             }
         }
 
+        // UPDATE
         public async Task<bool> UpdateEventAsync(int eventId, CalendarEventDto updatedEvent)
         {
             try
             {
+                AttachAuthorizationHeader();
                 var response = await HttpClient.PutAsJsonAsync($"events/{eventId}", updatedEvent);
                 return response.IsSuccessStatusCode;
             }
@@ -69,11 +75,12 @@ namespace BjjTrainer.Services.Events
             }
         }
 
-
+        // DELETE
         public async Task<bool> DeleteEventAsync(int eventId)
         {
             try
             {
+                AttachAuthorizationHeader();
                 // Send DELETE request to delete the event
                 var response = await HttpClient.DeleteAsync($"calendar/{eventId}");
 
@@ -91,10 +98,12 @@ namespace BjjTrainer.Services.Events
             }
         }
 
+        // GET ALL USER EVENTS
         public async Task<List<CalendarEventDto>> GetAllUserEventsAsync(string userId)
         {
             try
             {
+                AttachAuthorizationHeader();
                 var response = await HttpClient.GetAsync($"calendar/user/{userId}");
 
                 if (response.IsSuccessStatusCode)
@@ -112,7 +121,7 @@ namespace BjjTrainer.Services.Events
                     }
                 }
 
-                return new List<CalendarEventDto>(); // Return an empty list on error
+                return new List<CalendarEventDto>();  // Return empty list if request fails
             }
             catch (Exception ex)
             {

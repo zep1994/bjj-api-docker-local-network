@@ -7,22 +7,29 @@ namespace BjjTrainer.Views.Events
     {
         private readonly CreateEventViewModel _viewModel;
 
-        public CreateEventPage(SchedulerAppointment? appointment = null)
+        public CreateEventPage(DateTime start, DateTime end)
         {
             InitializeComponent();
-            _viewModel = new CreateEventViewModel();
-
-            // Populate fields if editing an existing appointment
-            if (appointment != null)
+            _viewModel = new CreateEventViewModel
             {
-                _viewModel.Title = appointment.Subject;
-                _viewModel.Description = appointment.Notes;
-                _viewModel.StartDate = appointment.StartTime;
-                _viewModel.EndDate = appointment.EndTime;
-                _viewModel.IsAllDay = appointment.IsAllDay;
-            }
+                StartDate = start,
+                StartTime = start.TimeOfDay,
+                EndDate = end,
+                EndTime = end.TimeOfDay
+            };
 
             BindingContext = _viewModel;
+        }
+
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (BindingContext is CalendarViewModel vm)
+            {
+                await vm.LoadAppointments();
+            }
         }
 
         private async void OnSaveEventClicked(object sender, EventArgs e)
@@ -32,7 +39,17 @@ namespace BjjTrainer.Views.Events
             if (success)
             {
                 await DisplayAlert("Success", "Event saved successfully.", "OK");
-                await Navigation.PopAsync();
+
+                if (Application.Current.MainPage.Navigation.NavigationStack
+                    .FirstOrDefault(x => x is CalendarPage) is CalendarPage calendarPage)
+                {
+                    if (calendarPage.BindingContext is CalendarViewModel calendarViewModel)
+                    {
+                        await calendarViewModel.LoadAppointments();
+                    }
+                }
+
+                await Navigation.PushAsync(new CalendarPage());
             }
             else
             {
@@ -40,10 +57,11 @@ namespace BjjTrainer.Views.Events
             }
         }
 
+
         private async void OnCancelEventClicked(object sender, EventArgs e)
         {
             // Navigate back without saving
-            await Navigation.PopAsync();
+            await Navigation.PushAsync(new CalendarPage());
         }
     }
 }

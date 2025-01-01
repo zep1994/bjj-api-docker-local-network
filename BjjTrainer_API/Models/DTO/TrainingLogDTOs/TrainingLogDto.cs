@@ -1,15 +1,31 @@
-﻿namespace BjjTrainer_API.Models.DTO.TrainingLogDTOs
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace BjjTrainer_API.Models.DTO.TrainingLogDTOs
 {
     public class TrainingLogDto
     {
         public int Id { get; set; }
+        public string? Title { get; set; }
+
+        [Column(TypeName = "date")]
         public DateTime Date { get; set; }
-        public double TrainingTime { get; set; }
-        public int RoundsRolled { get; set; }
-        public int Submissions { get; set; }
-        public int Taps { get; set; }
-        public string Notes { get; set; }
-        public string SelfAssessment { get; set; }
-        public List<MoveDto> Moves { get; set; } = new List<MoveDto>();
+
+        [Column(TypeName = "time")]
+        public TimeSpan? StartTime { get; set; }
+
+        public string ApplicationUserId { get; set; }
+        public double TrainingTime { get; set; } = 0;
+        public int RoundsRolled { get; set; } = 0;
+        public int Submissions { get; set; } = 0;
+        public int Taps { get; set; } = 0;
+        public string Notes { get; set; } = string.Empty;
+        public string SelfAssessment { get; set; } = string.Empty;
+        public List<int> MoveIds { get; set; } = [];
+
+        // Fields relevant during log creation (optional event linkage)
+        public bool IsCoachLog { get; set; }
+        public bool IsImported { get; set; } = false;
+        public int? ImportedFromLogId { get; set; }
+        public int? CalendarEventId { get; set; }
     }
 }

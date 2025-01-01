@@ -2,92 +2,125 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:BjjTrainer.ViewModels.TrainingLogs"
              x:Class="BjjTrainer.Views.Training.ShowTrainingLogPage"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             xmlns:syncfusionCards="clr-namespace:Syncfusion.Maui.Cards;assembly=Syncfusion.Maui.Cards"
+             xmlns:syncfusionButtons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
              Title="Training Log Details"
              BackgroundColor="{StaticResource BackgroundColor}">
 
-    <ContentPage.Content>
-        <ScrollView>
-            <VerticalStackLayout Padding="20" Spacing="15">
-                <!-- Page Title -->
-                <Label Text="Training Log Details"
-                       FontSize="24"
-                       FontAttributes="Bold"
-                       HorizontalOptions="Center"
-                       TextColor="{StaticResource PrimaryTextColor}" />
+    <ScrollView>
+        <VerticalStackLayout Padding="20">
 
-                <!-- Date -->
-                <VerticalStackLayout>
-                    <Label Text="Date:" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
-                    <Label Text="{Binding Date, StringFormat='{0:yyyy-MM-dd}'}" FontSize="16" TextColor="{StaticResource PrimaryTextColor}" />
+            <!-- Header Section -->
+            <Label Text="Training Log Details"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Margin="10"/>
+
+            <!-- Coach Log Badge -->
+            <syncfusion:SfBadgeView IsVisible="{Binding IsCoachLog}"
+                                    BadgeText="Coach Log"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Start">
+                <syncfusion:SfBadgeView.BadgeSettings>
+                    <syncfusion:BadgeSettings Background="Orange"
+                                              TextColor="White"
+                                              IsVisible="False"
+                                              FontAttributes="Bold"
+                                              Position="Top" />
+                </syncfusion:SfBadgeView.BadgeSettings>
+                <syncfusion:SfBadgeView.Content>
+                    <Label Text="Coach Created Log"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource AccentBlue}"
+                           HorizontalOptions="Center" />
+                </syncfusion:SfBadgeView.Content>
+            </syncfusion:SfBadgeView>
+
+            <!-- Log Details Section -->
+            <syncfusionCards:SfCardView Margin="10"
+                                   CornerRadius="12"
+                                   BorderColor="LightGray">
+                <VerticalStackLayout Padding="15">
+                    <Label Text="Date"
+                           FontAttributes="Bold"
+                           FontSize="18"/>
+                    <Label Text="{Binding Date, StringFormat='{0:MMMM dd, yyyy}'}"
+                           FontSize="16"/>
+
+                    <Label Text="Training Time (hours)"
+                           FontAttributes="Bold"
+                           FontSize="18"
+                           Margin="10,10,0,0"/>
+                    <Label Text="{Binding TrainingTime}"
+                           FontSize="16"/>
+
+                    <Label Text="Rounds Rolled"
+                           FontAttributes="Bold"
+                           FontSize="18"
+                           Margin="10,10,0,0"/>
+                    <Label Text="{Binding RoundsRolled}"
+                           FontSize="16"/>
+
+                    <Label Text="Submissions"
+                           FontAttributes="Bold"
+                           FontSize="18"
+                           Margin="10,10,0,0"/>
+                    <Label Text="{Binding Submissions}"
+                           FontSize="16"/>
+
+                    <Label Text="Taps Received"
+                           FontAttributes="Bold"
+                           FontSize="18"
+                           Margin="10,10,0,0"/>
+                    <Label Text="{Binding Taps}"
+                           FontSize="16"/>
                 </VerticalStackLayout>
+            </syncfusionCards:SfCardView>
 
-                <!-- Training Time -->
-                <VerticalStackLayout>
-                    <Label Text="Training Time (hours):" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
-                    <Label Text="{Binding TrainingTime}" FontSize="16" TextColor="{StaticResource PrimaryTextColor}" />
+            <!-- Notes Section -->
+            <syncfusionCards:SfCardView Margin="10"
+                                   CornerRadius="12"
+                                   BorderColor="LightGray">
+                <VerticalStackLayout Padding="15">
+                    <Label Text="Notes"
+                           FontAttributes="Bold"
+                           FontSize="18"/>
+                    <Label Text="{Binding Notes}"
+                           FontSize="16"
+                           LineBreakMode="WordWrap"/>
                 </VerticalStackLayout>
+            </syncfusionCards:SfCardView>
 
-                <!-- Rounds Rolled -->
-                <VerticalStackLayout>
-                    <Label Text="Rounds Rolled:" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
-                    <Label Text="{Binding RoundsRolled}" FontSize="16" TextColor="{StaticResource PrimaryTextColor}" />
+            <!-- Card for Log Details -->
+            <syncfusionCards:SfCardView Margin="10"
+                                        CornerRadius="12"
+                                        BorderColor="{StaticResource AccentBlue}">
+                <VerticalStackLayout Padding="15">
+                    <Label Text="Date"
+                           FontAttributes="Bold"
+                           FontSize="18"/>
+                    <Label Text="{Binding Date, StringFormat='{0:MMMM dd, yyyy}'}"
+                           FontSize="16"/>
                 </VerticalStackLayout>
+            </syncfusionCards:SfCardView>
 
-                <!-- Submissions -->
-                <VerticalStackLayout>
-                    <Label Text="Submissions:" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
-                    <Label Text="{Binding Submissions}" FontSize="16" TextColor="{StaticResource PrimaryTextColor}" />
-                </VerticalStackLayout>
-
-                <!-- Taps -->
-                <VerticalStackLayout>
-                    <Label Text="Taps Received:" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
-                    <Label Text="{Binding Taps}" FontSize="16" TextColor="{StaticResource PrimaryTextColor}" />
-                </VerticalStackLayout>
-
-                <!-- Notes -->
-                <VerticalStackLayout>
-                    <Label Text="Notes:" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
-                    <Label Text="{Binding Notes}" FontSize="16" TextColor="{StaticResource PrimaryTextColor}" />
-                </VerticalStackLayout>
-
-                <!-- Self Assessment -->
-                <VerticalStackLayout>
-                    <Label Text="Self Assessment:" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
-                    <Label Text="{Binding SelfAssessment}" FontSize="16" TextColor="{StaticResource PrimaryTextColor}" />
-                </VerticalStackLayout>
-
-                <!-- Moves -->
-                <VerticalStackLayout>
-                    <Label Text="Moves Practiced:" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
-                    <CollectionView ItemsSource="{Binding Moves}" SelectionMode="None">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <VerticalStackLayout>
-                                    <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
-                                </VerticalStackLayout>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </VerticalStackLayout>
-
-                <!-- Navigation Buttons -->
-                <HorizontalStackLayout Spacing="10">
-                    <!-- Back Button -->
-                    <Button Text="Back"
-                            Clicked="OnBackButtonClicked"
-                            BackgroundColor="Gray"
-                            TextColor="White"
-                            FontAttributes="Bold" />
-
-                    <!-- Update Button -->
-                    <Button Text="Update"
-                            Clicked="OnUpdateButtonClicked"
-                            BackgroundColor="Blue"
-                            TextColor="White"
-                            FontAttributes="Bold" />
-                </HorizontalStackLayout>
-            </VerticalStackLayout>
-        </ScrollView>
-    </ContentPage.Content>
+            <!-- Action Buttons -->
+            <HorizontalStackLayout HorizontalOptions="Center"
+                                   Margin="20,40,20,20">
+                <syncfusionButtons:SfButton Text="Back"
+                                            WidthRequest="120"
+                                            Clicked="OnBackButtonClicked"
+                                            BackgroundColor="{StaticResource AccentBlue}"/>
+                <syncfusionButtons:SfButton Text="Update"
+                                            WidthRequest="120"
+                                            Clicked="OnUpdateButtonClicked"
+                                            BackgroundColor="{StaticResource AccentBlue}"
+                                            TextColor="White"
+                                            Margin="20,0,0,0"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

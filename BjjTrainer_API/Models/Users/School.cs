@@ -17,6 +17,6 @@ namespace BjjTrainer_API.Models.Users
         [MaxLength(15)]
         public string Phone { get; set; } = string.Empty;
 
-        public ICollection<ApplicationUser> Users { get; set; } = new List<ApplicationUser>();
+        public ICollection<ApplicationUser> Users { get; set; } = [];
     }
 }

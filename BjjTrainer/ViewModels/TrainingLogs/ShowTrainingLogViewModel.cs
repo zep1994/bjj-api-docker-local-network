@@ -17,6 +17,20 @@ public class ShowTrainingLogViewModel : BaseViewModel
     public string Notes { get; set; } = string.Empty;
     public string SelfAssessment { get; set; } = string.Empty;
     public ObservableCollection<Move> Moves { get; set; } = new();
+    private bool isCoachLog;
+    public bool IsCoachLog
+    {
+        get => isCoachLog;
+        set
+        {
+            if (isCoachLog != value)
+            {
+                isCoachLog = value;
+                OnPropertyChanged(nameof(IsCoachLog));
+            }
+        }
+    }
+
 
     public Command NavigateBackCommand { get; }
 
@@ -32,18 +46,19 @@ public class ShowTrainingLogViewModel : BaseViewModel
 
         try
         {
-            Console.WriteLine($"Attempting to fetch training log with ID: {logId}"); // Debugging output
+            Console.WriteLine($"Fetching training log with ID: {logId}");
 
             var log = await _trainingService.GetTrainingLogByIdAsync(logId);
 
             if (log == null)
             {
-                Console.WriteLine($"No training log found for ID: {logId}"); // Debugging output
+                Console.WriteLine($"No training log found for ID: {logId}");
                 return;
             }
 
-            Console.WriteLine($"Training log retrieved: {log.Notes}"); // Debugging output
+            Console.WriteLine($"Training log retrieved: {log.Notes}");
 
+            // Set properties from fetched log
             Date = log.Date;
             TrainingTime = log.TrainingTime;
             RoundsRolled = log.RoundsRolled;
@@ -51,13 +66,19 @@ public class ShowTrainingLogViewModel : BaseViewModel
             Taps = log.Taps;
             Notes = log.Notes ?? string.Empty;
             SelfAssessment = log.SelfAssessment ?? string.Empty;
+            IsCoachLog = log.IsCoachLog;  // Bind IsCoachLog to ViewModel
 
+            // Clear and repopulate Moves with null check
             Moves.Clear();
-            foreach (var move in log.Moves)
+            if (log.Moves != null)
             {
-                Moves.Add(move);
+                foreach (var move in log.Moves)
+                {
+                    Moves.Add(move);
+                }
             }
 
+            // Notify UI to update
             OnPropertyChanged(nameof(Date));
             OnPropertyChanged(nameof(TrainingTime));
             OnPropertyChanged(nameof(RoundsRolled));
@@ -66,6 +87,7 @@ public class ShowTrainingLogViewModel : BaseViewModel
             OnPropertyChanged(nameof(Notes));
             OnPropertyChanged(nameof(SelfAssessment));
             OnPropertyChanged(nameof(Moves));
+            OnPropertyChanged(nameof(IsCoachLog));  // Trigger UI updates for IsCoachLog
         }
         catch (Exception ex)
         {
