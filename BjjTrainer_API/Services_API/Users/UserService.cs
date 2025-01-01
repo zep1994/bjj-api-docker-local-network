@@ -2,7 +2,6 @@
 using BjjTrainer_API.Models.Calendars;
 using BjjTrainer_API.Models.Lessons;
 using BjjTrainer_API.Models.Users;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

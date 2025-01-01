@@ -1,6 +1,7 @@
 ﻿using BjjTrainer_API.Data;
 using BjjTrainer_API.Models.DTO;
 using BjjTrainer_API.Models.DTO.TrainingLogDTOs;
+using BjjTrainer_API.Models.DTO.UserDtos;
 using BjjTrainer_API.Models.Joins;
 using BjjTrainer_API.Models.Trainings;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +32,8 @@ namespace BjjTrainer_API.Services_API.Trainings
                     Submissions = log.Submissions,
                     Taps = log.Taps,
                     Notes = log.Notes,
-                    SelfAssessment = log.SelfAssessment,          
+                    SelfAssessment = log.SelfAssessment,   
+                    IsCoachLog = log.IsCoachLog,
                     MoveIds = log.TrainingLogMoves.Select(tlm => tlm.Move.Id).ToList()
                 }).ToListAsync();
         }
@@ -52,11 +54,12 @@ namespace BjjTrainer_API.Services_API.Trainings
                     Taps = log.Taps,
                     Notes = log.Notes,
                     SelfAssessment = log.SelfAssessment,
+                    IsCoachLog = log.IsCoachLog,
                     MoveIds = log.TrainingLogMoves.Select(tlm => tlm.Move.Id).ToList()
                 }).FirstOrDefaultAsync();
         }
 
-        public async Task UpdateTrainingLogAsync(int logId, CreateTrainingLogDto dto)
+        public async Task UpdateTrainingLogAsync(int logId, UpdateTrainingLogDto dto)
         {
             var log = await _context.TrainingLogs
                 .Include(tl => tl.TrainingLogMoves)
@@ -65,7 +68,6 @@ namespace BjjTrainer_API.Services_API.Trainings
             if (log == null)
                 throw new Exception("Training log not found.");
 
-            // Update log fields
             log.Date = dto.Date;
             log.TrainingTime = dto.TrainingTime;
             log.RoundsRolled = dto.RoundsRolled;
@@ -73,6 +75,7 @@ namespace BjjTrainer_API.Services_API.Trainings
             log.Taps = dto.Taps;
             log.Notes = dto.Notes;
             log.SelfAssessment = dto.SelfAssessment;
+            log.IsCoachLog = dto.IsCoachLog;
 
             // Update moves
             _context.TrainingLogMoves.RemoveRange(log.TrainingLogMoves);
@@ -84,7 +87,32 @@ namespace BjjTrainer_API.Services_API.Trainings
                     MoveId = moveId
                 });
             }
+
             await _context.SaveChangesAsync();
+        }
+
+        public async Task ShareUpdatedLogWithStudents(int logId, UpdateTrainingLogDto updatedLog)
+        {
+            // Fetch the training log first
+            var trainingLog = await _context.TrainingLogs
+                .Include(tl => tl.ApplicationUser)
+                .FirstOrDefaultAsync(tl => tl.Id == logId);
+
+            if (trainingLog == null || trainingLog.ApplicationUser == null)
+            {
+                throw new Exception("Training log not found or user does not exist.");
+            }
+
+            // Fetch students in the same school as the training log's user
+            var students = await _context.ApplicationUsers
+                .Where(u => u.SchoolId == trainingLog.ApplicationUser.SchoolId)
+                .ToListAsync();
+
+            foreach (var student in students)
+            {
+                updatedLog.ApplicationUserId = student.Id;
+                await UpdateTrainingLogAsync(logId, updatedLog);
+            }
         }
 
         // ******************************** Sharing a Student Log  ************************************************

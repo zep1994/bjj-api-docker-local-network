@@ -1,6 +1,5 @@
 ﻿using BjjTrainer_API.Models.Calendars;
 using BjjTrainer_API.Models.DTO.Calendars;
-using BjjTrainer_API.Models.Trainings;
 using BjjTrainer_API.Services_API.Calendars;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;

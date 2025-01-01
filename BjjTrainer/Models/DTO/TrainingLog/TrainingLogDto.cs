@@ -1,6 +1,6 @@
 ﻿using BjjTrainer.Models.Moves;
 
-namespace BjjTrainer.Models.DTO
+namespace BjjTrainer.Models.DTO.TrainingLog
 {
     public class TrainingLogDto
     {
@@ -14,6 +14,9 @@ namespace BjjTrainer.Models.DTO
         public string? Notes { get; set; }
         public string? SelfAssessment { get; set; }
         public List<Move>? Moves { get; set; }
+        public bool IsCoachLog { get; set; } = false;
+        public List<int> MoveIds { get; set; } = new List<int>();
+
 
         public string DayColor => GetDayColor(Date.DayOfWeek);
         public string DayInitial => Date.DayOfWeek.ToString().Substring(0, 1).ToUpper();
@@ -22,13 +25,13 @@ namespace BjjTrainer.Models.DTO
         {
             return day switch
             {
-                DayOfWeek.Monday => "#FF5733",
-                DayOfWeek.Tuesday => "#33FF57",
-                DayOfWeek.Wednesday => "#3357FF",
-                DayOfWeek.Thursday => "#FF33A1",
-                DayOfWeek.Friday => "#A133FF",
-                DayOfWeek.Saturday => "#FFD700",
-                DayOfWeek.Sunday => "#FF6347",
+                DayOfWeek.Monday => "#4A90E2",   // Cool Blue
+                DayOfWeek.Tuesday => "#50E3C2",  // Teal
+                DayOfWeek.Wednesday => "#7B61FF", // Soft Purple
+                DayOfWeek.Thursday => "#6495ED", // Cornflower Blue
+                DayOfWeek.Friday => "#6A5ACD",   // Slate Blue
+                DayOfWeek.Saturday => "#4682B4", // Steel Blue
+                DayOfWeek.Sunday => "#708090",   // Slate Gray
                 _ => "#FFFFFF"
             };
         }

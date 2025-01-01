@@ -14,6 +14,7 @@ namespace BjjTrainer.ViewModels.TrainingLogs
         private readonly int _logId;
 
         public ObservableCollection<Move> Moves { get; private set; } = [];
+        public List<int> MoveIds { get; private set; } = [];  // FIX: Declare MoveIds
 
         public DateTime Date { get; set; }
         public double TrainingTime { get; set; }
@@ -22,6 +23,7 @@ namespace BjjTrainer.ViewModels.TrainingLogs
         public int Taps { get; set; }
         public string? Notes { get; set; }
         public string? SelfAssessment { get; set; }
+        public bool IsCoachLog { get; set; }
 
         private string _selectedDateDisplay;
         public string SelectedDateDisplay
@@ -52,7 +54,6 @@ namespace BjjTrainer.ViewModels.TrainingLogs
                 var log = await _trainingService.GetTrainingLogByIdAsync(_logId);
                 if (log != null)
                 {
-                    // Populate fields from database
                     Date = log.Date;
                     SelectedDateDisplay = log.Date.ToString("yyyy-MM-dd");
                     TrainingTime = log.TrainingTime;
@@ -61,19 +62,26 @@ namespace BjjTrainer.ViewModels.TrainingLogs
                     Taps = log.Taps;
                     Notes = log.Notes ?? string.Empty;
                     SelfAssessment = log.SelfAssessment;
+                    IsCoachLog = log.IsCoachLog;
+                    MoveIds = log.MoveIds;
 
-                    // Load and match moves
-                    var allMoves = await _moveService.GetAllMovesAsync();
                     Moves.Clear();
+
+                    // Load all available moves and handle empty scenarios
+                    var allMoves = await _moveService.GetAllMovesAsync();
+                    if (allMoves == null || !allMoves.Any())
+                    {
+                        Console.WriteLine("No moves found.");
+                        await Application.Current.MainPage.DisplayAlert("Error", "No available moves to select.", "OK");
+                        return;
+                    }
 
                     foreach (var move in allMoves)
                     {
-                        move.IsSelected = log.Moves.Any(m => m.Id == move.Id);
-                        move.TrainingLogCount = log.Moves.FirstOrDefault(m => m.Id == move.Id)?.TrainingLogCount ?? 0;
+                        move.IsSelected = MoveIds.Contains(move.Id);
                         Moves.Add(move);
                     }
 
-                    // Notify UI to update bindings
                     OnPropertyChanged(nameof(Date));
                     OnPropertyChanged(nameof(SelectedDateDisplay));
                     OnPropertyChanged(nameof(TrainingTime));
@@ -88,6 +96,7 @@ namespace BjjTrainer.ViewModels.TrainingLogs
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading log details: {ex.Message}");
+                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load log details: {ex.Message}", "OK");
             }
             finally
             {
@@ -116,7 +125,8 @@ namespace BjjTrainer.ViewModels.TrainingLogs
                     ApplicationUserId = Preferences.Get("UserId", string.Empty)
                 };
 
-                await _trainingService.UpdateTrainingLogAsync(_logId, updatedLog);
+                await _trainingService.UpdateTrainingLogAsync(_logId, updatedLog, IsCoachLog);
+
                 return true;
             }
             catch (Exception ex)

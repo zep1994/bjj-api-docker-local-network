@@ -1,4 +1,4 @@
-﻿using BjjTrainer_API.Models.DTO;
+﻿using BjjTrainer_API.Models.DTO.TrainingLogDTOs;
 using BjjTrainer_API.Models.Trainings;
 using BjjTrainer_API.Services_API.Calendars;
 using BjjTrainer_API.Services_API.Trainings;
@@ -54,7 +54,7 @@ namespace BjjTrainer_API.Controllers.Training
 
         // ******************************** UPDATE ************************************************
         [HttpPut("{logId}")]
-        public async Task<IActionResult> UpdateTrainingLog(int logId, [FromBody] CreateTrainingLogDto dto)
+        public async Task<IActionResult> UpdateTrainingLog(int logId, [FromBody] UpdateTrainingLogDto dto)
         {
             if (dto == null || !dto.MoveIds.Any())
                 return BadRequest("Training log must include valid moves.");

@@ -1,4 +1,4 @@
-﻿using BjjTrainer.Models.DTO;
+﻿using BjjTrainer.Models.DTO.TrainingLog;
 using BjjTrainer.Services.Trainings;
 using BjjTrainer.Views.Training;
 using MvvmHelpers;
@@ -6,23 +6,18 @@ using System.Collections.ObjectModel;
 
 namespace BjjTrainer.ViewModels.TrainingLogs
 {
-    public class TrainingLogListViewModel : BaseViewModel
+    public partial class TrainingLogListViewModel : BaseViewModel
     {
         private readonly TrainingService _trainingService;
         private readonly INavigation _navigation;
 
         public ObservableCollection<TrainingLogDto> TrainingLogs { get; set; } = new ObservableCollection<TrainingLogDto>();
 
-        public TrainingLogDto SelectedLog
+        // Public Parameterless Constructor
+        public TrainingLogListViewModel()
         {
-            get => null; // Prevents retaining the selected item
-            set
-            {
-                if (value != null)
-                {
-                    NavigateToUpdateLogPage(value);
-                }
-            }
+            _trainingService = new TrainingService();
+            LoadTrainingLogs();
         }
 
         public TrainingLogListViewModel(INavigation navigation)
@@ -32,7 +27,7 @@ namespace BjjTrainer.ViewModels.TrainingLogs
             LoadTrainingLogs();
         }
 
-        private async void LoadTrainingLogs()
+        public async void LoadTrainingLogs()
         {
             IsBusy = true;
 
@@ -44,10 +39,15 @@ namespace BjjTrainer.ViewModels.TrainingLogs
                     var logs = await _trainingService.GetTrainingLogsAsync(userId);
                     TrainingLogs.Clear();
 
-                    foreach (var log in logs.Take(10))
+                    foreach (var log in logs)
                     {
                         TrainingLogs.Add(log);
+                        Console.WriteLine($"Loaded Log: {log.Date.ToShortDateString()} - {log.TrainingTime} hrs");
                     }
+                }
+                else
+                {
+                    Console.WriteLine("User ID not found.");
                 }
             }
             catch (Exception ex)
@@ -58,11 +58,6 @@ namespace BjjTrainer.ViewModels.TrainingLogs
             {
                 IsBusy = false;
             }
-        }
-
-        private async void NavigateToUpdateLogPage(TrainingLogDto selectedLog)
-        {
-            await _navigation.PushAsync(new UpdateTrainingLogPage(selectedLog.Id));
         }
     }
 }

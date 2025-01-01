@@ -15,6 +15,7 @@
                     <!-- Add the converter to the resources -->
                     <Converters:NullToBoolConverter x:Key="NullToBoolConverter" />
                     <Converters:GreaterThanZeroConverter x:Key="GreaterThanZeroConverter" />
+                    <Converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

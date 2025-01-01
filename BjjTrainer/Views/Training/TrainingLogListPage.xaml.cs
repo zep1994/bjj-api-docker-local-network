@@ -1,4 +1,6 @@
 using BjjTrainer.ViewModels.TrainingLogs;
+using Syncfusion.Maui.ListView;
+using BjjTrainer.Models.DTO;
 
 namespace BjjTrainer.Views.Training
 {

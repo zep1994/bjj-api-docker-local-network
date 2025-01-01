@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BjjTrainer_API.Models.DTO
+namespace BjjTrainer_API.Models.DTO.TrainingLogDTOs  // Fix Namespace
 {
     public class CreateTrainingLogDto
     {
         public string? Title { get; set; }
         [Column(TypeName = "date")]
-        public DateTime Date { get; set; } // StartDate
+        public DateTime Date { get; set; }
         [Column(TypeName = "time")]
         public TimeSpan? StartTime { get; set; }
         public string ApplicationUserId { get; set; }
@@ -17,7 +17,6 @@ namespace BjjTrainer_API.Models.DTO
         public string Notes { get; set; } = string.Empty;
         public string SelfAssessment { get; set; } = string.Empty;
         public List<int> MoveIds { get; set; } = [];
-
         public bool IsCoachLog { get; set; }
         public bool IsImported { get; set; } = false;
         public int? ImportedFromLogId { get; set; }
