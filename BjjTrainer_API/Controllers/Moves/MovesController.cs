@@ -16,7 +16,7 @@ namespace BjjTrainer_API.Controllers.Moves
             _moveService = moveService;
         }
 
-        // Get all Moves
+        // ******************************** GET ALL MOVES ********************************
         [HttpGet]
         public async Task<ActionResult<List<MoveDto>>> GetAllMoves()
         {
@@ -24,7 +24,7 @@ namespace BjjTrainer_API.Controllers.Moves
             return Ok(moves);
         }
 
-        // Get Move details
+        // ******************************** GET MOVE BY ID ********************************
         [HttpGet("{id}")]
         public async Task<ActionResult<MoveDto>> GetMoveById(int id)
         {
@@ -33,11 +33,25 @@ namespace BjjTrainer_API.Controllers.Moves
             {
                 return NotFound("Move not found.");
             }
-
             return Ok(move);
         }
 
-        // Create a new Move
+        // ******************************** GET MOVES BY IDS ********************************
+        [HttpPost("byIds")]
+        public async Task<ActionResult<List<MoveDto>>> GetMovesByIdsAsync([FromBody] List<int> moveIds)
+        {
+            try
+            {
+                var moves = await _moveService.GetMovesByIdsAsync(moveIds);
+                return Ok(moves);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // ******************************** CREATE MOVE ********************************
         [HttpPost]
         public async Task<ActionResult<Move>> CreateMove([FromBody] Move move)
         {
@@ -45,7 +59,7 @@ namespace BjjTrainer_API.Controllers.Moves
             return CreatedAtAction(nameof(GetMoveById), new { id = createdMove.Id }, createdMove);
         }
 
-        // Update an existing Move
+        // ******************************** UPDATE MOVE ********************************
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMove(int id, [FromBody] MoveDto moveDto)
         {
@@ -63,7 +77,7 @@ namespace BjjTrainer_API.Controllers.Moves
             return NoContent();
         }
 
-        // Delete a Move
+        // ******************************** DELETE MOVE ********************************
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMove(int id)
         {

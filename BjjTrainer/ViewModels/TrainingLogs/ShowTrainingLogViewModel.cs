@@ -5,10 +5,11 @@ using System.Collections.ObjectModel;
 
 namespace BjjTrainer.ViewModels.TrainingLogs;
 
-public class ShowTrainingLogViewModel : BaseViewModel
+public partial class ShowTrainingLogViewModel : BaseViewModel
 {
     private readonly TrainingService _trainingService;
 
+    public int Id { get; set; }  // Add this property
     public DateTime Date { get; set; }
     public double TrainingTime { get; set; }
     public int RoundsRolled { get; set; }
@@ -59,6 +60,7 @@ public class ShowTrainingLogViewModel : BaseViewModel
             Console.WriteLine($"Training log retrieved: {log.Notes}");
 
             // Set properties from fetched log
+            Id = log.Id;  // Map from DTO
             Date = log.Date;
             TrainingTime = log.TrainingTime;
             RoundsRolled = log.RoundsRolled;

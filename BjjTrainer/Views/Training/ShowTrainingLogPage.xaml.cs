@@ -56,7 +56,7 @@ public partial class ShowTrainingLogPage : ContentPage
     {
         if (BindingContext is ShowTrainingLogViewModel viewModel)
         {
-            await Navigation.PushAsync(new UpdateTrainingLogPage(LogId));
+            await Navigation.PushAsync(new UpdateTrainingLogPage(viewModel.Id));
         }
     }
 

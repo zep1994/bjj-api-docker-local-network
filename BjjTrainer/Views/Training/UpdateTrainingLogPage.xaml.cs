@@ -1,44 +1,90 @@
 using BjjTrainer.ViewModels.TrainingLogs;
+using BjjTrainer.Views.Components;
+using Syncfusion.Maui.DataForm;
+using System.Collections.ObjectModel;
 
 namespace BjjTrainer.Views.Training
 {
     public partial class UpdateTrainingLogPage : ContentPage
     {
-        private readonly UpdateTrainingLogViewModel _viewModel;
+        private UpdateTrainingLogViewModel _viewModel;
 
         public UpdateTrainingLogPage(int logId)
         {
             InitializeComponent();
-            _viewModel = new UpdateTrainingLogViewModel(logId);
-            BindingContext = _viewModel;
+            _viewModel = new UpdateTrainingLogViewModel(logId);  // Assign the ViewModel
+            BindingContext = _viewModel;  // Set BindingContext to ViewModel
+
+            // Handle custom editor assignment during item generation
+            dataForm.GenerateDataFormItem += OnGenerateDataFormItem;
+
+            // Subscribe to move selection updates
+            MessagingCenter.Subscribe<MoveSelectionModal, List<int>>(this, "MovesUpdated", (sender, selectedIds) =>
+            {
+                _viewModel.UpdateSelectedMoves(new ObservableCollection<int>(selectedIds));
+            });
         }
 
-        private void OnCalendarIconTapped(object sender, EventArgs e)
+        // Edit Moves Modal
+        private async void OnEditMovesClicked(object sender, EventArgs e)
         {
-            // Show the hidden DatePicker
-            DatePickerField.Focus();
-        }
+            // Ensure Moves collection is loaded before opening modal
+            if (_viewModel.Moves == null || !_viewModel.Moves.Any())
+            {
+                await DisplayAlert("Error", "No moves available to edit.", "OK");
+                return;
+            }
 
-        private void OnDateSelected(object sender, DateChangedEventArgs e)
-        {
-            // Update the view model's Date and display value
-            _viewModel.Date = e.NewDate;
-            _viewModel.SelectedDateDisplay = e.NewDate.ToString("yyyy-MM-dd");
+            // Extract selected move IDs to pass to the modal
+            var selectedMoveIds = new ObservableCollection<int>(
+                _viewModel.Moves
+                    .Where(m => m.IsSelected)
+                    .Select(m => m.Id)
+            );
+
+            var modal = new MoveSelectionModal(selectedMoveIds);
+            await Navigation.PushModalAsync(modal);
         }
 
         private async void OnUpdateButtonClicked(object sender, EventArgs e)
         {
-            try
+            dataForm.Commit();  // Commit the changes
+
+            if (dataForm.Validate())  // Validate the form
             {
-                var success = await _viewModel.UpdateLogAsync();
+                var viewModel = BindingContext as UpdateTrainingLogViewModel;
+                bool success = await viewModel.UpdateLogAsync();
+
                 if (success)
                 {
-                    await Shell.Current.GoToAsync("//TrainingLogListPage");
+                    await DisplayAlert("Success", "Training log updated successfully.", "OK");
+                    await Navigation.PushAsync(new TrainingLogListPage());
+                }
+                else
+                {
+                    await DisplayAlert("Error", "Failed to update log.", "OK");
                 }
             }
-            catch (Exception ex)
+            else
             {
-                throw new Exception($"Error: {ex.Message} ");
+                await DisplayAlert("Validation Error", "Please check the form for errors.", "OK");
+            }
+        }
+
+        // Ensure numeric fields in DataForm use proper keyboard
+        private void OnGenerateDataFormItem(object sender, GenerateDataFormItemEventArgs e)
+        {
+            if (e.DataFormItem != null &&
+               (e.DataFormItem.FieldName == "TrainingTime" ||
+                e.DataFormItem.FieldName == "RoundsRolled" ||
+                e.DataFormItem.FieldName == "Submissions" ||
+                e.DataFormItem.FieldName == "Taps"))
+            {
+                if (e.DataFormItem is DataFormTextEditorItem textEditorItem)
+                {
+                    textEditorItem.Keyboard = Keyboard.Numeric;
+                    textEditorItem.Background = Colors.DarkSlateGray;
+                }
             }
         }
     }

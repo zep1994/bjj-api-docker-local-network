@@ -1,7 +1,7 @@
 ﻿using BjjTrainer_API.Data;
 using BjjTrainer_API.Models.DTO;
-using Microsoft.EntityFrameworkCore;
 using BjjTrainer_API.Models.Moves;
+using Microsoft.EntityFrameworkCore;
 
 namespace BjjTrainer_API.Services_API.Moves
 {
@@ -14,13 +14,21 @@ namespace BjjTrainer_API.Services_API.Moves
             _context = context;
         }
 
-        // Retrieve all moves
-        public async Task<List<Move>> GetAllMovesAsync()
+        // ******************************** GET ALL MOVES ********************************
+        public async Task<List<MoveDto>> GetAllMovesAsync()
         {
-            return await _context.Moves.ToListAsync();
+            return await _context.Moves
+                .Select(m => new MoveDto
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    Description = m.Description,
+                    SkillLevel = m.SkillLevel,
+                    Tags = m.Tags
+                }).ToListAsync();
         }
 
-        // Retrieve a move by ID
+        // ******************************** GET MOVE BY ID ********************************
         public async Task<MoveDto> GetMoveByIdAsync(int id)
         {
             var move = await _context.Moves
@@ -41,32 +49,35 @@ namespace BjjTrainer_API.Services_API.Moves
             };
         }
 
-        // Create a new move
+        // ******************************** GET MOVES BY IDS ********************************
+        public async Task<List<MoveDto>> GetMovesByIdsAsync(List<int> moveIds)
+        {
+            if (moveIds == null || !moveIds.Any())
+                throw new ArgumentException("Move IDs list cannot be empty.");
+
+            return await _context.Moves
+                .Where(m => moveIds.Contains(m.Id))
+                .Select(m => new MoveDto
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    Description = m.Description,
+                    SkillLevel = m.SkillLevel
+                }).ToListAsync();
+        }
+
+        // ******************************** CREATE MOVE ********************************
         public async Task<Move> CreateMoveAsync(Move move)
         {
-            var moveResult = new Move
-            {
-                Name = move.Name,
-                Description = move.Description,
-                Content = move.Content,
-                SkillLevel = move.SkillLevel,
-                Category = move.Category,
-                StartingPosition = move.StartingPosition,
-                History = move.History,
-                Scenarios = move.Scenarios,
-                CounterStrategies = move.CounterStrategies,
-                Tags = move.Tags,
-                LegalInCompetitions = move.LegalInCompetitions
-            };
+            if (move == null)
+                throw new ArgumentNullException(nameof(move), "Move cannot be null.");
 
             _context.Moves.Add(move);
             await _context.SaveChangesAsync();
-
-            move.Id = moveResult.Id;
             return move;
         }
 
-        // Update an existing move
+        // ******************************** UPDATE MOVE ********************************
         public async Task<bool> UpdateMoveAsync(MoveDto moveDto)
         {
             var move = await _context.Moves.FindAsync(moveDto.Id);
@@ -80,11 +91,10 @@ namespace BjjTrainer_API.Services_API.Moves
 
             _context.Entry(move).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-
             return true;
         }
 
-        // Delete a move
+        // ******************************** DELETE MOVE ********************************
         public async Task<bool> DeleteMoveAsync(int id)
         {
             var move = await _context.Moves.FindAsync(id);
@@ -92,11 +102,10 @@ namespace BjjTrainer_API.Services_API.Moves
 
             _context.Moves.Remove(move);
             await _context.SaveChangesAsync();
-
             return true;
         }
 
-        // Retrieve moves associated with a specific SubLesson
+        // ******************************** GET MOVES BY SUBLESSON ID ********************************
         public async Task<List<MoveDto>> GetMovesBySubLessonIdAsync(int subLessonId)
         {
             return await _context.SubLessonMoves

@@ -10,7 +10,7 @@ namespace BjjTrainer.ViewModels.Moves
     {
         private readonly MoveService _moveService;
 
-        public ObservableCollection<Move> Moves { get; set; } = new ObservableCollection<Move>();
+        public ObservableCollection<Move> Moves { get; set; } = [];
 
         public Command LoadMovesCommand { get; }
 

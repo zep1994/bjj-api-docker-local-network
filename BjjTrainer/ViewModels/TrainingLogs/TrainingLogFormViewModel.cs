@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace BjjTrainer.ViewModels.TrainingLogs
 {
-    public class TrainingLogFormViewModel : BaseViewModel
+    public partial class TrainingLogFormViewModel : BaseViewModel
     {
         private readonly TrainingService _trainingService;
         private readonly MoveService _moveService;

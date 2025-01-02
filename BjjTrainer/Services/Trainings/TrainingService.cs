@@ -1,4 +1,6 @@
 ﻿using BjjTrainer.Models.DTO.TrainingLog;
+using BjjTrainer.Models.Moves.BjjTrainer.Models.DTO.Moves;
+using System.Collections.ObjectModel;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
@@ -7,7 +9,7 @@ namespace BjjTrainer.Services.Trainings
 {
     public class TrainingService : ApiService
     {
-        // GET ALL BY UserId
+        // ******************************** GET ALL TRAINING LOGS BY USER ********************************
         public async Task<List<TrainingLogDto>> GetTrainingLogsAsync(string userId)
         {
             try
@@ -21,7 +23,7 @@ namespace BjjTrainer.Services.Trainings
             }
         }
 
-        // GET BY ID
+        // ******************************** GET SINGLE TRAINING LOG BY ID ********************************
         public async Task<TrainingLogDto> GetTrainingLogByIdAsync(int logId)
         {
             try
@@ -44,16 +46,68 @@ namespace BjjTrainer.Services.Trainings
             }
         }
 
-        // CREATE
+        // ******************************** GET MOVES FOR TRAINING LOG ********************************
+        public async Task<UpdateTrainingLogDto> GetTrainingLogMoves(int logId)
+        {
+            try
+            {
+                var log = await HttpClient.GetFromJsonAsync<UpdateTrainingLogDto>($"traininglog/log/{logId}");
+
+                if (log == null)
+                {
+                    Console.WriteLine("Training log not found in API response.");
+                    throw new Exception("Training log not found.");
+                }
+
+                if (log.MoveIds.Any())
+                {
+                    var moveDetails = await GetMovesByIds(log.MoveIds);
+                    log.Moves = new ObservableCollection<UpdateMoveDto>(moveDetails);
+                }
+                else
+                {
+                    log.Moves = new ObservableCollection<UpdateMoveDto>();
+                }
+
+                return log;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching training log from API: {ex.Message}");
+                throw new Exception($"Error fetching training log: {ex.Message}");
+            }
+        }
+
+        // ******************************** FETCH MOVES BY IDS (MISSING METHOD) ********************************
+        public async Task<List<UpdateMoveDto>> GetMovesByIds(List<int> moveIds)
+        {
+            try
+            {
+                var response = await HttpClient.PostAsJsonAsync("moves/byIds", moveIds);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Error fetching moves: {error}");
+                }
+
+                var moves = await response.Content.ReadFromJsonAsync<List<UpdateMoveDto>>();
+                return moves ?? new List<UpdateMoveDto>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to fetch moves by IDs: {ex.Message}");
+            }
+        }
+
+        // ******************************** CREATE NEW TRAINING LOG ********************************
         public async Task<bool> SubmitTrainingLogAsync(object trainingLog)
         {
             try
             {
-                // Serialize the training log object to JSON
                 var json = JsonSerializer.Serialize(trainingLog);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                // POST request to the API endpoint
                 var response = await HttpClient.PostAsync("traininglog/log", content);
 
                 if (response.IsSuccessStatusCode)
@@ -61,7 +115,6 @@ namespace BjjTrainer.Services.Trainings
                     return true;
                 }
 
-                // Extract error message if the submission fails
                 var errorMessage = await response.Content.ReadAsStringAsync();
                 throw new Exception($"Server error: {errorMessage}");
             }
@@ -71,7 +124,7 @@ namespace BjjTrainer.Services.Trainings
             }
         }
 
-        // PUT
+        // ******************************** UPDATE EXISTING TRAINING LOG ********************************
         public async Task UpdateTrainingLogAsync(int logId, UpdateTrainingLogDto updatedLog, bool isCoachLog)
         {
             try
@@ -84,7 +137,6 @@ namespace BjjTrainer.Services.Trainings
                     throw new Exception($"Error updating training log: {error}");
                 }
 
-                // If this is a coach's log, apply updates to students
                 if (isCoachLog)
                 {
                     var shareResponse = await HttpClient.PostAsync($"traininglog/{logId}/share", null);
@@ -101,7 +153,7 @@ namespace BjjTrainer.Services.Trainings
             }
         }
 
-        // DELETE
+        // ******************************** DELETE TRAINING LOG ********************************
         public async Task DeleteTrainingLogAsync(int logId)
         {
             try
@@ -116,6 +168,20 @@ namespace BjjTrainer.Services.Trainings
             catch (Exception ex)
             {
                 throw new Exception($"Error deleting training log: {ex.Message}");
+            }
+        }
+
+        // ******************************** FETCH ALL MOVES ********************************
+        public async Task<List<UpdateMoveDto>> GetAllMovesAsync()
+        {
+            try
+            {
+                var moves = await HttpClient.GetFromJsonAsync<List<UpdateMoveDto>>("moves");
+                return moves ?? new List<UpdateMoveDto>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error fetching moves: {ex.Message}");
             }
         }
     }

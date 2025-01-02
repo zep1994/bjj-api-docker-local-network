@@ -1,6 +1,5 @@
 ﻿using BjjTrainer.Models.DTO.TrainingLog;
 using BjjTrainer.Services.Trainings;
-using BjjTrainer.Views.Training;
 using MvvmHelpers;
 using System.Collections.ObjectModel;
 
