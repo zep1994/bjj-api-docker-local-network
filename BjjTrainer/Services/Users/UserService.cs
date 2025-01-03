@@ -69,7 +69,7 @@ namespace BjjTrainer.Services.Users
 
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadFromJsonAsync<List<School>>() ?? new List<School>();
+                return await response.Content.ReadFromJsonAsync<List<School>>() ?? [];
             }
             else
             {
@@ -88,7 +88,7 @@ namespace BjjTrainer.Services.Users
             if (response.IsSuccessStatusCode)
             {
                 var favoriteLessons = await response.Content.ReadFromJsonAsync<List<Lesson>>();
-                return favoriteLessons ?? new List<Lesson>();
+                return favoriteLessons ?? [];
             }
             else
             {

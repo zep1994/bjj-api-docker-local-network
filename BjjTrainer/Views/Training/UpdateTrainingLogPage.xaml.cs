@@ -5,55 +5,91 @@ using System.Collections.ObjectModel;
 
 namespace BjjTrainer.Views.Training
 {
+    [QueryProperty(nameof(LogId), "logId")]
     public partial class UpdateTrainingLogPage : ContentPage
     {
         private UpdateTrainingLogViewModel _viewModel;
+        private int _logId;
 
-        public UpdateTrainingLogPage(int logId)
+        public int LogId
+        {
+            get => _logId;
+            set
+            {
+                _logId = value;
+                Console.WriteLine($"LogId set to: {_logId}");
+
+                // Initialize ViewModel only after LogId is assigned
+                if (_viewModel == null && _logId > 0)
+                {
+                    _viewModel = new UpdateTrainingLogViewModel(_logId);
+                    BindingContext = _viewModel;
+                    _viewModel.LoadLogDetails();
+                }
+            }
+        }
+
+        public UpdateTrainingLogPage()
         {
             InitializeComponent();
-            _viewModel = new UpdateTrainingLogViewModel(logId);  // Assign the ViewModel
-            BindingContext = _viewModel;  // Set BindingContext to ViewModel
 
-            // Handle custom editor assignment during item generation
+            // Delay ViewModel Initialization
             dataForm.GenerateDataFormItem += OnGenerateDataFormItem;
 
-            // Subscribe to move selection updates
             MessagingCenter.Subscribe<MoveSelectionModal, List<int>>(this, "MovesUpdated", (sender, selectedIds) =>
             {
-                _viewModel.UpdateSelectedMoves(new ObservableCollection<int>(selectedIds));
+                _viewModel?.UpdateSelectedMoves(new ObservableCollection<int>(selectedIds));
             });
         }
 
-        // Edit Moves Modal
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            Console.WriteLine($"UpdateTrainingLogPage Appearing with LogId: {LogId}");
+
+            try
+            {
+                if (LogId > 0 && _viewModel != null)
+                {
+                    _viewModel.LoadLogDetails();
+
+                    // Force UI refresh to reflect any updates
+                    BindingContext = null;
+                    BindingContext = _viewModel;
+                }
+                else
+                {
+                    DisplayAlert("Error", "Invalid Training Log ID.", "OK");
+                    Navigation.PopAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error during OnAppearing: {ex.Message}");
+                DisplayAlert("Error", "Failed to load training log.", "OK");
+            }
+        }
+
+        // Opens the Move Selection Modal
         private async void OnEditMovesClicked(object sender, EventArgs e)
         {
-            // Ensure Moves collection is loaded before opening modal
             if (_viewModel.Moves == null || !_viewModel.Moves.Any())
             {
-                await DisplayAlert("Error", "No moves available to edit.", "OK");
-                return;
+                await DisplayAlert("Notice", "No moves available. Add new moves from the selection modal.", "OK");
             }
 
-            // Extract selected move IDs to pass to the modal
-            var selectedMoveIds = new ObservableCollection<int>(
-                _viewModel.Moves
-                    .Where(m => m.IsSelected)
-                    .Select(m => m.Id)
-            );
-
-            var modal = new MoveSelectionModal(selectedMoveIds);
+            var modal = new MoveSelectionModal(new ObservableCollection<int>(_viewModel.SelectedMoveIds), LogId);
             await Navigation.PushModalAsync(modal);
         }
 
+        // Handles updating the training log
         private async void OnUpdateButtonClicked(object sender, EventArgs e)
         {
-            dataForm.Commit();  // Commit the changes
+            dataForm.Commit();
 
-            if (dataForm.Validate())  // Validate the form
+            if (dataForm.Validate())
             {
-                var viewModel = BindingContext as UpdateTrainingLogViewModel;
-                bool success = await viewModel.UpdateLogAsync();
+                bool success = await _viewModel.UpdateLogAsync();
 
                 if (success)
                 {
@@ -62,7 +98,7 @@ namespace BjjTrainer.Views.Training
                 }
                 else
                 {
-                    await DisplayAlert("Error", "Failed to update log.", "OK");
+                    await DisplayAlert("Error", "Failed to update log. Please try again.", "OK");
                 }
             }
             else
@@ -71,20 +107,22 @@ namespace BjjTrainer.Views.Training
             }
         }
 
-        // Ensure numeric fields in DataForm use proper keyboard
+        private async void OnBackButtonClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//TrainingLogListPage");
+        }
+
+        // Customize numeric inputs for specific fields
         private void OnGenerateDataFormItem(object sender, GenerateDataFormItemEventArgs e)
         {
-            if (e.DataFormItem != null &&
-               (e.DataFormItem.FieldName == "TrainingTime" ||
-                e.DataFormItem.FieldName == "RoundsRolled" ||
-                e.DataFormItem.FieldName == "Submissions" ||
-                e.DataFormItem.FieldName == "Taps"))
+            if (e.DataFormItem is DataFormTextEditorItem textEditorItem &&
+                (e.DataFormItem.FieldName == "TrainingTime" ||
+                 e.DataFormItem.FieldName == "RoundsRolled" ||
+                 e.DataFormItem.FieldName == "Submissions" ||
+                 e.DataFormItem.FieldName == "Taps"))
             {
-                if (e.DataFormItem is DataFormTextEditorItem textEditorItem)
-                {
-                    textEditorItem.Keyboard = Keyboard.Numeric;
-                    textEditorItem.Background = Colors.DarkSlateGray;
-                }
+                textEditorItem.Keyboard = Keyboard.Numeric;
+                textEditorItem.Background = Colors.DarkSlateGray;
             }
         }
     }

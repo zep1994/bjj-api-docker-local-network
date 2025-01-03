@@ -13,6 +13,6 @@ namespace BjjTrainer.Models.DTO
         public string FavoriteMoveThisMonth { get; set; }
         public int TotalGoalsAchieved { get; set; } 
         public int TotalMoves { get; set; } 
-        public List<MoveDto> MovesPerformed { get; set; } = new List<MoveDto>();
+        public List<MoveDto> MovesPerformed { get; set; } = [];
     }
 }

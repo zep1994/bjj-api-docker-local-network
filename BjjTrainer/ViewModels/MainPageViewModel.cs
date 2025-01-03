@@ -18,8 +18,8 @@ namespace BjjTrainer.ViewModels
         private readonly MoveService _moveService;
         private readonly TrainingGoalService _trainingGoalService;
 
-        public ObservableCollection<MoveDto> MovesPerformed { get; set; } = new ObservableCollection<MoveDto>();
-        public ObservableCollection<TrainingGoal> TrainingGoals { get; set; } = new ObservableCollection<TrainingGoal>();
+        public ObservableCollection<MoveDto> MovesPerformed { get; set; } = [];
+        public ObservableCollection<TrainingGoal> TrainingGoals { get; set; } = [];
 
         // Properties for User Progress
         public double TotalTrainingTime { get; private set; }

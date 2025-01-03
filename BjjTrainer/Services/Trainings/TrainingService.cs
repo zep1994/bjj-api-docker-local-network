@@ -15,7 +15,7 @@ namespace BjjTrainer.Services.Trainings
             try
             {
                 var response = await HttpClient.GetFromJsonAsync<List<TrainingLogDto>>($"traininglog/list/{userId}");
-                return response ?? new List<TrainingLogDto>();
+                return response ?? [];
             }
             catch (Exception ex)
             {
@@ -56,7 +56,7 @@ namespace BjjTrainer.Services.Trainings
                 if (log == null)
                 {
                     Console.WriteLine("Training log not found in API response.");
-                    throw new Exception("Training log not found.");
+                    throw new Exception($"Training log with ID {logId} not found.");
                 }
 
                 if (log.MoveIds.Any())
@@ -66,7 +66,7 @@ namespace BjjTrainer.Services.Trainings
                 }
                 else
                 {
-                    log.Moves = new ObservableCollection<UpdateMoveDto>();
+                    log.Moves = [];
                 }
 
                 return log;
@@ -74,11 +74,11 @@ namespace BjjTrainer.Services.Trainings
             catch (Exception ex)
             {
                 Console.WriteLine($"Error fetching training log from API: {ex.Message}");
-                throw new Exception($"Error fetching training log: {ex.Message}");
+                throw new Exception($"Failed to fetch training log (ID: {logId}): {ex.Message}");
             }
         }
 
-        // ******************************** FETCH MOVES BY IDS (MISSING METHOD) ********************************
+        // ******************************** FETCH MOVES BY IDS  ********************************
         public async Task<List<UpdateMoveDto>> GetMovesByIds(List<int> moveIds)
         {
             try
@@ -92,11 +92,29 @@ namespace BjjTrainer.Services.Trainings
                 }
 
                 var moves = await response.Content.ReadFromJsonAsync<List<UpdateMoveDto>>();
-                return moves ?? new List<UpdateMoveDto>();
+                return moves ?? [];
             }
             catch (Exception ex)
             {
                 throw new Exception($"Failed to fetch moves by IDs: {ex.Message}");
+            }
+        }
+
+        // ******************************** REMOVE MOVE TO TRAINING LOG ********************************
+        public async Task RemoveMoveFromTrainingLog(int logId, int moveId)
+        {
+            try
+            {
+                var response = await HttpClient.DeleteAsync($"traininglog/{logId}/removemove/{moveId}");
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Failed to remove move: {error}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error removing move: {ex.Message}");
             }
         }
 
@@ -136,16 +154,6 @@ namespace BjjTrainer.Services.Trainings
                     var error = await response.Content.ReadAsStringAsync();
                     throw new Exception($"Error updating training log: {error}");
                 }
-
-                if (isCoachLog)
-                {
-                    var shareResponse = await HttpClient.PostAsync($"traininglog/{logId}/share", null);
-                    if (!shareResponse.IsSuccessStatusCode)
-                    {
-                        var shareError = await shareResponse.Content.ReadAsStringAsync();
-                        throw new Exception($"Error sharing log with students: {shareError}");
-                    }
-                }
             }
             catch (Exception ex)
             {
@@ -177,7 +185,7 @@ namespace BjjTrainer.Services.Trainings
             try
             {
                 var moves = await HttpClient.GetFromJsonAsync<List<UpdateMoveDto>>("moves");
-                return moves ?? new List<UpdateMoveDto>();
+                return moves ?? [];
             }
             catch (Exception ex)
             {

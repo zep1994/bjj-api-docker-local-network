@@ -1,7 +1,6 @@
 ﻿using BjjTrainer_API.Models.DTO.TrainingLogDTOs;
 using BjjTrainer_API.Services_API.Trainings;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace BjjTrainer_API.Controllers.Training
 {
@@ -114,6 +113,21 @@ namespace BjjTrainer_API.Controllers.Training
             {
                 await _trainingService.DeleteTrainingLogAsync(logId);
                 return Ok(new { message = "Training log deleted successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+        // ******************************** DELETE TRAINING LOG MOVE ********************************
+        [HttpDelete("{logId}/removemove/{moveId}")]
+        public async Task<IActionResult> RemoveMoveFromTrainingLog(int logId, int moveId)
+        {
+            try
+            {
+                await _trainingService.RemoveTrainingLogMoveAsync(logId, moveId);
+                return Ok(new { message = "Move removed successfully!" });
             }
             catch (Exception ex)
             {

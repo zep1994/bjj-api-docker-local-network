@@ -4,27 +4,25 @@ using System.Collections.ObjectModel;
 
 namespace BjjTrainer.ViewModels.Components
 {
-    public class MoveSelectionViewModel : BaseViewModel
+    public partial class MoveSelectionViewModel : BaseViewModel
     {
-        public ObservableCollection<UpdateMoveDto> Moves { get; set; }
-        public Command<UpdateMoveDto> ToggleMoveCommand { get; }
+        public ObservableCollection<UpdateMoveDto> Moves { get; set; } = new();
+
+        public int MoveCount => Moves.Count;
 
         public MoveSelectionViewModel(ObservableCollection<UpdateMoveDto> moves)
         {
-            Moves = new ObservableCollection<UpdateMoveDto>(moves);
-            ToggleMoveCommand = new Command<UpdateMoveDto>(ToggleMove);
+            Moves = moves;
+            Moves.CollectionChanged += (s, e) =>
+            {
+                OnPropertyChanged(nameof(MoveCount));  // Notify UI when count changes
+            };
         }
 
-        private void ToggleMove(UpdateMoveDto move)
+        public void RefreshList()
         {
-            move.IsSelected = !move.IsSelected;
-        }
-
-        public ObservableCollection<int> GetSelectedMoveIds()
-        {
-            return new ObservableCollection<int>(Moves
-                .Where(m => m.IsSelected)
-                .Select(m => m.Id));
+            OnPropertyChanged(nameof(Moves));
+            OnPropertyChanged(nameof(MoveCount));  // Ensure MoveCount is updated
         }
     }
 }

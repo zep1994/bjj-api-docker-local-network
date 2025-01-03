@@ -12,7 +12,7 @@ public class ShowTrainingGoalViewModel : BaseViewModel
     public int GoalId { get; }
     public DateTime GoalDate { get; set; }
     public string Notes { get; set; } = string.Empty;
-    public ObservableCollection<MoveDto> Moves { get; set; } = new();
+    public ObservableCollection<MoveDto> Moves { get; set; } = [];
 
     public ShowTrainingGoalViewModel(int goalId)
     {

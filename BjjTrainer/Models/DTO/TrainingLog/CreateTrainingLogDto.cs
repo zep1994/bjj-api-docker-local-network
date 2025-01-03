@@ -11,6 +11,6 @@
         public int Taps { get; set; }
         public string Notes { get; set; }
         public string SelfAssessment { get; set; } = string.Empty;
-        public List<int> MoveIds { get; set; } = new List<int>();
+        public List<int> MoveIds { get; set; } = [];
     }
 }

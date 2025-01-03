@@ -15,7 +15,7 @@ namespace BjjTrainer_API.Models.DTO.TrainingLogDTOs
         public string Notes { get; set; } = string.Empty;
         public string SelfAssessment { get; set; } = string.Empty;
         public bool IsCoachLog {  get; set; }
-        public List<int> MoveIds { get; set; } = new();
-        public ObservableCollection<UpdateMoveDto> Moves { get; set; } = new();
+        public List<int> MoveIds { get; set; } = [];
+        public ObservableCollection<UpdateMoveDto>? Moves { get; set; } = [];
     }
 }

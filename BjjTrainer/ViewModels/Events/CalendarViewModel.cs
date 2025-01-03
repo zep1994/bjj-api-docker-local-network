@@ -10,7 +10,7 @@ namespace BjjTrainer.ViewModels.Events
     {
         private readonly EventService _eventService;
 
-        public ObservableCollection<SchedulerAppointment> Appointments { get; set; } = new();
+        public ObservableCollection<SchedulerAppointment> Appointments { get; set; } = [];
 
 
         public CalendarViewModel()

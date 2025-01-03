@@ -10,41 +10,37 @@ namespace BjjTrainer.Views.Components
     {
         public MoveSelectionViewModel ViewModel { get; private set; }
         private readonly TrainingService _trainingService;
-        private readonly ObservableCollection<int> _selectedMoveIds;
+        private ObservableCollection<int> _selectedMoveIds;
+        private ObservableCollection<int> _toggledMoveIds = new();
+        private readonly int _logId;
 
-        public MoveSelectionModal(ObservableCollection<int> selectedMoveIds)
+        public MoveSelectionModal(ObservableCollection<int> selectedMoveIds, int logId)
         {
             InitializeComponent();
             _trainingService = new TrainingService();
             _selectedMoveIds = selectedMoveIds;
+            _logId = logId;
 
             LoadAllMovesAsync();
         }
 
-        // Load all moves and pre-select those already linked to the training log
         private async void LoadAllMovesAsync()
         {
             try
             {
-                // Fetch all moves from the API
                 var allMoves = await _trainingService.GetAllMovesAsync();
                 var moveDtos = new ObservableCollection<UpdateMoveDto>(allMoves);
 
-                // Pre-select moves that match the selectedMoveIds
                 foreach (var move in moveDtos)
                 {
-                    if (_selectedMoveIds.Contains(move.Id))
-                    {
-                        move.IsSelected = true;
-                    }
+                    move.IsSelected = _selectedMoveIds.Contains(move.Id);
                 }
 
                 ViewModel = new MoveSelectionViewModel(moveDtos);
                 BindingContext = ViewModel;
-
-                // Force ListView to refresh and reflect selection
-                MoveListView.ItemsSource = null;
                 MoveListView.ItemsSource = ViewModel.Moves;
+                ViewModel.RefreshList();
+
             }
             catch (Exception ex)
             {
@@ -53,37 +49,32 @@ namespace BjjTrainer.Views.Components
             }
         }
 
-        // Toggle checkbox selection when tapping the list item
-        private void OnMoveTapped(object sender, ItemTappedEventArgs e)
+        // Toggle Move Selection
+        private void OnToggleMoveClicked(object sender, EventArgs e)
         {
-            if (e.Item is UpdateMoveDto move)
+            if (sender is Button button && button.BindingContext is UpdateMoveDto move)
             {
                 move.IsSelected = !move.IsSelected;
 
-                // Refresh the UI immediately
-                ((ListView)sender).ItemsSource = null;
-                ((ListView)sender).ItemsSource = ViewModel.Moves;
+                // Update the list to reflect changes immediately
+                ViewModel.RefreshList();
+
+                Console.WriteLine($"Move Toggled: {move.Name} - IsSelected: {move.IsSelected}");
             }
         }
 
-        // Send selected move IDs when modal closes
-        protected override void OnDisappearing()
+        // Confirm selection and pass updated move list back
+        private async void OnConfirmButtonClicked(object sender, EventArgs e)
         {
-            base.OnDisappearing();
-            var selectedIds = ViewModel.Moves
+            var selectedMoveIds = ViewModel.Moves
                 .Where(m => m.IsSelected)
                 .Select(m => m.Id)
                 .ToList();
+            Console.WriteLine($"Selected Moves: {selectedMoveIds}");
+            MessagingCenter.Send(this, "MovesUpdated", selectedMoveIds);
 
-            MessagingCenter.Send(this, "MovesUpdated", selectedIds);
-        }
-
-        // Handle confirm button click to send selected move IDs
-        private void OnConfirmButtonClicked(object sender, EventArgs e)
-        {
-            var selectedMoveIds = ViewModel.GetSelectedMoveIds();
-            MessagingCenter.Send(this, "SelectedMovesUpdated", selectedMoveIds);
-            Navigation.PopModalAsync();
+            // Navigate back to UpdateTrainingLogPage
+            await Shell.Current.GoToAsync($"///UpdateTrainingLogPage?logId={_logId}");
         }
     }
 }

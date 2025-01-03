@@ -10,7 +10,7 @@ public class TrainingGoalListViewModel : BaseViewModel
 {
     private readonly TrainingGoalService _trainingGoalService;
 
-    public ObservableCollection<TrainingGoal> TrainingGoals { get; set; } = new();
+    public ObservableCollection<TrainingGoal> TrainingGoals { get; set; } = [];
 
     public Command AddNewGoalCommand { get; }
 

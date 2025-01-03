@@ -10,6 +10,7 @@
     xmlns:moves="clr-namespace:BjjTrainer.Views.Moves"
     xmlns:events="clr-namespace:BjjTrainer.Views.Events"
     xmlns:train="clr-namespace:BjjTrainer.Views.Training"
+    xmlns:comp="clr-namespace:BjjTrainer.Views.Components"
     xmlns:goals="clr-namespace:BjjTrainer.Views.TrainingGoals"
     xmlns:viewModels="clr-namespace:BjjTrainer.ViewModels"
     Title="BjjTrainer"
@@ -95,6 +96,7 @@
     <ShellContent Title="Update Training Log" Route="UpdateTrainingLogPage" ContentTemplate="{DataTemplate train:UpdateTrainingLogPage}" />
     <ShellContent Title="Show Training Log" Route="ShowTrainingLogPage" ContentTemplate="{DataTemplate train:ShowTrainingLogPage}" />
     <ShellContent Title="Update Training Goal" Route="UpdateTrainingGoalPage" ContentTemplate="{DataTemplate goals:UpdateTrainingGoalPage}" />
+    <ShellContent Title="Moves Selection Modal" Route="MoveSelectionModal" ContentTemplate="{DataTemplate comp:MoveSelectionModal}" />
     <ShellContent Title="Show Training Goal" Route="ShowTrainingGoalPage" ContentTemplate="{DataTemplate goals:ShowTrainingGoalPage}" />
     <ShellContent Title="Show Event Page" Route="ShowEventPage" ContentTemplate="{DataTemplate events:ShowEventPage}" />
     <ShellContent Title="Update Event" Route="UpdateEventPage" ContentTemplate="{DataTemplate events:UpdateEventPage}" />

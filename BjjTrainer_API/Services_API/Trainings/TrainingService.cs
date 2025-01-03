@@ -76,7 +76,11 @@ namespace BjjTrainer_API.Services_API.Trainings
                 })
                 .FirstOrDefaultAsync();
 
-            if (log == null) return null;
+            if (log == null)
+            {
+                Console.WriteLine($"Training log with ID {logId} not found.");
+                throw new Exception($"Training log with ID {logId} not found.");
+            }
 
             return new UpdateTrainingLogDto
             {
@@ -182,6 +186,23 @@ namespace BjjTrainer_API.Services_API.Trainings
             _context.TrainingLogs.Remove(log);
 
             await _context.SaveChangesAsync();
+        }
+
+        // ******************************** DELETE TRAINING LOG MOVE ********************************
+        public async Task RemoveTrainingLogMoveAsync(int logId, int moveId)
+        {
+            var logMove = await _context.TrainingLogMoves
+                .FirstOrDefaultAsync(tlm => tlm.TrainingLogId == logId && tlm.MoveId == moveId);
+
+            if (logMove != null)
+            {
+                _context.TrainingLogMoves.Remove(logMove);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception("Move not found for this training log.");
+            }
         }
 
         // ******************************** GET USER PROGRESS ********************************

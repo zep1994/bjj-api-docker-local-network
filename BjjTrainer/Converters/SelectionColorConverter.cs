@@ -2,20 +2,20 @@
 
 namespace BjjTrainer.Converters
 {
-    public class GreaterThanZeroConverter : IValueConverter
+    public class SelectionColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is int count)
+            if (value is bool isSelected)
             {
-                return count > 0;
+                return isSelected ? Colors.LightGreen : Colors.Transparent;
             }
-            return false;
+            return Colors.Transparent;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return null; // Not needed in this case
+            throw new NotImplementedException();
         }
     }
 }

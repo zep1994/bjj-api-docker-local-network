@@ -15,7 +15,7 @@ namespace BjjTrainer.Models.DTO.TrainingLog
         public string? SelfAssessment { get; set; }
         public List<Move>? Moves { get; set; }
         public bool IsCoachLog { get; set; } = false;
-        public List<int> MoveIds { get; set; } = new List<int>();
+        public List<int> MoveIds { get; set; } = [];
 
 
         public string DayColor => GetDayColor(Date.DayOfWeek);

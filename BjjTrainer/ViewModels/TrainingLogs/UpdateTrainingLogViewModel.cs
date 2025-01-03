@@ -9,10 +9,9 @@ namespace BjjTrainer.ViewModels.TrainingLogs
     public partial class UpdateTrainingLogViewModel : BaseViewModel
     {
         private readonly TrainingService _trainingService;
-        private readonly int _logId;
 
-        public ObservableCollection<UpdateMoveDto> Moves { get; set; } = new();
-        public ObservableCollection<int> SelectedMoveIds { get; set; } = new();
+        public ObservableCollection<UpdateMoveDto> Moves { get; set; } = [];
+        public ObservableCollection<int> SelectedMoveIds { get; set; } = [];
 
         public DateTime Date { get; set; }
         public double TrainingTime { get; set; }
@@ -22,25 +21,34 @@ namespace BjjTrainer.ViewModels.TrainingLogs
         public string? Notes { get; set; }
         public string? SelfAssessment { get; set; }
         public bool IsCoachLog { get; set; }
+        public int LogId { get; private set; }
 
         public UpdateTrainingLogViewModel(int logId)
         {
             _trainingService = new TrainingService();
-            _logId = logId;
+            LogId = logId;
 
             LoadLogDetails();
         }
 
         // ******************************** LOAD TRAINING LOG DETAILS ********************************
-        private async void LoadLogDetails()
+        public async void LoadLogDetails()
         {
             IsBusy = true;
 
             try
             {
-                var log = await _trainingService.GetTrainingLogMoves(_logId);
+                if (LogId <= 0)
+                {
+                    Console.WriteLine("Invalid logId for API request.");
+                    await Application.Current.MainPage.DisplayAlert("Error", "Invalid Training Log ID.", "OK");
+                    return;
+                }
+
+                var log = await _trainingService.GetTrainingLogMoves(LogId);
                 if (log != null)
                 {
+                    // Populate all fields from the log DTO
                     Date = log.Date;
                     TrainingTime = log.TrainingTime;
                     RoundsRolled = log.RoundsRolled;
@@ -50,13 +58,21 @@ namespace BjjTrainer.ViewModels.TrainingLogs
                     SelfAssessment = log.SelfAssessment ?? string.Empty;
                     IsCoachLog = log.IsCoachLog;
 
-                    // Fetch full move details and update the Moves collection
-                    var fullMoves = await _trainingService.GetMovesByIds(log.MoveIds);
-                    Moves = new ObservableCollection<UpdateMoveDto>(fullMoves);
+                    // Initialize moves even if no moveIds are returned
+                    if (log.MoveIds != null && log.MoveIds.Any())
+                    {
+                        var fullMoves = await _trainingService.GetMovesByIds(log.MoveIds);
+                        Moves = new ObservableCollection<UpdateMoveDto>(fullMoves);
+                    }
+                    else
+                    {
+                        Moves = new ObservableCollection<UpdateMoveDto>();
+                        Console.WriteLine("No moves associated with this log. Initializing empty list.");
+                    }
 
-                    // Select the moves linked to the training log
-                    SelectedMoveIds = new ObservableCollection<int>(log.MoveIds);
+                    SelectedMoveIds = new ObservableCollection<int>(log.MoveIds ?? []);
 
+                    // Notify UI of updated fields
                     OnPropertyChanged(nameof(Date));
                     OnPropertyChanged(nameof(TrainingTime));
                     OnPropertyChanged(nameof(RoundsRolled));
@@ -66,13 +82,16 @@ namespace BjjTrainer.ViewModels.TrainingLogs
                     OnPropertyChanged(nameof(SelfAssessment));
                     OnPropertyChanged(nameof(IsCoachLog));
                     OnPropertyChanged(nameof(Moves));
-                    OnPropertyChanged(nameof(SelectedMoveIds));
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", "Training log not found.", "OK");
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading log details: {ex.Message}");
-                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load log details: {ex.Message}", "OK");
+                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load training log: {ex.Message}", "OK");
             }
             finally
             {
@@ -88,6 +107,15 @@ namespace BjjTrainer.ViewModels.TrainingLogs
             {
                 SelectedMoveIds.Add(moveId);
             }
+
+            // Refresh the moves list to reflect the changes
+            foreach (var move in Moves)
+            {
+                move.IsSelected = moveIds.Contains(move.Id);
+            }
+
+            OnPropertyChanged(nameof(SelectedMoveIds));
+            OnPropertyChanged(nameof(Moves));
         }
 
         // ******************************** UPDATE TRAINING LOG ********************************
@@ -109,9 +137,9 @@ namespace BjjTrainer.ViewModels.TrainingLogs
                     MoveIds = SelectedMoveIds.ToList()
                 };
 
-                await _trainingService.UpdateTrainingLogAsync(_logId, updatedLog, IsCoachLog);
+                await _trainingService.UpdateTrainingLogAsync(LogId, updatedLog, IsCoachLog);
 
-                await Application.Current.MainPage.Navigation.PopAsync();
+                await Shell.Current.GoToAsync($"///UpdateTrainingLogPage?logId={updatedLog.Id}");
                 return true;
             }
             catch (Exception ex)

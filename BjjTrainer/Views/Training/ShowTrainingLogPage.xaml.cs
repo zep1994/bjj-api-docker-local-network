@@ -51,12 +51,19 @@ public partial class ShowTrainingLogPage : ContentPage
         }
     }
 
-
     private async void OnUpdateButtonClicked(object sender, EventArgs e)
     {
         if (BindingContext is ShowTrainingLogViewModel viewModel)
         {
-            await Navigation.PushAsync(new UpdateTrainingLogPage(viewModel.Id));
+            if (viewModel.Id > 0)
+            {
+                await Shell.Current.GoToAsync($"///UpdateTrainingLogPage?logId={viewModel.Id}");
+            }
+            else
+            {
+                Console.WriteLine("Invalid logId for navigation.");
+                await Application.Current.MainPage.DisplayAlert("Error", "Invalid Training Log ID.", "OK");
+            }
         }
     }
 

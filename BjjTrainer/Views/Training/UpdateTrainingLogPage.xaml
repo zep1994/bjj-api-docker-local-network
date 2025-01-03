@@ -76,13 +76,29 @@
 
             <!-- Selected Moves Section -->
             <VerticalStackLayout Grid.Row="2"
+                                 Spacing="10"
                                  Padding="15">
 
-                <Label Text="Selected Moves"
+                <HorizontalStackLayout>
+                    <Label Text="Selected Moves"
                        FontAttributes="Bold"
                        FontSize="20"
                        HorizontalOptions="Start"
-                       Margin="0,20,0,10" />
+                       Padding="0, 30, 0, 30"
+                       Margin="15,20,80,10" />
+                    
+                    <Button Text="Edit Moves"
+                        x:Name="EditMovesButton"
+                        Clicked="OnEditMovesClicked"
+                        BackgroundColor="{StaticResource AccentBlue}"
+                        TextColor="White"
+                        FontSize="20"
+                        FontAttributes="Bold"
+                        CornerRadius="16"
+                        HeightRequest="45"
+                        HorizontalOptions="End" />
+                </HorizontalStackLayout>
+
 
                 <!-- Collection View to Display Selected Moves -->
                 <CollectionView ItemsSource="{Binding Moves}" SelectionMode="None">
@@ -102,25 +118,25 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
-                
                 <!-- Edit Moves Button -->
-                <Button Text="Edit Moves"
-                        Clicked="OnEditMovesClicked"
-                        HorizontalOptions="Center"
-                        BackgroundColor="#007AFF"
+                <Button Text="Back"
+                        Clicked="OnBackButtonClicked"
+                        BackgroundColor="{StaticResource AccentRed}"
                         TextColor="White"
-                        Margin="20,10" />
-
-                <!-- Submit Button -->
-                <Button Text="Update Log"
-                    Clicked="OnUpdateButtonClicked"
-                    BackgroundColor="{StaticResource PrimaryColor}"
-                    TextColor="White"
-                    FontSize="18"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    Grid.Row="2"
-                    Margin="20" />
+                        FontSize="20"
+                        FontAttributes="Bold"
+                        CornerRadius="16"
+                        HeightRequest="45"
+                        HorizontalOptions="FillAndExpand" />
+                <Button Text="Save Update"
+                        Clicked="OnUpdateButtonClicked"
+                        BackgroundColor="{StaticResource AccentGreen}"
+                        TextColor="White"
+                        FontSize="20"
+                        FontAttributes="Bold"
+                        CornerRadius="16"
+                        HeightRequest="45"
+                        HorizontalOptions="FillAndExpand" />
             </VerticalStackLayout>
 
         </Grid>

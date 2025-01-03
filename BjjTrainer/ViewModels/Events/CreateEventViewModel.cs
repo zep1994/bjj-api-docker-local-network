@@ -43,8 +43,8 @@ namespace BjjTrainer.ViewModels.Events
             }
         }
 
-        public ObservableCollection<Move> AvailableMoves { get; set; } = new();
-        public ObservableCollection<Move> SelectedMoves { get; set; } = new();
+        public ObservableCollection<Move> AvailableMoves { get; set; } = [];
+        public ObservableCollection<Move> SelectedMoves { get; set; } = [];
 
         public CreateEventViewModel()
         {
