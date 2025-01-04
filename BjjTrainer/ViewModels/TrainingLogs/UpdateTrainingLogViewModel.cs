@@ -54,8 +54,8 @@ namespace BjjTrainer.ViewModels.TrainingLogs
                     RoundsRolled = log.RoundsRolled;
                     Submissions = log.Submissions;
                     Taps = log.Taps;
-                    Notes = log.Notes ?? string.Empty;
-                    SelfAssessment = log.SelfAssessment ?? string.Empty;
+                    Notes = log.Notes;
+                    SelfAssessment = log.SelfAssessment;
                     IsCoachLog = log.IsCoachLog;
 
                     // Initialize moves even if no moveIds are returned
@@ -132,14 +132,14 @@ namespace BjjTrainer.ViewModels.TrainingLogs
                     RoundsRolled = RoundsRolled,
                     Submissions = Submissions,
                     Taps = Taps,
-                    Notes = Notes ?? string.Empty,
-                    SelfAssessment = SelfAssessment ?? string.Empty,
+                    Notes = Notes,
+                    SelfAssessment = SelfAssessment,
                     MoveIds = SelectedMoveIds.ToList()
                 };
 
                 await _trainingService.UpdateTrainingLogAsync(LogId, updatedLog, IsCoachLog);
 
-                await Shell.Current.GoToAsync($"///UpdateTrainingLogPage?logId={updatedLog.Id}");
+                await Shell.Current.GoToAsync($"///UpdateTrainingLogPage?logId={LogId}");
                 return true;
             }
             catch (Exception ex)

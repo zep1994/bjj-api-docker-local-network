@@ -94,7 +94,7 @@ namespace BjjTrainer.Views.Training
                 if (success)
                 {
                     await DisplayAlert("Success", "Training log updated successfully.", "OK");
-                    await Navigation.PushAsync(new TrainingLogListPage());
+//                    await Navigation.PushAsync(new TrainingLogListPage());
                 }
                 else
                 {
