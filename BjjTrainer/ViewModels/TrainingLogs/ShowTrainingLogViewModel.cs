@@ -54,6 +54,7 @@ public partial class ShowTrainingLogViewModel : BaseViewModel
             if (log == null)
             {
                 Console.WriteLine($"No training log found for ID: {logId}");
+                await Application.Current.MainPage.DisplayAlert("Error", "Training log not found.", "OK");
                 return;
             }
 
