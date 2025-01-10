@@ -6,18 +6,16 @@ using System.Diagnostics;
 
 namespace BjjTrainer.ViewModels.Moves
 {
-    public class MovesViewModel : BaseViewModel
+    public partial class MovesViewModel : BaseViewModel
     {
         private readonly MoveService _moveService;
 
         public ObservableCollection<Move> Moves { get; set; } = [];
 
-        public Command LoadMovesCommand { get; }
-
         public MovesViewModel()
         {
             _moveService = new MoveService();
-            LoadMovesCommand = new Command(async () => await LoadMovesAsync());
+            LoadMovesAsync();
         }
 
         public async Task LoadMovesAsync()
