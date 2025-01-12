@@ -12,13 +12,7 @@
     </ContentPage.BindingContext>
 
     <Grid RowDefinitions="Auto,*">
-        <!-- Add Button -->
-        <Button Text="Add Training Log"
-                Clicked="OnAddLogTapped"
-                HorizontalOptions="End"
-                Margin="10"/>
-
-        <!-- Syncfusion ListView -->
+         <!-- Syncfusion ListView -->
         <syncfusion:SfListView x:Name="LogListView"
                                Grid.Row="1"
                                ItemsSource="{Binding Moves}"

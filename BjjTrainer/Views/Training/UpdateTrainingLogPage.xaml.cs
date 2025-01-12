@@ -1,5 +1,8 @@
+using BjjTrainer.Messages;
 using BjjTrainer.ViewModels.TrainingLogs;
 using BjjTrainer.Views.Components;
+using CommunityToolkit.Mvvm.Messaging;
+using Syncfusion.Maui.Core.Carousel;
 using Syncfusion.Maui.DataForm;
 using System.Collections.ObjectModel;
 
@@ -20,7 +23,7 @@ namespace BjjTrainer.Views.Training
                 Console.WriteLine($"LogId set to: {_logId}");
 
                 // Initialize ViewModel only after LogId is assigned
-                if (_viewModel == null && _logId > 0)
+                if (_logId > 0)
                 {
                     _viewModel = new UpdateTrainingLogViewModel(_logId);
                     BindingContext = _viewModel;
@@ -29,45 +32,25 @@ namespace BjjTrainer.Views.Training
             }
         }
 
-        public UpdateTrainingLogPage()
+        public UpdateTrainingLogPage(int logId)
         {
             InitializeComponent();
-
+            LogId = logId;
             // Delay ViewModel Initialization
             dataForm.GenerateDataFormItem += OnGenerateDataFormItem;
 
-            MessagingCenter.Subscribe<MoveSelectionModal, List<int>>(this, "MovesUpdated", (sender, selectedIds) =>
-            {
-                _viewModel?.UpdateSelectedMoves(new ObservableCollection<int>(selectedIds));
-            });
+            WeakReferenceMessenger.Default.Register<SelectedMovesUpdatedMessage>(this, OnSelectedMovesUpdated);
+        }
+
+        private void OnSelectedMovesUpdated(object recipient, SelectedMovesUpdatedMessage message)
+        {
+            _viewModel.UpdateSelectedMoves(new ObservableCollection<int>(message.SelectedMoveIds));
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            Console.WriteLine($"UpdateTrainingLogPage Appearing with LogId: {LogId}");
-
-            try
-            {
-                if (LogId > 0 && _viewModel != null)
-                {
-                    _viewModel.LoadLogDetails();
-
-                    // Force UI refresh to reflect any updates
-                    BindingContext = null;
-                    BindingContext = _viewModel;
-                }
-                else
-                {
-                    DisplayAlert("Error", "Invalid Training Log ID.", "OK");
-                    Navigation.PopAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error during OnAppearing: {ex.Message}");
-                DisplayAlert("Error", "Failed to load training log.", "OK");
-            }
+            WeakReferenceMessenger.Default.Unregister<SelectedMovesUpdatedMessage>(this);
         }
 
         // Opens the Move Selection Modal

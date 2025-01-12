@@ -3,6 +3,8 @@ using BjjTrainer.ViewModels.Components;
 using BjjTrainer.Services.Trainings;
 using System.Collections.ObjectModel;
 using System.Linq;
+using CommunityToolkit.Mvvm.Messaging;
+using BjjTrainer.Messages;
 
 namespace BjjTrainer.Views.Components
 {
@@ -11,7 +13,6 @@ namespace BjjTrainer.Views.Components
         public MoveSelectionViewModel ViewModel { get; private set; }
         private readonly TrainingService _trainingService;
         private ObservableCollection<int> _selectedMoveIds;
-        private ObservableCollection<int> _toggledMoveIds = new();
         private readonly int _logId;
 
         public MoveSelectionModal(ObservableCollection<int> selectedMoveIds, int logId)
@@ -56,10 +57,24 @@ namespace BjjTrainer.Views.Components
             {
                 move.IsSelected = !move.IsSelected;
 
+                // Update _selectedMoveIds collection
+                if (move.IsSelected)
+                {
+                    if (!_selectedMoveIds.Contains(move.Id))
+                    {
+                        _selectedMoveIds.Add(move.Id);
+                    }
+                }
+                else
+                {
+                    _selectedMoveIds.Remove(move.Id);
+                }
+
                 // Update the list to reflect changes immediately
                 ViewModel.RefreshList();
 
                 Console.WriteLine($"Move Toggled: {move.Name} - IsSelected: {move.IsSelected}");
+                Console.WriteLine($"Updated _selectedMoveIds: {string.Join(", ", _selectedMoveIds)}");
             }
         }
 
@@ -70,8 +85,10 @@ namespace BjjTrainer.Views.Components
                 .Where(m => m.IsSelected)
                 .Select(m => m.Id)
                 .ToList();
-            Console.WriteLine($"Selected Moves: {selectedMoveIds}");
-            MessagingCenter.Send(this, "MovesUpdated", selectedMoveIds);
+            Console.WriteLine($"Selected Moves: {string.Join(", ", selectedMoveIds)}");
+
+            // Send the message using WeakReferenceMessenger
+            WeakReferenceMessenger.Default.Send(new SelectedMovesUpdatedMessage(selectedMoveIds));
 
             // Navigate back to UpdateTrainingLogPage
             await Shell.Current.GoToAsync($"///UpdateTrainingLogPage?logId={_logId}");
