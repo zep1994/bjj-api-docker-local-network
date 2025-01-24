@@ -1,6 +1,9 @@
-﻿using BjjTrainer.Models.DTO.TrainingLog;
+﻿using BjjTrainer.Messages;
+using BjjTrainer.Models.DTO.TrainingLog;
 using BjjTrainer.Models.Moves.BjjTrainer.Models.DTO.Moves;
 using BjjTrainer.Services.Trainings;
+using BjjTrainer.Views.Components;
+using CommunityToolkit.Mvvm.Messaging;
 using MvvmHelpers;
 using System.Collections.ObjectModel;
 
@@ -10,8 +13,7 @@ namespace BjjTrainer.ViewModels.TrainingLogs
     {
         private readonly TrainingService _trainingService;
 
-        public ObservableCollection<UpdateMoveDto> Moves { get; set; } = [];
-        public ObservableCollection<int> SelectedMoveIds { get; set; } = [];
+        public ObservableCollection<UpdateMoveDto> Moves { get; set; } = new();
 
         public DateTime Date { get; set; }
         public double TrainingTime { get; set; }
@@ -21,34 +23,38 @@ namespace BjjTrainer.ViewModels.TrainingLogs
         public string? Notes { get; set; }
         public string? SelfAssessment { get; set; }
         public bool IsCoachLog { get; set; }
-        public int LogId { get; private set; }
+        public int LogId { get; set; }
 
         public UpdateTrainingLogViewModel(int logId)
         {
             _trainingService = new TrainingService();
             LogId = logId;
 
-            LoadLogDetails();
+            WeakReferenceMessenger.Default.Register<SelectedMovesUpdatedMessage>(this, (r, m) => UpdateSelectedMoves(m.Moves));
+
+            // Load data explicitly if it hasn't been loaded yet
+            if (!_isDataLoaded)
+            {
+                Task.Run(async () => await LoadTrainingLogDetailsAsync());
+            }
         }
 
-        // ******************************** LOAD TRAINING LOG DETAILS ********************************
-        public async void LoadLogDetails()
+
+        private bool _isDataLoaded = false;
+
+        public async Task LoadTrainingLogDetailsAsync()
         {
+            // Prevent loading data multiple times unless explicitly requested
+            if (_isDataLoaded)
+                return;
+
             IsBusy = true;
 
             try
             {
-                if (LogId <= 0)
-                {
-                    Console.WriteLine("Invalid logId for API request.");
-                    await Application.Current.MainPage.DisplayAlert("Error", "Invalid Training Log ID.", "OK");
-                    return;
-                }
-
                 var log = await _trainingService.GetTrainingLogMoves(LogId);
                 if (log != null)
                 {
-                    // Populate all fields from the log DTO
                     Date = log.Date;
                     TrainingTime = log.TrainingTime;
                     RoundsRolled = log.RoundsRolled;
@@ -58,40 +64,16 @@ namespace BjjTrainer.ViewModels.TrainingLogs
                     SelfAssessment = log.SelfAssessment;
                     IsCoachLog = log.IsCoachLog;
 
-                    // Initialize moves even if no moveIds are returned
-                    if (log.MoveIds != null && log.MoveIds.Any())
-                    {
-                        var fullMoves = await _trainingService.GetMovesByIds(log.MoveIds);
-                        Moves = new ObservableCollection<UpdateMoveDto>(fullMoves);
-                    }
-                    else
-                    {
-                        Moves = new ObservableCollection<UpdateMoveDto>();
-                        Console.WriteLine("No moves associated with this log. Initializing empty list.");
-                    }
-
-                    SelectedMoveIds = new ObservableCollection<int>(log.MoveIds ?? []);
-
-                    // Notify UI of updated fields
-                    OnPropertyChanged(nameof(Date));
-                    OnPropertyChanged(nameof(TrainingTime));
-                    OnPropertyChanged(nameof(RoundsRolled));
-                    OnPropertyChanged(nameof(Submissions));
-                    OnPropertyChanged(nameof(Taps));
-                    OnPropertyChanged(nameof(Notes));
-                    OnPropertyChanged(nameof(SelfAssessment));
-                    OnPropertyChanged(nameof(IsCoachLog));
+                    SyncMoves(log.Moves);
                     OnPropertyChanged(nameof(Moves));
-                }
-                else
-                {
-                    await Application.Current.MainPage.DisplayAlert("Error", "Training log not found.", "OK");
+
+                    _isDataLoaded = true; // Mark data as loaded
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading log details: {ex.Message}");
-                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load training log: {ex.Message}", "OK");
+                await SafeDisplayAlert("Error", $"Failed to load training log: {ex.Message}", "OK");
             }
             finally
             {
@@ -99,26 +81,80 @@ namespace BjjTrainer.ViewModels.TrainingLogs
             }
         }
 
-        // ******************************** UPDATE SELECTED MOVES ********************************
-        public void UpdateSelectedMoves(ObservableCollection<int> moveIds)
+        // Sync the Moves collection with the latest list from the API
+        private void SyncMoves(ICollection<UpdateMoveDto> updatedMoves)
         {
-            SelectedMoveIds.Clear();
-            foreach (var moveId in moveIds)
+            // Add or update existing moves
+            foreach (var updatedMove in updatedMoves)
             {
-                SelectedMoveIds.Add(moveId);
+                var existingMove = Moves.FirstOrDefault(m => m.Id == updatedMove.Id);
+                if (existingMove == null)
+                {
+                    Moves.Add(updatedMove);
+                }
+                else
+                {
+                    existingMove.Name = updatedMove.Name; // Update name in case it changed
+                    existingMove.IsSelected = true; // Ensure the move is marked as selected
+                }
             }
 
-            // Refresh the moves list to reflect the changes
-            foreach (var move in Moves)
+            // Remove deselected moves
+            var movesToRemove = Moves.Where(m => !updatedMoves.Any(um => um.Id == m.Id)).ToList();
+            foreach (var moveToRemove in movesToRemove)
             {
-                move.IsSelected = moveIds.Contains(move.Id);
+                Moves.Remove(moveToRemove);
+            }
+        }
+
+
+        public async Task EditMovesAsync()
+        {
+            if (Moves == null || !Moves.Any())
+            {
+                await SafeDisplayAlert("Notice", "No moves available. Add new moves from the selection modal.", "OK");
+                return;
             }
 
-            OnPropertyChanged(nameof(SelectedMoveIds));
+            var modal = new MoveSelectionModal(new ObservableCollection<UpdateMoveDto>(Moves), LogId);
+            await Application.Current?.MainPage?.Navigation.PushModalAsync(modal);
+        }
+
+        private async Task SafeDisplayAlert(string title, string message, string cancel)
+        {
+            if (Application.Current?.MainPage != null)
+            {
+                await Application.Current.MainPage.DisplayAlert(title, message, cancel);
+            }
+            else
+            {
+                Console.WriteLine($"Alert: {title} - {message}");
+            }
+        }
+
+        public void UpdateSelectedMoves(ObservableCollection<UpdateMoveDto> updatedMoves)
+        {
+            foreach (var existingMove in Moves)
+            {
+                existingMove.IsSelected = updatedMoves.Any(m => m.Id == existingMove.Id && m.IsSelected);
+            }
+
+            var newMoves = updatedMoves.Where(um => Moves.All(em => em.Id != um.Id)).ToList();
+            foreach (var newMove in newMoves)
+            {
+                Moves.Add(newMove);
+            }
+
+            var removedMoves = Moves.Where(em => updatedMoves.All(um => um.Id != em.Id)).ToList();
+            foreach (var removedMove in removedMoves)
+            {
+                Moves.Remove(removedMove);
+            }
+
             OnPropertyChanged(nameof(Moves));
         }
 
-        // ******************************** UPDATE TRAINING LOG ********************************
+
         public async Task<bool> UpdateLogAsync()
         {
             IsBusy = true;
@@ -134,25 +170,21 @@ namespace BjjTrainer.ViewModels.TrainingLogs
                     Taps = Taps,
                     Notes = Notes,
                     SelfAssessment = SelfAssessment,
-                    MoveIds = SelectedMoveIds.ToList()
+                    Moves = new ObservableCollection<UpdateMoveDto>(Moves)
                 };
 
                 await _trainingService.UpdateTrainingLogAsync(LogId, updatedLog, IsCoachLog);
-
-                await Shell.Current.GoToAsync($"///UpdateTrainingLogPage?logId={LogId}");
                 return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error updating log: {ex.Message}");
-                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to update log: {ex.Message}", "OK");
+                return false;
             }
             finally
             {
                 IsBusy = false;
             }
-
-            return false;
         }
     }
 }

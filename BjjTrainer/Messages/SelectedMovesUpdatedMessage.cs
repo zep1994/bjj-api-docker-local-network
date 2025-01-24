@@ -1,12 +1,15 @@
+using System.Collections.ObjectModel;
+using BjjTrainer.Models.Moves.BjjTrainer.Models.DTO.Moves;
+
 namespace BjjTrainer.Messages
 {
     public class SelectedMovesUpdatedMessage
     {
-        public List<int> SelectedMoveIds { get; }
+        public ObservableCollection<UpdateMoveDto> Moves { get; }
 
-        public SelectedMovesUpdatedMessage(List<int> selectedMoveIds)
+        public SelectedMovesUpdatedMessage(ObservableCollection<UpdateMoveDto> moves)
         {
-            SelectedMoveIds = selectedMoveIds;
+            Moves = moves;
         }
     }
 }

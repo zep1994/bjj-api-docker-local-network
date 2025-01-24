@@ -12,14 +12,14 @@ namespace BjjTrainer.Views.Components
     {
         public MoveSelectionViewModel ViewModel { get; private set; }
         private readonly TrainingService _trainingService;
-        private ObservableCollection<int> _selectedMoveIds;
+        private ObservableCollection<UpdateMoveDto> _selectedMoves;
         private readonly int _logId;
 
-        public MoveSelectionModal(ObservableCollection<int> selectedMoveIds, int logId)
+        public MoveSelectionModal(ObservableCollection<UpdateMoveDto> selectedMoves, int logId)
         {
             InitializeComponent();
             _trainingService = new TrainingService();
-            _selectedMoveIds = selectedMoveIds;
+            _selectedMoves = selectedMoves;
             _logId = logId;
 
             LoadAllMovesAsync();
@@ -34,14 +34,13 @@ namespace BjjTrainer.Views.Components
 
                 foreach (var move in moveDtos)
                 {
-                    move.IsSelected = _selectedMoveIds.Contains(move.Id);
+                    move.IsSelected = _selectedMoves.Any(m => m.Id == move.Id);
                 }
 
                 ViewModel = new MoveSelectionViewModel(moveDtos);
                 BindingContext = ViewModel;
                 MoveListView.ItemsSource = ViewModel.Moves;
                 ViewModel.RefreshList();
-
             }
             catch (Exception ex)
             {
@@ -57,41 +56,32 @@ namespace BjjTrainer.Views.Components
             {
                 move.IsSelected = !move.IsSelected;
 
-                // Update _selectedMoveIds collection
-                if (move.IsSelected)
+                var existingMove = _selectedMoves.FirstOrDefault(m => m.Id == move.Id);
+                if (move.IsSelected && existingMove == null)
                 {
-                    if (!_selectedMoveIds.Contains(move.Id))
-                    {
-                        _selectedMoveIds.Add(move.Id);
-                    }
+                    _selectedMoves.Add(move);
                 }
-                else
+                else if (!move.IsSelected && existingMove != null)
                 {
-                    _selectedMoveIds.Remove(move.Id);
+                    _selectedMoves.Remove(existingMove);
                 }
 
-                // Update the list to reflect changes immediately
                 ViewModel.RefreshList();
-
-                Console.WriteLine($"Move Toggled: {move.Name} - IsSelected: {move.IsSelected}");
-                Console.WriteLine($"Updated _selectedMoveIds: {string.Join(", ", _selectedMoveIds)}");
             }
         }
 
         // Confirm selection and pass updated move list back
         private async void OnConfirmButtonClicked(object sender, EventArgs e)
         {
-            var selectedMoveIds = ViewModel.Moves
+            var selectedMoves = ViewModel.Moves
                 .Where(m => m.IsSelected)
-                .Select(m => m.Id)
                 .ToList();
-            Console.WriteLine($"Selected Moves: {string.Join(", ", selectedMoveIds)}");
 
-            // Send the message using WeakReferenceMessenger
-            WeakReferenceMessenger.Default.Send(new SelectedMovesUpdatedMessage(selectedMoveIds));
+            // Send updated moves back to the UpdateTrainingLogViewModel
+            WeakReferenceMessenger.Default.Send(new SelectedMovesUpdatedMessage(new ObservableCollection<UpdateMoveDto>(selectedMoves)));
 
-            // Navigate back to UpdateTrainingLogPage
-            await Shell.Current.GoToAsync($"///UpdateTrainingLogPage?logId={_logId}");
+            // Close the 
+            await Navigation.PopModalAsync();
         }
     }
 }

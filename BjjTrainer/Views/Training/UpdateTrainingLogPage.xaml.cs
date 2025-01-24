@@ -1,8 +1,8 @@
 using BjjTrainer.Messages;
+using BjjTrainer.Models.Moves.BjjTrainer.Models.DTO.Moves;
 using BjjTrainer.ViewModels.TrainingLogs;
 using BjjTrainer.Views.Components;
 using CommunityToolkit.Mvvm.Messaging;
-using Syncfusion.Maui.Core.Carousel;
 using Syncfusion.Maui.DataForm;
 using System.Collections.ObjectModel;
 
@@ -11,7 +11,7 @@ namespace BjjTrainer.Views.Training
     [QueryProperty(nameof(LogId), "logId")]
     public partial class UpdateTrainingLogPage : ContentPage
     {
-        private UpdateTrainingLogViewModel _viewModel;
+        private UpdateTrainingLogViewModel? _viewModel;
         private int _logId;
 
         public int LogId
@@ -22,52 +22,58 @@ namespace BjjTrainer.Views.Training
                 _logId = value;
                 Console.WriteLine($"LogId set to: {_logId}");
 
-                // Initialize ViewModel only after LogId is assigned
+                // Initialize ViewModel after LogId is assigned
                 if (_logId > 0)
                 {
                     _viewModel = new UpdateTrainingLogViewModel(_logId);
                     BindingContext = _viewModel;
-                    _viewModel.LoadLogDetails();
                 }
             }
         }
 
-        public UpdateTrainingLogPage(int logId)
+        public UpdateTrainingLogPage()
         {
             InitializeComponent();
-            LogId = logId;
-            // Delay ViewModel Initialization
-            dataForm.GenerateDataFormItem += OnGenerateDataFormItem;
 
-            WeakReferenceMessenger.Default.Register<SelectedMovesUpdatedMessage>(this, OnSelectedMovesUpdated);
+            // Register messenger to handle move selection updates
+            WeakReferenceMessenger.Default.Register<SelectedMovesUpdatedMessage>(this, HandleSelectedMovesUpdated);
         }
 
-        private void OnSelectedMovesUpdated(object recipient, SelectedMovesUpdatedMessage message)
+        private void HandleSelectedMovesUpdated(object recipient, SelectedMovesUpdatedMessage message)
         {
-            _viewModel.UpdateSelectedMoves(new ObservableCollection<int>(message.SelectedMoveIds));
+            if (_viewModel != null)
+            {
+                // Update the Moves collection in the ViewModel
+                _viewModel.UpdateSelectedMoves(message.Moves);
+
+                // Notify UI to refresh
+                OnPropertyChanged(nameof(_viewModel.Moves));
+            }
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
-            WeakReferenceMessenger.Default.Unregister<SelectedMovesUpdatedMessage>(this);
+
+            if (_viewModel != null)
+            {
+                // Ensure data is loaded only once
+                await _viewModel.LoadTrainingLogDetailsAsync();
+                OnPropertyChanged(nameof(_viewModel.Moves));
+            }
         }
 
-        // Opens the Move Selection Modal
         private async void OnEditMovesClicked(object sender, EventArgs e)
         {
-            if (_viewModel.Moves == null || !_viewModel.Moves.Any())
+            if (_viewModel != null)
             {
-                await DisplayAlert("Notice", "No moves available. Add new moves from the selection modal.", "OK");
+                await _viewModel.EditMovesAsync();
             }
-
-            var modal = new MoveSelectionModal(new ObservableCollection<int>(_viewModel.SelectedMoveIds), LogId);
-            await Navigation.PushModalAsync(modal);
         }
 
-        // Handles updating the training log
         private async void OnUpdateButtonClicked(object sender, EventArgs e)
         {
+            // Commit the form and validate inputs
             dataForm.Commit();
 
             if (dataForm.Validate())
@@ -77,7 +83,7 @@ namespace BjjTrainer.Views.Training
                 if (success)
                 {
                     await DisplayAlert("Success", "Training log updated successfully.", "OK");
-//                    await Navigation.PushAsync(new TrainingLogListPage());
+                    await Navigation.PopAsync();
                 }
                 else
                 {
@@ -92,12 +98,13 @@ namespace BjjTrainer.Views.Training
 
         private async void OnBackButtonClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("//TrainingLogListPage");
+            // Navigate back to the previous page
+            await Navigation.PopAsync();
         }
 
-        // Customize numeric inputs for specific fields
         private void OnGenerateDataFormItem(object sender, GenerateDataFormItemEventArgs e)
         {
+            // Customize data form items for specific fields
             if (e.DataFormItem is DataFormTextEditorItem textEditorItem &&
                 (e.DataFormItem.FieldName == "TrainingTime" ||
                  e.DataFormItem.FieldName == "RoundsRolled" ||

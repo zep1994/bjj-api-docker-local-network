@@ -1,4 +1,5 @@
-﻿using BjjTrainer_API.Data;
+﻿using System.Collections.ObjectModel;
+using BjjTrainer_API.Data;
 using BjjTrainer_API.Models.DTO;
 using BjjTrainer_API.Models.DTO.Moves;
 using BjjTrainer_API.Models.DTO.TrainingLogDTOs;
@@ -62,6 +63,8 @@ namespace BjjTrainer_API.Services_API.Trainings
         {
             var log = await _context.TrainingLogs
                 .Where(t => t.Id == logId)
+                .Include(t => t.TrainingLogMoves)
+                .ThenInclude(tlm => tlm.Move)
                 .Select(t => new
                 {
                     t.Date,
@@ -72,13 +75,16 @@ namespace BjjTrainer_API.Services_API.Trainings
                     t.Notes,
                     t.SelfAssessment,
                     t.IsCoachLog,
-                    MoveIds = t.TrainingLogMoves.Select(tlm => tlm.Move.Id).ToList()
+                    Moves = t.TrainingLogMoves.Select(tlm => new UpdateMoveDto
+                    {
+                        Id = tlm.Move.Id,
+                        Name = tlm.Move.Name
+                    }).ToList()
                 })
                 .FirstOrDefaultAsync();
 
             if (log == null)
             {
-                Console.WriteLine($"Training log with ID {logId} not found.");
                 throw new Exception($"Training log with ID {logId} not found.");
             }
 
@@ -92,9 +98,10 @@ namespace BjjTrainer_API.Services_API.Trainings
                 Notes = log.Notes,
                 SelfAssessment = log.SelfAssessment,
                 IsCoachLog = log.IsCoachLog,
-                MoveIds = log.MoveIds
+                Moves = new ObservableCollection<UpdateMoveDto>(log.Moves)
             };
         }
+
 
         // ******************************** GET MOVES BY IDS ********************************
         public async Task<List<MoveDto>> GetMovesByIdsAsync(List<int> moveIds)
@@ -123,6 +130,7 @@ namespace BjjTrainer_API.Services_API.Trainings
             if (log == null)
                 throw new Exception("Training log not found.");
 
+            // Update training log properties
             log.Date = dto.Date;
             log.TrainingTime = dto.TrainingTime;
             log.RoundsRolled = dto.RoundsRolled;
@@ -131,17 +139,20 @@ namespace BjjTrainer_API.Services_API.Trainings
             log.Notes = dto.Notes;
             log.SelfAssessment = dto.SelfAssessment;
 
+            // Remove existing training log moves
             _context.TrainingLogMoves.RemoveRange(log.TrainingLogMoves);
 
-            foreach (var moveId in dto.MoveIds)
+            // Add new training log moves based on the provided Moves
+            foreach (var move in dto.Moves)
             {
                 _context.TrainingLogMoves.Add(new TrainingLogMove
                 {
                     TrainingLogId = log.Id,
-                    MoveId = moveId
+                    MoveId = move.Id // Use the Id property from UpdateMoveDto
                 });
             }
 
+            // Save changes to the database
             await _context.SaveChangesAsync();
         }
 

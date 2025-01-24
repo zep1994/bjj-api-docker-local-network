@@ -8,6 +8,7 @@ using BjjTrainer.Services.Users;
 using BjjTrainer.ViewModels;
 using BjjTrainer.ViewModels.Components;
 using BjjTrainer.ViewModels.Events;
+using BjjTrainer.ViewModels.Lessons;
 using BjjTrainer.ViewModels.Moves;
 using BjjTrainer.ViewModels.TrainingGoals;
 using BjjTrainer.ViewModels.TrainingLogs;
