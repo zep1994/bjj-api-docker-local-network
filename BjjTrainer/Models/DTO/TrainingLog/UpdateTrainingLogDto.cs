@@ -8,7 +8,7 @@ namespace BjjTrainer.Models.DTO.TrainingLog
         public int? Id { get; set; }
         public DateTime Date { get; set; }
         public double TrainingTime { get; set; }
-        public int RoundsRolled { get; set; l}
+        public int RoundsRolled { get; set; }
         public int Submissions { get; set; }
         public int Taps { get; set; }
         public string? Notes { get; set; }

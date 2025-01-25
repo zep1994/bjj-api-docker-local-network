@@ -1,10 +1,9 @@
-using BjjTrainer.Models.Moves.BjjTrainer.Models.DTO.Moves;
-using BjjTrainer.ViewModels.Components;
-using BjjTrainer.Services.Trainings;
-using System.Collections.ObjectModel;
-using System.Linq;
-using CommunityToolkit.Mvvm.Messaging;
 using BjjTrainer.Messages;
+using BjjTrainer.Models.Moves.BjjTrainer.Models.DTO.Moves;
+using BjjTrainer.Services.Trainings;
+using BjjTrainer.ViewModels.Components;
+using CommunityToolkit.Mvvm.Messaging;
+using System.Collections.ObjectModel;
 
 namespace BjjTrainer.Views.Components
 {
@@ -77,10 +76,12 @@ namespace BjjTrainer.Views.Components
                 .Where(m => m.IsSelected)
                 .ToList();
 
-            // Send updated moves back to the UpdateTrainingLogViewModel
-            WeakReferenceMessenger.Default.Send(new SelectedMovesUpdatedMessage(new ObservableCollection<UpdateMoveDto>(selectedMoves)));
+            // Send updated moves back to the ViewModel
+            WeakReferenceMessenger.Default.Send(new SelectedMovesUpdatedMessage(
+                new ObservableCollection<UpdateMoveDto>(selectedMoves)
+            ));
 
-            // Close the 
+            // Close the modal
             await Navigation.PopModalAsync();
         }
     }

@@ -1,32 +1,20 @@
-using BjjTrainer.Messages;
-using BjjTrainer.Models.Moves.BjjTrainer.Models.DTO.Moves;
-using BjjTrainer.ViewModels.TrainingLogs;
-using BjjTrainer.Views.Components;
-using CommunityToolkit.Mvvm.Messaging;
 using Syncfusion.Maui.DataForm;
-using System.Collections.ObjectModel;
 
 namespace BjjTrainer.Views.Training
 {
     [QueryProperty(nameof(LogId), "logId")]
     public partial class UpdateTrainingLogPage : ContentPage
     {
-        private UpdateTrainingLogViewModel? _viewModel;
-        private int _logId;
-
         public int LogId
         {
-            get => _logId;
+            get => BindingContext is UpdateTrainingLogViewModel vm ? vm.LogId : 0;
             set
             {
-                _logId = value;
-                Console.WriteLine($"LogId set to: {_logId}");
-
-                // Initialize ViewModel after LogId is assigned
-                if (_logId > 0)
+                if (value > 0 && BindingContext is not UpdateTrainingLogViewModel)
                 {
-                    _viewModel = new UpdateTrainingLogViewModel(_logId);
-                    BindingContext = _viewModel;
+                    // Initialize ViewModel with LogId
+                    BindingContext = new UpdateTrainingLogViewModel(value);
+                    InitializeViewModel();
                 }
             }
         }
@@ -34,71 +22,54 @@ namespace BjjTrainer.Views.Training
         public UpdateTrainingLogPage()
         {
             InitializeComponent();
-
-            // Register messenger to handle move selection updates
-            WeakReferenceMessenger.Default.Register<SelectedMovesUpdatedMessage>(this, HandleSelectedMovesUpdated);
         }
 
-        private void HandleSelectedMovesUpdated(object recipient, SelectedMovesUpdatedMessage message)
+        private async void InitializeViewModel()
         {
-            if (_viewModel != null)
+            if (BindingContext is UpdateTrainingLogViewModel viewModel)
             {
-                // Update the Moves collection in the ViewModel
-                _viewModel.UpdateSelectedMoves(message.Moves);
-
-                // Notify UI to refresh
-                OnPropertyChanged(nameof(_viewModel.Moves));
-            }
-        }
-
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-
-            if (_viewModel != null)
-            {
-                // Ensure data is loaded only once
-                await _viewModel.LoadTrainingLogDetailsAsync();
-                OnPropertyChanged(nameof(_viewModel.Moves));
+                // Load the training log details
+                await viewModel.LoadTrainingLogDetailsAsync();
             }
         }
 
         private async void OnEditMovesClicked(object sender, EventArgs e)
         {
-            if (_viewModel != null)
+            if (BindingContext is UpdateTrainingLogViewModel viewModel)
             {
-                await _viewModel.EditMovesAsync();
+                await viewModel.EditMovesAsync();
             }
         }
 
         private async void OnUpdateButtonClicked(object sender, EventArgs e)
         {
-            // Commit the form and validate inputs
-            dataForm.Commit();
-
-            if (dataForm.Validate())
+            if (BindingContext is UpdateTrainingLogViewModel viewModel)
             {
-                bool success = await _viewModel.UpdateLogAsync();
+                dataForm.Commit();
 
-                if (success)
+                if (dataForm.Validate())
                 {
-                    await DisplayAlert("Success", "Training log updated successfully.", "OK");
-                    await Navigation.PopAsync();
+                    bool success = await viewModel.UpdateLogAsync();
+
+                    if (success)
+                    {
+                        await DisplayAlert("Success", "Training log updated successfully.", "OK");
+                        await Shell.Current.GoToAsync($"///UpdateTrainingLogPage?logId={LogId}");
+                    }
+                    else
+                    {
+                        await DisplayAlert("Error", "Failed to update log. Please try again.", "OK");
+                    }
                 }
                 else
                 {
-                    await DisplayAlert("Error", "Failed to update log. Please try again.", "OK");
+                    await DisplayAlert("Validation Error", "Please check the form for errors.", "OK");
                 }
-            }
-            else
-            {
-                await DisplayAlert("Validation Error", "Please check the form for errors.", "OK");
             }
         }
 
         private async void OnBackButtonClicked(object sender, EventArgs e)
         {
-            // Navigate back to the previous page
             await Navigation.PopAsync();
         }
 
