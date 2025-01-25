@@ -54,7 +54,7 @@ namespace BjjTrainer.Views.Training
                     if (success)
                     {
                         await DisplayAlert("Success", "Training log updated successfully.", "OK");
-                        await Shell.Current.GoToAsync($"///UpdateTrainingLogPage?logId={LogId}");
+                        await Shell.Current.GoToAsync($"///ShowTrainingLogPage?logId={LogId}");
                     }
                     else
                     {
@@ -70,7 +70,7 @@ namespace BjjTrainer.Views.Training
 
         private async void OnBackButtonClicked(object sender, EventArgs e)
         {
-            await Navigation.PopAsync();
+            await Shell.Current.GoToAsync($"///ShowTrainingLogPage?logId={LogId}");
         }
 
         private void OnGenerateDataFormItem(object sender, GenerateDataFormItemEventArgs e)
