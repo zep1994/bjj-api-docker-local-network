@@ -91,8 +91,10 @@ namespace BjjTrainer_API.Controllers.Training
         [HttpPut("{logId}")]
         public async Task<IActionResult> UpdateTrainingLog(int logId, [FromBody] UpdateTrainingLogDto dto)
         {
-            if (dto == null || !dto.MoveIds.Any())
+            if (dto == null || !dto.Moves.Any())
+            {
                 return BadRequest("Training log must include valid moves.");
+            }
 
             try
             {

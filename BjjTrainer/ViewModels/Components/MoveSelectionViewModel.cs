@@ -6,23 +6,16 @@ namespace BjjTrainer.ViewModels.Components
 {
     public partial class MoveSelectionViewModel : BaseViewModel
     {
-        public ObservableCollection<UpdateMoveDto> Moves { get; set; } = new();
+        public ObservableCollection<UpdateMoveDto> Moves { get; set; }
 
-        public int MoveCount => Moves.Count;
-
-        public MoveSelectionViewModel(ObservableCollection<UpdateMoveDto> moves)
+        public MoveSelectionViewModel(ObservableCollection<UpdateMoveDto> selectedMoves)
         {
-            Moves = moves;
-            Moves.CollectionChanged += (s, e) =>
-            {
-                OnPropertyChanged(nameof(MoveCount));  // Notify UI when count changes
-            };
+            Moves = selectedMoves;
         }
 
         public void RefreshList()
         {
             OnPropertyChanged(nameof(Moves));
-            OnPropertyChanged(nameof(MoveCount));  // Ensure MoveCount is updated
         }
     }
 }

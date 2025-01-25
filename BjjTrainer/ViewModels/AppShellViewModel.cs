@@ -2,7 +2,7 @@
 
 namespace BjjTrainer.ViewModels
 {
-    public class AppShellViewModel : BaseViewModel
+    public partial class AppShellViewModel : BaseViewModel
     {
         private string _profileImage;
         public string ProfileImage

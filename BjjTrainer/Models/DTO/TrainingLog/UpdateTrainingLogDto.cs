@@ -1,6 +1,5 @@
-﻿using BjjTrainer.Models.Moves.BjjTrainer.Models.DTO.Moves;
-using Syncfusion.Maui.DataForm;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using BjjTrainer.Models.Moves.BjjTrainer.Models.DTO.Moves;
 
 namespace BjjTrainer.Models.DTO.TrainingLog
 {
@@ -15,7 +14,6 @@ namespace BjjTrainer.Models.DTO.TrainingLog
         public string? Notes { get; set; }
         public string? SelfAssessment { get; set; }
         public bool IsCoachLog { get; set; }
-        public List<int> MoveIds { get; set; } = [];
         public ObservableCollection<UpdateMoveDto> Moves { get; set; } = [];
         public string? ApplicationUserId { get; set; }
     }

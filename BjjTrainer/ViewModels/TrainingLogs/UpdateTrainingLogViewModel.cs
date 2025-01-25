@@ -1,158 +1,181 @@
-﻿using BjjTrainer.Models.DTO.TrainingLog;
+﻿using BjjTrainer.Messages;
+using BjjTrainer.Models.DTO.TrainingLog;
 using BjjTrainer.Models.Moves.BjjTrainer.Models.DTO.Moves;
 using BjjTrainer.Services.Trainings;
+using BjjTrainer.Views.Components;
+using CommunityToolkit.Mvvm.Messaging;
 using MvvmHelpers;
 using System.Collections.ObjectModel;
 
-namespace BjjTrainer.ViewModels.TrainingLogs
+public partial class UpdateTrainingLogViewModel : BaseViewModel
 {
-    public partial class UpdateTrainingLogViewModel : BaseViewModel
+    private readonly TrainingService _trainingService;
+
+    public ObservableCollection<UpdateMoveDto> Moves { get; set; } = new();
+
+    private DateTime _date;
+    public DateTime Date
     {
-        private readonly TrainingService _trainingService;
+        get => _date;
+        set => SetProperty(ref _date, value);
+    }
 
-        public ObservableCollection<UpdateMoveDto> Moves { get; set; } = [];
-        public ObservableCollection<int> SelectedMoveIds { get; set; } = [];
+    private double _trainingTime;
+    public double TrainingTime
+    {
+        get => _trainingTime;
+        set => SetProperty(ref _trainingTime, value);
+    }
 
-        public DateTime Date { get; set; }
-        public double TrainingTime { get; set; }
-        public int RoundsRolled { get; set; }
-        public int Submissions { get; set; }
-        public int Taps { get; set; }
-        public string? Notes { get; set; }
-        public string? SelfAssessment { get; set; }
-        public bool IsCoachLog { get; set; }
-        public int LogId { get; private set; }
+    private int _roundsRolled;
+    public int RoundsRolled
+    {
+        get => _roundsRolled;
+        set => SetProperty(ref _roundsRolled, value);
+    }
 
-        public UpdateTrainingLogViewModel(int logId)
+    private int _submissions;
+    public int Submissions
+    {
+        get => _submissions;
+        set => SetProperty(ref _submissions, value);
+    }
+
+    private int _taps;
+    public int Taps
+    {
+        get => _taps;
+        set => SetProperty(ref _taps, value);
+    }
+
+    private string? _notes;
+    public string? Notes
+    {
+        get => _notes;
+        set => SetProperty(ref _notes, value);
+    }
+
+    private string? _selfAssessment;
+    public string? SelfAssessment
+    {
+        get => _selfAssessment;
+        set => SetProperty(ref _selfAssessment, value);
+    }
+
+    private bool _isCoachLog;
+    public bool IsCoachLog
+    {
+        get => _isCoachLog;
+        set => SetProperty(ref _isCoachLog, value);
+    }
+    public int LogId { get; set; }
+
+    public UpdateTrainingLogViewModel(int logId)
+    {
+        LogId = logId;
+        _trainingService = new TrainingService();
+
+        // Register for messenger updates
+        WeakReferenceMessenger.Default.Register<SelectedMovesUpdatedMessage>(this, (r, m) =>
         {
-            _trainingService = new TrainingService();
-            LogId = logId;
-
-            LoadLogDetails();
-        }
-
-        // ******************************** LOAD TRAINING LOG DETAILS ********************************
-        public async void LoadLogDetails()
-        {
-            IsBusy = true;
-
-            try
+            if (m.Moves?.Any() == true)
             {
-                if (LogId <= 0)
+                Moves.Clear();
+                foreach (var move in m.Moves)
                 {
-                    Console.WriteLine("Invalid logId for API request.");
-                    await Application.Current.MainPage.DisplayAlert("Error", "Invalid Training Log ID.", "OK");
-                    return;
-                }
-
-                var log = await _trainingService.GetTrainingLogMoves(LogId);
-                if (log != null)
-                {
-                    // Populate all fields from the log DTO
-                    Date = log.Date;
-                    TrainingTime = log.TrainingTime;
-                    RoundsRolled = log.RoundsRolled;
-                    Submissions = log.Submissions;
-                    Taps = log.Taps;
-                    Notes = log.Notes;
-                    SelfAssessment = log.SelfAssessment;
-                    IsCoachLog = log.IsCoachLog;
-
-                    // Initialize moves even if no moveIds are returned
-                    if (log.MoveIds != null && log.MoveIds.Any())
-                    {
-                        var fullMoves = await _trainingService.GetMovesByIds(log.MoveIds);
-                        Moves = new ObservableCollection<UpdateMoveDto>(fullMoves);
-                    }
-                    else
-                    {
-                        Moves = new ObservableCollection<UpdateMoveDto>();
-                        Console.WriteLine("No moves associated with this log. Initializing empty list.");
-                    }
-
-                    SelectedMoveIds = new ObservableCollection<int>(log.MoveIds ?? []);
-
-                    // Notify UI of updated fields
-                    OnPropertyChanged(nameof(Date));
-                    OnPropertyChanged(nameof(TrainingTime));
-                    OnPropertyChanged(nameof(RoundsRolled));
-                    OnPropertyChanged(nameof(Submissions));
-                    OnPropertyChanged(nameof(Taps));
-                    OnPropertyChanged(nameof(Notes));
-                    OnPropertyChanged(nameof(SelfAssessment));
-                    OnPropertyChanged(nameof(IsCoachLog));
-                    OnPropertyChanged(nameof(Moves));
-                }
-                else
-                {
-                    await Application.Current.MainPage.DisplayAlert("Error", "Training log not found.", "OK");
+                    Moves.Add(move);
                 }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading log details: {ex.Message}");
-                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load training log: {ex.Message}", "OK");
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
+        });
+    }
 
-        // ******************************** UPDATE SELECTED MOVES ********************************
-        public void UpdateSelectedMoves(ObservableCollection<int> moveIds)
+    public void Initialize(int logId)
+    {
+        LogId = logId;
+        Task.Run(async () => await LoadTrainingLogDetailsAsync());
+    }
+
+    public async Task LoadTrainingLogDetailsAsync()
+    {
+        try
         {
-            SelectedMoveIds.Clear();
-            foreach (var moveId in moveIds)
+            var log = await _trainingService.GetTrainingLogMoves(LogId);
+            if (log != null)
             {
-                SelectedMoveIds.Add(moveId);
-            }
+                Date = log.Date;
+                TrainingTime = log.TrainingTime;
+                RoundsRolled = log.RoundsRolled;
+                Submissions = log.Submissions;
+                Taps = log.Taps;
+                Notes = log.Notes;
+                SelfAssessment = log.SelfAssessment;
+                IsCoachLog = log.IsCoachLog;
 
-            // Refresh the moves list to reflect the changes
-            foreach (var move in Moves)
-            {
-                move.IsSelected = moveIds.Contains(move.Id);
-            }
-
-            OnPropertyChanged(nameof(SelectedMoveIds));
-            OnPropertyChanged(nameof(Moves));
-        }
-
-        // ******************************** UPDATE TRAINING LOG ********************************
-        public async Task<bool> UpdateLogAsync()
-        {
-            IsBusy = true;
-
-            try
-            {
-                var updatedLog = new UpdateTrainingLogDto
+                Moves.Clear();
+                foreach (var move in log.Moves)
                 {
-                    Date = Date,
-                    TrainingTime = TrainingTime,
-                    RoundsRolled = RoundsRolled,
-                    Submissions = Submissions,
-                    Taps = Taps,
-                    Notes = Notes,
-                    SelfAssessment = SelfAssessment,
-                    MoveIds = SelectedMoveIds.ToList()
-                };
-
-                await _trainingService.UpdateTrainingLogAsync(LogId, updatedLog, IsCoachLog);
-
-                await Shell.Current.GoToAsync($"///UpdateTrainingLogPage?logId={LogId}");
-                return true;
+                    Moves.Add(move);
+                }
             }
-            catch (Exception ex)
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading log details: {ex.Message}");
+            await SafeDisplayAlert("Error", $"Failed to load training log: {ex.Message}", "OK");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    public async Task EditMovesAsync()
+    {
+        var modal = new MoveSelectionModal(new ObservableCollection<UpdateMoveDto>(Moves), LogId);
+        await Application.Current?.MainPage?.Navigation.PushModalAsync(modal);
+    }
+
+    public async Task<bool> UpdateLogAsync()
+    {
+        IsBusy = true;
+
+        try
+        {
+            var updatedLog = new UpdateTrainingLogDto
             {
-                Console.WriteLine($"Error updating log: {ex.Message}");
-                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to update log: {ex.Message}", "OK");
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+                Date = Date,
+                TrainingTime = TrainingTime,
+                RoundsRolled = RoundsRolled,
+                Submissions = Submissions,
+                Taps = Taps,
+                Notes = Notes,
+                SelfAssessment = SelfAssessment,
+                Moves = new ObservableCollection<UpdateMoveDto>(Moves)
+            };
 
+            await _trainingService.UpdateTrainingLogAsync(LogId, updatedLog, IsCoachLog);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error updating log: {ex.Message}");
             return false;
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private async Task SafeDisplayAlert(string title, string message, string cancel)
+    {
+        if (Application.Current?.MainPage != null)
+        {
+            await Application.Current.MainPage.DisplayAlert(title, message, cancel);
+        }
+        else
+        {
+            Console.WriteLine($"Alert: {title} - {message}");
         }
     }
 }

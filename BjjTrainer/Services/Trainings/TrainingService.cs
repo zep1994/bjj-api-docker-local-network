@@ -59,15 +59,8 @@ namespace BjjTrainer.Services.Trainings
                     throw new Exception($"Training log with ID {logId} not found.");
                 }
 
-                if (log.MoveIds.Any())
-                {
-                    var moveDetails = await GetMovesByIds(log.MoveIds);
-                    log.Moves = new ObservableCollection<UpdateMoveDto>(moveDetails);
-                }
-                else
-                {
-                    log.Moves = [];
-                }
+                // Log for debugging
+                Console.WriteLine($"Fetched training log: Date={log.Date}, MovesCount={log.Moves.Count}");
 
                 return log;
             }
@@ -75,28 +68,6 @@ namespace BjjTrainer.Services.Trainings
             {
                 Console.WriteLine($"Error fetching training log from API: {ex.Message}");
                 throw new Exception($"Failed to fetch training log (ID: {logId}): {ex.Message}");
-            }
-        }
-
-        // ******************************** FETCH MOVES BY IDS  ********************************
-        public async Task<List<UpdateMoveDto>> GetMovesByIds(List<int> moveIds)
-        {
-            try
-            {
-                var response = await HttpClient.PostAsJsonAsync("moves/byIds", moveIds);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    var error = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"Error fetching moves: {error}");
-                }
-
-                var moves = await response.Content.ReadFromJsonAsync<List<UpdateMoveDto>>();
-                return moves ?? [];
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Failed to fetch moves by IDs: {ex.Message}");
             }
         }
 

@@ -1,103 +1,81 @@
-using BjjTrainer.Messages;
-using BjjTrainer.ViewModels.TrainingLogs;
-using BjjTrainer.Views.Components;
-using CommunityToolkit.Mvvm.Messaging;
-using Syncfusion.Maui.Core.Carousel;
 using Syncfusion.Maui.DataForm;
-using System.Collections.ObjectModel;
 
 namespace BjjTrainer.Views.Training
 {
     [QueryProperty(nameof(LogId), "logId")]
     public partial class UpdateTrainingLogPage : ContentPage
     {
-        private UpdateTrainingLogViewModel _viewModel;
-        private int _logId;
-
         public int LogId
         {
-            get => _logId;
+            get => BindingContext is UpdateTrainingLogViewModel vm ? vm.LogId : 0;
             set
             {
-                _logId = value;
-                Console.WriteLine($"LogId set to: {_logId}");
-
-                // Initialize ViewModel only after LogId is assigned
-                if (_logId > 0)
+                if (value > 0 && BindingContext is not UpdateTrainingLogViewModel)
                 {
-                    _viewModel = new UpdateTrainingLogViewModel(_logId);
-                    BindingContext = _viewModel;
-                    _viewModel.LoadLogDetails();
+                    // Initialize ViewModel with LogId
+                    BindingContext = new UpdateTrainingLogViewModel(value);
+                    InitializeViewModel();
                 }
             }
         }
 
-        public UpdateTrainingLogPage(int logId)
+        public UpdateTrainingLogPage()
         {
             InitializeComponent();
-            LogId = logId;
-            // Delay ViewModel Initialization
-            dataForm.GenerateDataFormItem += OnGenerateDataFormItem;
-
-            WeakReferenceMessenger.Default.Register<SelectedMovesUpdatedMessage>(this, OnSelectedMovesUpdated);
         }
 
-        private void OnSelectedMovesUpdated(object recipient, SelectedMovesUpdatedMessage message)
+        private async void InitializeViewModel()
         {
-            _viewModel.UpdateSelectedMoves(new ObservableCollection<int>(message.SelectedMoveIds));
+            if (BindingContext is UpdateTrainingLogViewModel viewModel)
+            {
+                // Load the training log details
+                await viewModel.LoadTrainingLogDetailsAsync();
+            }
         }
 
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            WeakReferenceMessenger.Default.Unregister<SelectedMovesUpdatedMessage>(this);
-        }
-
-        // Opens the Move Selection Modal
         private async void OnEditMovesClicked(object sender, EventArgs e)
         {
-            if (_viewModel.Moves == null || !_viewModel.Moves.Any())
+            if (BindingContext is UpdateTrainingLogViewModel viewModel)
             {
-                await DisplayAlert("Notice", "No moves available. Add new moves from the selection modal.", "OK");
+                await viewModel.EditMovesAsync();
             }
-
-            var modal = new MoveSelectionModal(new ObservableCollection<int>(_viewModel.SelectedMoveIds), LogId);
-            await Navigation.PushModalAsync(modal);
         }
 
-        // Handles updating the training log
         private async void OnUpdateButtonClicked(object sender, EventArgs e)
         {
-            dataForm.Commit();
-
-            if (dataForm.Validate())
+            if (BindingContext is UpdateTrainingLogViewModel viewModel)
             {
-                bool success = await _viewModel.UpdateLogAsync();
+                dataForm.Commit();
 
-                if (success)
+                if (dataForm.Validate())
                 {
-                    await DisplayAlert("Success", "Training log updated successfully.", "OK");
-//                    await Navigation.PushAsync(new TrainingLogListPage());
+                    bool success = await viewModel.UpdateLogAsync();
+
+                    if (success)
+                    {
+                        await DisplayAlert("Success", "Training log updated successfully.", "OK");
+                        await Shell.Current.GoToAsync($"///UpdateTrainingLogPage?logId={LogId}");
+                    }
+                    else
+                    {
+                        await DisplayAlert("Error", "Failed to update log. Please try again.", "OK");
+                    }
                 }
                 else
                 {
-                    await DisplayAlert("Error", "Failed to update log. Please try again.", "OK");
+                    await DisplayAlert("Validation Error", "Please check the form for errors.", "OK");
                 }
-            }
-            else
-            {
-                await DisplayAlert("Validation Error", "Please check the form for errors.", "OK");
             }
         }
 
         private async void OnBackButtonClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("//TrainingLogListPage");
+            await Navigation.PopAsync();
         }
 
-        // Customize numeric inputs for specific fields
         private void OnGenerateDataFormItem(object sender, GenerateDataFormItemEventArgs e)
         {
+            // Customize data form items for specific fields
             if (e.DataFormItem is DataFormTextEditorItem textEditorItem &&
                 (e.DataFormItem.FieldName == "TrainingTime" ||
                  e.DataFormItem.FieldName == "RoundsRolled" ||

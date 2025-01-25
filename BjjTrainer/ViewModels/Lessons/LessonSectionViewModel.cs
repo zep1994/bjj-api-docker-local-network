@@ -3,7 +3,7 @@ using BjjTrainer.Services.Lessons;
 using MvvmHelpers;
 using System.Collections.ObjectModel;
 
-namespace BjjTrainer.ViewModels
+namespace BjjTrainer.ViewModels.Lessons
 {
     public class LessonSectionViewModel : BaseViewModel
     {
