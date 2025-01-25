@@ -37,7 +37,7 @@ namespace BjjTrainer.Services.TrainingGoals
                 if (string.IsNullOrEmpty(userId))
                 {
                     Console.WriteLine("User ID is missing in Preferences.");
-                    return new List<TrainingGoal>();
+                    return [];
                 }
 
                 var url = $"TrainingGoal/user/{userId}";
@@ -50,7 +50,7 @@ namespace BjjTrainer.Services.TrainingGoals
                 if (goals == null || !goals.Any())
                 {
                     Console.WriteLine("No goals found.");
-                    return new List<TrainingGoal>();
+                    return [];
                 }
 
                 foreach (var goal in goals)
@@ -63,7 +63,7 @@ namespace BjjTrainer.Services.TrainingGoals
             catch (Exception ex)
             {
                 Console.WriteLine($"Error fetching training goals: {ex.Message}");
-                return new List<TrainingGoal>();
+                return [];
             }
         }
 

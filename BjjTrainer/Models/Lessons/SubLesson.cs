@@ -19,7 +19,7 @@ namespace BjjTrainer.Models.Lessons
         public int LessonSectionId { get; set; }
         public LessonSection? LessonSection { get; set; }
 
-        public List<MoveDto> Moves { get; set; } = new List<MoveDto>();
+        public List<MoveDto> Moves { get; set; } = [];
 
     }
 

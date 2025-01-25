@@ -117,11 +117,11 @@ namespace BjjTrainer.Services.Events
                     catch (Exception ex)
                     {
                         Console.WriteLine($"Deserialization error: {ex.Message}");
-                        return new List<CalendarEventDto>();
+                        return [];
                     }
                 }
 
-                return new List<CalendarEventDto>();  // Return empty list if request fails
+                return [];  // Return empty list if request fails
             }
             catch (Exception ex)
             {

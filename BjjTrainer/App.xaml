@@ -15,7 +15,9 @@
                     <!-- Add the converter to the resources -->
                     <Converters:NullToBoolConverter x:Key="NullToBoolConverter" />
                     <Converters:GreaterThanZeroConverter x:Key="GreaterThanZeroConverter" />
+                    <Converters:SelectionColorConverter x:Key="SelectionColorConverter" />
                     <Converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+                    <Converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

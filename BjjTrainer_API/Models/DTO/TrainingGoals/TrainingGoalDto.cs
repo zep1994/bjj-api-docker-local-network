@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using BjjTrainer_API.Models.DTO.Moves;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BjjTrainer_API.Models.DTO.TrainingGoals
 {

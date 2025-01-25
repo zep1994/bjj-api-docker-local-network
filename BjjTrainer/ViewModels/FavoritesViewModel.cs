@@ -23,7 +23,7 @@ namespace BjjTrainer.ViewModels
         public FavoritesViewModel()
         {
             _userService = new UserService();
-            FavoriteLessons = new ObservableCollection<Lesson>();
+            FavoriteLessons = [];
             LoadFavoritesCommand = new Command(async () => await LoadFavoritesAsync());
         }
 

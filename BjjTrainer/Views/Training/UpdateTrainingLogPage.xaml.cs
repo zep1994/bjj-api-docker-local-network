@@ -1,44 +1,89 @@
-using BjjTrainer.ViewModels.TrainingLogs;
+using Syncfusion.Maui.DataForm;
 
 namespace BjjTrainer.Views.Training
 {
+    [QueryProperty(nameof(LogId), "logId")]
     public partial class UpdateTrainingLogPage : ContentPage
     {
-        private readonly UpdateTrainingLogViewModel _viewModel;
+        public int LogId
+        {
+            get => BindingContext is UpdateTrainingLogViewModel vm ? vm.LogId : 0;
+            set
+            {
+                if (value > 0 && BindingContext is not UpdateTrainingLogViewModel)
+                {
+                    // Initialize ViewModel with LogId
+                    BindingContext = new UpdateTrainingLogViewModel(value);
+                    InitializeViewModel();
+                }
+            }
+        }
 
-        public UpdateTrainingLogPage(int logId)
+        public UpdateTrainingLogPage()
         {
             InitializeComponent();
-            _viewModel = new UpdateTrainingLogViewModel(logId);
-            BindingContext = _viewModel;
         }
 
-        private void OnCalendarIconTapped(object sender, EventArgs e)
+        private async void InitializeViewModel()
         {
-            // Show the hidden DatePicker
-            DatePickerField.Focus();
+            if (BindingContext is UpdateTrainingLogViewModel viewModel)
+            {
+                // Load the training log details
+                await viewModel.LoadTrainingLogDetailsAsync();
+            }
         }
 
-        private void OnDateSelected(object sender, DateChangedEventArgs e)
+        private async void OnEditMovesClicked(object sender, EventArgs e)
         {
-            // Update the view model's Date and display value
-            _viewModel.Date = e.NewDate;
-            _viewModel.SelectedDateDisplay = e.NewDate.ToString("yyyy-MM-dd");
+            if (BindingContext is UpdateTrainingLogViewModel viewModel)
+            {
+                await viewModel.EditMovesAsync();
+            }
         }
 
         private async void OnUpdateButtonClicked(object sender, EventArgs e)
         {
-            try
+            if (BindingContext is UpdateTrainingLogViewModel viewModel)
             {
-                var success = await _viewModel.UpdateLogAsync();
-                if (success)
+                dataForm.Commit();
+
+                if (dataForm.Validate())
                 {
-                    await Shell.Current.GoToAsync("//TrainingLogListPage");
+                    bool success = await viewModel.UpdateLogAsync();
+
+                    if (success)
+                    {
+                        await DisplayAlert("Success", "Training log updated successfully.", "OK");
+                        await Shell.Current.GoToAsync($"///ShowTrainingLogPage?logId={LogId}");
+                    }
+                    else
+                    {
+                        await DisplayAlert("Error", "Failed to update log. Please try again.", "OK");
+                    }
+                }
+                else
+                {
+                    await DisplayAlert("Validation Error", "Please check the form for errors.", "OK");
                 }
             }
-            catch (Exception ex)
+        }
+
+        private async void OnBackButtonClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync($"///ShowTrainingLogPage?logId={LogId}");
+        }
+
+        private void OnGenerateDataFormItem(object sender, GenerateDataFormItemEventArgs e)
+        {
+            // Customize data form items for specific fields
+            if (e.DataFormItem is DataFormTextEditorItem textEditorItem &&
+                (e.DataFormItem.FieldName == "TrainingTime" ||
+                 e.DataFormItem.FieldName == "RoundsRolled" ||
+                 e.DataFormItem.FieldName == "Submissions" ||
+                 e.DataFormItem.FieldName == "Taps"))
             {
-                throw new Exception($"Error: {ex.Message} ");
+                textEditorItem.Keyboard = Keyboard.Numeric;
+                textEditorItem.Background = Colors.DarkSlateGray;
             }
         }
     }

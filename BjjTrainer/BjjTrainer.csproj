@@ -1,8 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-    <TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst;net8.0-windows10.0.19041.0</TargetFrameworks>
-		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+    <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+      <TargetFrameworks>net8.0-android;net8.0-windows10.0.19041.0</TargetFrameworks>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(OS)' == 'Darwin'">
+      <TargetFrameworks>net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
+    </PropertyGroup>
+  <PropertyGroup>
+
+    <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
 
 		<!-- Note for MacCatalyst:
@@ -20,7 +27,7 @@
 		<Nullable>enable</Nullable>
 
 		<!-- Display name -->
-		<ApplicationTitle>BjjTrainer</ApplicationTitle>
+		<ApplicationTitle>Roll Call</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.bjjtrainer</ApplicationId>
@@ -43,7 +50,7 @@
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#000023" BaseSize="128,128" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -73,12 +80,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
@@ -89,6 +97,8 @@
 		<PackageReference Include="Syncfusion.Maui.Charts" Version="28.1.37" />
     <PackageReference Include="Syncfusion.Maui.Core" Version="28.1.37" />
     <PackageReference Include="Syncfusion.Maui.Calendar" Version="28.1.37" />
+    <PackageReference Include="Syncfusion.Maui.DataForm" Version="28.1.37" />
+    <PackageReference Include="Syncfusion.Maui.Expander" Version="28.1.37" />
     <PackageReference Include="Syncfusion.Maui.ListView" Version="28.1.37" />
     <PackageReference Include="Syncfusion.Maui.Scheduler" Version="28.1.37" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.2.0" />
@@ -97,6 +107,9 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Controls\FlyoutHeader.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Components\MoveSelectionModal.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Events\CalendarPage.xaml">

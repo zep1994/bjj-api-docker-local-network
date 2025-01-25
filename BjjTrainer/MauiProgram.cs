@@ -6,11 +6,14 @@ using BjjTrainer.Services.TrainingGoals;
 using BjjTrainer.Services.Trainings;
 using BjjTrainer.Services.Users;
 using BjjTrainer.ViewModels;
+using BjjTrainer.ViewModels.Components;
 using BjjTrainer.ViewModels.Events;
+using BjjTrainer.ViewModels.Lessons;
 using BjjTrainer.ViewModels.Moves;
 using BjjTrainer.ViewModels.TrainingGoals;
 using BjjTrainer.ViewModels.TrainingLogs;
 using BjjTrainer.ViewModels.Users;
+using BjjTrainer.Views.Components;
 using BjjTrainer.Views.Events;
 using BjjTrainer.Views.Lessons;
 using BjjTrainer.Views.Moves;
@@ -98,6 +101,9 @@ namespace BjjTrainer
             builder.Services.AddSingleton<MoveService>();
             builder.Services.AddTransient<MovesViewModel>();
             builder.Services.AddTransient<MovesPage>();
+            builder.Services.AddTransient<MoveSelectionModal>();
+            builder.Services.AddTransient<MoveSelectionViewModel>();
+           
 
 
 

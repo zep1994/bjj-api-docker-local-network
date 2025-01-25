@@ -63,7 +63,7 @@ namespace BjjTrainer.ViewModels
                 if (SubLessonDetails.Moves == null || !SubLessonDetails.Moves.Any())
                 {
                     Debug.WriteLine("No moves available.");
-                    SubLessonDetails.Moves = new List<MoveDto>();
+                    SubLessonDetails.Moves = [];
                 }
 
                 SelectedMove = SubLessonDetails.Moves.FirstOrDefault();

@@ -13,7 +13,7 @@
         public string? Scenarios { get; set; }
         public bool? LegalInCompetitions { get; set; }
         public string? CounterStrategies { get; set; }
-        public List<string>? Tags { get; set; } = new List<string>();
+        public List<string>? Tags { get; set; } = [];
         public int TrainingLogCount { get; set; }
 
         public bool IsSelected { get; set; } = false;

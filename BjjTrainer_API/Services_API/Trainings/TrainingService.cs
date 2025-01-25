@@ -1,5 +1,7 @@
-﻿using BjjTrainer_API.Data;
+﻿using System.Collections.ObjectModel;
+using BjjTrainer_API.Data;
 using BjjTrainer_API.Models.DTO;
+using BjjTrainer_API.Models.DTO.Moves;
 using BjjTrainer_API.Models.DTO.TrainingLogDTOs;
 using BjjTrainer_API.Models.DTO.UserDtos;
 using BjjTrainer_API.Models.Joins;
@@ -12,15 +14,13 @@ namespace BjjTrainer_API.Services_API.Trainings
     {
         private readonly ApplicationDbContext _context;
 
-        public TrainingService(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        public TrainingService(ApplicationDbContext context) => _context = context;
 
+        // ******************************** GET ALL TRAINING LOGS BY USER ********************************
         public async Task<List<TrainingLogDto>> GetTrainingLogsAsync(string userId)
         {
             return await _context.TrainingLogs
-                .Where(log => log.ApplicationUserId == userId)  
+                .Where(log => log.ApplicationUserId == userId)
                 .Include(log => log.TrainingLogMoves)
                 .ThenInclude(tlm => tlm.Move)
                 .Select(log => new TrainingLogDto
@@ -32,12 +32,12 @@ namespace BjjTrainer_API.Services_API.Trainings
                     Submissions = log.Submissions,
                     Taps = log.Taps,
                     Notes = log.Notes,
-                    SelfAssessment = log.SelfAssessment,   
-                    IsCoachLog = log.IsCoachLog,
+                    SelfAssessment = log.SelfAssessment,
                     MoveIds = log.TrainingLogMoves.Select(tlm => tlm.Move.Id).ToList()
                 }).ToListAsync();
         }
 
+        // ******************************** GET SINGLE TRAINING LOG BY ID ********************************
         public async Task<TrainingLogDto?> GetTrainingLogByIdAsync(int logId)
         {
             return await _context.TrainingLogs
@@ -54,11 +54,73 @@ namespace BjjTrainer_API.Services_API.Trainings
                     Taps = log.Taps,
                     Notes = log.Notes,
                     SelfAssessment = log.SelfAssessment,
-                    IsCoachLog = log.IsCoachLog,
                     MoveIds = log.TrainingLogMoves.Select(tlm => tlm.Move.Id).ToList()
                 }).FirstOrDefaultAsync();
         }
 
+        // ******************************** GET TRAINING LOG MOVES BY LOG ID ********************************
+        public async Task<UpdateTrainingLogDto> GetTrainingLogMovesAsync(int logId)
+        {
+            var log = await _context.TrainingLogs
+                .Where(t => t.Id == logId)
+                .Include(t => t.TrainingLogMoves)
+                .ThenInclude(tlm => tlm.Move)
+                .Select(t => new
+                {
+                    t.Date,
+                    t.TrainingTime,
+                    t.RoundsRolled,
+                    t.Submissions,
+                    t.Taps,
+                    t.Notes,
+                    t.SelfAssessment,
+                    t.IsCoachLog,
+                    Moves = t.TrainingLogMoves.Select(tlm => new UpdateMoveDto
+                    {
+                        Id = tlm.Move.Id,
+                        Name = tlm.Move.Name
+                    }).ToList()
+                })
+                .FirstOrDefaultAsync();
+
+            if (log == null)
+            {
+                throw new Exception($"Training log with ID {logId} not found.");
+            }
+
+            return new UpdateTrainingLogDto
+            {
+                Date = log.Date,
+                TrainingTime = log.TrainingTime,
+                RoundsRolled = log.RoundsRolled,
+                Submissions = log.Submissions,
+                Taps = log.Taps,
+                Notes = log.Notes,
+                SelfAssessment = log.SelfAssessment,
+                IsCoachLog = log.IsCoachLog,
+                Moves = new ObservableCollection<UpdateMoveDto>(log.Moves)
+            };
+        }
+
+
+        // ******************************** GET MOVES BY IDS ********************************
+        public async Task<List<MoveDto>> GetMovesByIdsAsync(List<int> moveIds)
+        {
+            if (moveIds == null || !moveIds.Any())
+                throw new ArgumentException("Move IDs list cannot be empty.");
+
+            return await _context.Moves
+                .Where(m => moveIds.Contains(m.Id))
+                .Select(m => new MoveDto
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    Description = m.Description,
+                    SkillLevel = m.SkillLevel
+                }).ToListAsync();
+        }
+
+        // ******************************** UPDATE TRAINING LOG ********************************
         public async Task UpdateTrainingLogAsync(int logId, UpdateTrainingLogDto dto)
         {
             var log = await _context.TrainingLogs
@@ -68,6 +130,7 @@ namespace BjjTrainer_API.Services_API.Trainings
             if (log == null)
                 throw new Exception("Training log not found.");
 
+            // Update training log properties
             log.Date = dto.Date;
             log.TrainingTime = dto.TrainingTime;
             log.RoundsRolled = dto.RoundsRolled;
@@ -75,88 +138,43 @@ namespace BjjTrainer_API.Services_API.Trainings
             log.Taps = dto.Taps;
             log.Notes = dto.Notes;
             log.SelfAssessment = dto.SelfAssessment;
-            log.IsCoachLog = dto.IsCoachLog;
 
-            // Update moves
+            // Remove existing training log moves
             _context.TrainingLogMoves.RemoveRange(log.TrainingLogMoves);
-            foreach (var moveId in dto.MoveIds)
+
+            // Add new training log moves based on the provided Moves
+            foreach (var move in dto.Moves)
             {
                 _context.TrainingLogMoves.Add(new TrainingLogMove
                 {
                     TrainingLogId = log.Id,
+                    MoveId = move.Id // Use the Id property from UpdateMoveDto
+                });
+            }
+
+            // Save changes to the database
+            await _context.SaveChangesAsync();
+        }
+
+        // ******************************** ADD NEW TRAINING LOG ********************************
+        public async Task AddTrainingLogAsync(string userId, TrainingLog trainingLog, List<int> moveIds)
+        {
+            var user = await _context.ApplicationUsers.FindAsync(userId);
+            if (user == null)
+                throw new Exception("User not found.");
+
+            _context.TrainingLogs.Add(trainingLog);
+            await _context.SaveChangesAsync();
+
+            foreach (var moveId in moveIds)
+            {
+                _context.TrainingLogMoves.Add(new TrainingLogMove
+                {
+                    TrainingLogId = trainingLog.Id,
                     MoveId = moveId
                 });
             }
 
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task ShareUpdatedLogWithStudents(int logId, UpdateTrainingLogDto updatedLog)
-        {
-            // Fetch the training log first
-            var trainingLog = await _context.TrainingLogs
-                .Include(tl => tl.ApplicationUser)
-                .FirstOrDefaultAsync(tl => tl.Id == logId);
-
-            if (trainingLog == null || trainingLog.ApplicationUser == null)
-            {
-                throw new Exception("Training log not found or user does not exist.");
-            }
-
-            // Fetch students in the same school as the training log's user
-            var students = await _context.ApplicationUsers
-                .Where(u => u.SchoolId == trainingLog.ApplicationUser.SchoolId)
-                .ToListAsync();
-
-            foreach (var student in students)
-            {
-                updatedLog.ApplicationUserId = student.Id;
-                await UpdateTrainingLogAsync(logId, updatedLog);
-            }
-        }
-
-        // ******************************** Sharing a Student Log  ************************************************
-        public async Task ToggleTrainingLogSharingAsync(int logId, string userId)
-        {
-            var trainingLog = await _context.TrainingLogs
-                .FirstOrDefaultAsync(tl => tl.Id == logId && tl.ApplicationUserId == userId);
-
-            if (trainingLog == null)
-                throw new Exception("Training log not found.");
-
-            trainingLog.IsShared = !trainingLog.IsShared;
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task AddTrainingLogAsync(string userId, TrainingLog trainingLog, List<int> moveIds)
-        {
-            // Validate user exists
-            var user = await _context.ApplicationUsers.FindAsync(userId);
-            if (user == null) throw new Exception("User not found");
-
-            // Add the training log
-            _context.TrainingLogs.Add(trainingLog);
-            await _context.SaveChangesAsync();
-
-            // Link moves to the training log
-            foreach (var moveId in moveIds)
-            {
-                var move = await _context.Moves.FindAsync(moveId);
-                if (move != null)
-                {
-                    // Increment training log count for the move
-                    move.TrainingLogCount++;
-
-                    // Create a new TrainingLogMove
-                    _context.TrainingLogMoves.Add(new TrainingLogMove
-                    {
-                        TrainingLogId = trainingLog.Id,
-                        MoveId = move.Id,
-                    });
-                }
-            }
-
-            // Update user's aggregate training statistics
             user.TotalTrainingTime += trainingLog.TrainingTime;
             user.TotalRoundsRolled += trainingLog.RoundsRolled;
             user.TotalSubmissions += trainingLog.Submissions;
@@ -165,22 +183,58 @@ namespace BjjTrainer_API.Services_API.Trainings
             await _context.SaveChangesAsync();
         }
 
-        public async Task<UserProgressDto> GetUserProgressAsync(string applicationUserId)
+        // ******************************** DELETE TRAINING LOG ********************************
+        public async Task DeleteTrainingLogAsync(int logId)
+        {
+            var log = await _context.TrainingLogs
+                .Include(tl => tl.TrainingLogMoves)
+                .FirstOrDefaultAsync(tl => tl.Id == logId);
+
+            if (log == null)
+                throw new Exception("Training log not found.");
+
+            _context.TrainingLogMoves.RemoveRange(log.TrainingLogMoves);
+            _context.TrainingLogs.Remove(log);
+
+            await _context.SaveChangesAsync();
+        }
+
+        // ******************************** DELETE TRAINING LOG MOVE ********************************
+        public async Task RemoveTrainingLogMoveAsync(int logId, int moveId)
+        {
+            var logMove = await _context.TrainingLogMoves
+                .FirstOrDefaultAsync(tlm => tlm.TrainingLogId == logId && tlm.MoveId == moveId);
+
+            if (logMove != null)
+            {
+                _context.TrainingLogMoves.Remove(logMove);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception("Move not found for this training log.");
+            }
+        }
+
+        // ******************************** GET USER PROGRESS ********************************
+        public async Task<UserProgressDto> GetUserProgressAsync(string userId)
         {
             try
             {
+                // Fetch user's training logs and related data
                 var userLogs = await _context.TrainingLogs
-                    .Where(log => log.ApplicationUserId == applicationUserId)
+                    .Where(log => log.ApplicationUserId == userId)
                     .Include(log => log.TrainingLogMoves)
                     .ThenInclude(tlm => tlm.Move)
                     .ToListAsync();
 
                 var trainingGoals = await _context.TrainingGoals
-                    .Where(goal => goal.ApplicationUserId == applicationUserId)
+                    .Where(goal => goal.ApplicationUserId == userId)
                     .Include(goal => goal.UserTrainingGoalMoves)
                     .ThenInclude(gtm => gtm.Move)
                     .ToListAsync();
 
+                // Return default progress if no logs or goals exist
                 if (!userLogs.Any() && !trainingGoals.Any())
                 {
                     return new UserProgressDto
@@ -198,19 +252,23 @@ namespace BjjTrainer_API.Services_API.Trainings
                     };
                 }
 
+                // Aggregate statistics
                 var totalTrainingTime = userLogs.Sum(log => log.TrainingTime);
                 var totalRoundsRolled = userLogs.Sum(log => log.RoundsRolled);
                 var totalSubmissions = userLogs.Sum(log => log.Submissions);
                 var totalTaps = userLogs.Sum(log => log.Taps);
 
-                var oneWeekAgo = DateTime.Now.AddDays(-7);
+                // Calculate weekly training hours
+                var oneWeekAgo = DateTime.UtcNow.AddDays(-7);
                 var weeklyTrainingHours = userLogs
                     .Where(log => log.Date >= oneWeekAgo)
                     .Sum(log => log.TrainingTime / 60);
 
-                var averageSessionLength = userLogs.Average(log => log.TrainingTime);
+                // Calculate average session length
+                var averageSessionLength = userLogs.Any() ? userLogs.Average(log => log.TrainingTime) : 0;
 
-                var currentMonth = DateTime.Now.Month;
+                // Identify the most practiced move this month
+                var currentMonth = DateTime.UtcNow.Month;
                 var favoriteMove = userLogs
                     .Where(log => log.Date.Month == currentMonth)
                     .SelectMany(log => log.TrainingLogMoves)
@@ -218,6 +276,7 @@ namespace BjjTrainer_API.Services_API.Trainings
                     .OrderByDescending(g => g.Count())
                     .FirstOrDefault()?.Key ?? "No moves practiced";
 
+                // Aggregate moves performed
                 var movesPerformed = userLogs
                     .SelectMany(log => log.TrainingLogMoves)
                     .GroupBy(tlm => tlm.Move.Id)
@@ -228,12 +287,16 @@ namespace BjjTrainer_API.Services_API.Trainings
                         Description = group.First().Move.Description,
                         SkillLevel = group.First().Move.SkillLevel,
                         TrainingLogCount = group.Count()
-                    })
-                    .ToList();
+                    }).ToList();
 
-                var totalGoalsAchieved = trainingGoals.Count(goal => goal.GoalDate <= DateTime.Now);
-                var totalMoves = trainingGoals.SelectMany(goal => goal.UserTrainingGoalMoves).Select(gtm => gtm.Move).Distinct().Count();
+                var totalGoalsAchieved = trainingGoals.Count(goal => goal.GoalDate <= DateTime.UtcNow);
+                var totalMoves = trainingGoals
+                    .SelectMany(goal => goal.UserTrainingGoalMoves)
+                    .Select(gtm => gtm.Move)
+                    .Distinct()
+                    .Count();
 
+                // Return user progress summary
                 return new UserProgressDto
                 {
                     TotalTrainingTime = totalTrainingTime,
@@ -252,21 +315,6 @@ namespace BjjTrainer_API.Services_API.Trainings
             {
                 throw new InvalidOperationException("An error occurred while fetching user progress.", ex);
             }
-        }
-
-        public async Task DeleteTrainingLogAsync(int logId)
-        {
-            var log = await _context.TrainingLogs
-                .Include(tl => tl.TrainingLogMoves)
-                .FirstOrDefaultAsync(tl => tl.Id == logId);
-
-            if (log == null)
-                throw new Exception("Training log not found.");
-
-            _context.TrainingLogMoves.RemoveRange(log.TrainingLogMoves);
-            _context.TrainingLogs.Remove(log);
-
-            await _context.SaveChangesAsync();
         }
     }
 }

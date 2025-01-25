@@ -7,12 +7,12 @@ using System.Collections.ObjectModel;
 
 namespace BjjTrainer.ViewModels.TrainingLogs
 {
-    public class TrainingLogFormViewModel : BaseViewModel
+    public partial class TrainingLogFormViewModel : BaseViewModel
     {
         private readonly TrainingService _trainingService;
         private readonly MoveService _moveService;
 
-        public ObservableCollection<Move> Moves { get; private set; } = new ObservableCollection<Move>();
+        public ObservableCollection<Move> Moves { get; private set; } = [];
 
         public DateTime Date { get; set; } = DateTime.Now;
         public double? TrainingTime { get; set; }

@@ -1,6 +1,5 @@
 ﻿using BjjTrainer.Models.DTO.TrainingLog;
 using BjjTrainer.Services.Trainings;
-using BjjTrainer.Views.Training;
 using MvvmHelpers;
 using System.Collections.ObjectModel;
 
@@ -11,7 +10,7 @@ namespace BjjTrainer.ViewModels.TrainingLogs
         private readonly TrainingService _trainingService;
         private readonly INavigation _navigation;
 
-        public ObservableCollection<TrainingLogDto> TrainingLogs { get; set; } = new ObservableCollection<TrainingLogDto>();
+        public ObservableCollection<TrainingLogDto> TrainingLogs { get; set; } = [];
 
         // Public Parameterless Constructor
         public TrainingLogListViewModel()

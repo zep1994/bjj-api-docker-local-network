@@ -10,12 +10,12 @@ namespace BjjTrainer.Services.Moves
             try
             {
                 var moves = await HttpClient.GetFromJsonAsync<List<Move>>("moves");
-                return moves ?? new List<Move>();
+                return moves ?? [];
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error fetching moves: {ex.Message}");
-                return new List<Move>();
+                return [];
             }
         }
     }

@@ -2,67 +2,59 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BjjTrainer.Views.Moves.MovesPage"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             xmlns:vm="clr-namespace:BjjTrainer.ViewModels.Moves"
              Title="Moves"
              BackgroundColor="{StaticResource BackgroundColor}">
 
-    <ContentPage.Resources>
-        <!-- Label Styles -->
-        <Style TargetType="Label">
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="TextColor" Value="#333" />
-        </Style>
+    <ContentPage.BindingContext>
+        <vm:MovesViewModel />
+    </ContentPage.BindingContext>
 
-        <!-- Frame/Card Style -->
-        <Style TargetType="Frame">
-            <Setter Property="CornerRadius" Value="15" />
-            <Setter Property="Padding" Value="15" />
-            <Setter Property="BackgroundColor" Value="White" />
-            <Setter Property="BorderColor" Value="#E0E0E0" />
-            <Setter Property="HasShadow" Value="True" />
-        </Style>
-    </ContentPage.Resources>
+    <Grid RowDefinitions="Auto,*">
+         <!-- Syncfusion ListView -->
+        <syncfusion:SfListView x:Name="LogListView"
+                               Grid.Row="1"
+                               ItemsSource="{Binding Moves}"
+                               SelectionMode="Single"
+                               AutoFitMode="Height">
 
-    <ContentPage.Content>
-        <RefreshView Command="{Binding LoadMovesCommand}" IsRefreshing="{Binding IsBusy}">
-            <CollectionView ItemsSource="{Binding Moves}" 
-                            VerticalOptions="FillAndExpand"
-                            BackgroundColor="Transparent">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame Margin="10">
-                            <VerticalStackLayout Spacing="10">
-                                <!-- Move Name -->
-                                <Label Text="{Binding Name}" 
-                                       FontSize="20" 
-                                       FontAttributes="Bold" 
-                                       TextColor="#007AFF" />
+            <syncfusion:SfListView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="15"
+                           Margin="10"
+                           BorderColor="LightGray"
+                           CornerRadius="8"
+                           HasShadow="True"
+                           BackgroundColor="{StaticResource AccentBlue}">
 
-                                <!-- Move Description -->
-                                <Label Text="{Binding Description}" 
-                                       FontSize="14" 
-                                       TextColor="#555"
-                                       LineBreakMode="WordWrap" />
+                        <Grid ColumnDefinitions="*,Auto"
+                              RowDefinitions="Auto,Auto,Auto,Auto"
+                              ColumnSpacing="10"
+                              RowSpacing="6">
 
-                                <!-- Additional Details -->
-                                <HorizontalStackLayout Spacing="10">
-                                    <Label Text="Skill Level:" FontSize="14" FontAttributes="Bold" TextColor="#444" />
-                                    <Label Text="{Binding SkillLevel}" FontSize="14" TextColor="#007AFF" />
-                                </HorizontalStackLayout>
+                            <!-- Title and Date Section -->
+                            <Label Text="Moves"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   Grid.ColumnSpan="2" />
 
-                                <HorizontalStackLayout Spacing="10">
-                                    <Label Text="Category:" FontSize="14" FontAttributes="Bold" TextColor="#444" />
-                                    <Label Text="{Binding Category}" FontSize="14" TextColor="#32CD32" />
-                                </HorizontalStackLayout>
+                            <!-- Training Time and Details -->
+                            <Label Text="{Binding Name, StringFormat='Move Name: {0} hrs'}"
+                                   FontSize="14"
+                                   TextColor="White"
+                                   Grid.Row="3" />
 
-                                <HorizontalStackLayout Spacing="10">
-                                    <Label Text="Used:" FontSize="14" FontAttributes="Bold" TextColor="#444" />
-                                    <Label Text="{Binding TrainingLogCount, StringFormat='{0} times'}" FontSize="14" TextColor="#800080" />
-                                </HorizontalStackLayout>
-                            </VerticalStackLayout>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </RefreshView>
-    </ContentPage.Content>
+                            <Label Text="{Binding Description, StringFormat='Description: {0}'}"
+                                   FontSize="14"
+                                   TextColor="White"
+                                   Grid.Row="4" />
+
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </syncfusion:SfListView.ItemTemplate>
+        </syncfusion:SfListView>
+    </Grid>
 </ContentPage>

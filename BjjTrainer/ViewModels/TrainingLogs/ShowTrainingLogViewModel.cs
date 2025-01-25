@@ -5,10 +5,11 @@ using System.Collections.ObjectModel;
 
 namespace BjjTrainer.ViewModels.TrainingLogs;
 
-public class ShowTrainingLogViewModel : BaseViewModel
+public partial class ShowTrainingLogViewModel : BaseViewModel
 {
     private readonly TrainingService _trainingService;
 
+    public int Id { get; set; }  // Add this property
     public DateTime Date { get; set; }
     public double TrainingTime { get; set; }
     public int RoundsRolled { get; set; }
@@ -16,7 +17,7 @@ public class ShowTrainingLogViewModel : BaseViewModel
     public int Taps { get; set; }
     public string Notes { get; set; } = string.Empty;
     public string SelfAssessment { get; set; } = string.Empty;
-    public ObservableCollection<Move> Moves { get; set; } = new();
+    public ObservableCollection<Move> Moves { get; set; } = [];
     private bool isCoachLog;
     public bool IsCoachLog
     {
@@ -53,12 +54,14 @@ public class ShowTrainingLogViewModel : BaseViewModel
             if (log == null)
             {
                 Console.WriteLine($"No training log found for ID: {logId}");
+                await Application.Current.MainPage.DisplayAlert("Error", "Training log not found.", "OK");
                 return;
             }
 
             Console.WriteLine($"Training log retrieved: {log.Notes}");
 
             // Set properties from fetched log
+            Id = log.Id;  // Map from DTO
             Date = log.Date;
             TrainingTime = log.TrainingTime;
             RoundsRolled = log.RoundsRolled;

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using BjjTrainer_API.Models.Moves;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BjjTrainer_API.Models.DTO.TrainingLogDTOs
 {
@@ -21,8 +22,6 @@ namespace BjjTrainer_API.Models.DTO.TrainingLogDTOs
         public string Notes { get; set; } = string.Empty;
         public string SelfAssessment { get; set; } = string.Empty;
         public List<int> MoveIds { get; set; } = [];
-
-        // Fields relevant during log creation (optional event linkage)
         public bool IsCoachLog { get; set; }
         public bool IsImported { get; set; } = false;
         public int? ImportedFromLogId { get; set; }

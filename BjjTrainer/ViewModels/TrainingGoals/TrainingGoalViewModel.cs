@@ -14,7 +14,7 @@ public class TrainingGoalViewModel : BaseViewModel
 
     public DateTime GoalDate { get; set; } = DateTime.Today;
     public string Notes { get; set; }
-    public ObservableCollection<Move> Moves { get; set; } = new();
+    public ObservableCollection<Move> Moves { get; set; } = [];
 
     public TrainingGoalViewModel()
     {

@@ -27,6 +27,7 @@
     <!-- Dark Blue for graph bars and text -->
     <Color x:Key="TextPrimary">#03A9F4</Color>
     <!-- Black for text and graph elements -->
+    <Color x:Key="AccentGreen">#50E3C2</Color>
 
     <!-- Secondary Palette -->
     <Color x:Key="Secondary">#2C2C2C</Color>
