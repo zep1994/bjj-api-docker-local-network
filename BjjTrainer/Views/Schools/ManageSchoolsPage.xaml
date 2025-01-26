@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BjjTrainer.Views.Schools.ManageSchoolsPage">
+    <StackLayout Padding="20" Spacing="20">
+        <Label FontSize="Medium"
+               HorizontalOptions="Center"
+               Text="Schools" />
+        <CollectionView ItemsSource="{Binding Schools}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Button Command="{Binding CreateSchoolCommand}" Text="Create School" />
+    </StackLayout>
+</ContentPage>

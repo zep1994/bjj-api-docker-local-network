@@ -9,8 +9,10 @@
     xmlns:users="clr-namespace:BjjTrainer.Views.Users"
     xmlns:moves="clr-namespace:BjjTrainer.Views.Moves"
     xmlns:events="clr-namespace:BjjTrainer.Views.Events"
+    xmlns:schools="clr-namespace:BjjTrainer.Views.Schools"
     xmlns:train="clr-namespace:BjjTrainer.Views.Training"
     xmlns:comp="clr-namespace:BjjTrainer.Views.Components"
+    xmlns:coach="clr-namespace:BjjTrainer.Views.Coaches"
     xmlns:goals="clr-namespace:BjjTrainer.Views.TrainingGoals"
     xmlns:viewModels="clr-namespace:BjjTrainer.ViewModels"
     Title="BjjTrainer"
@@ -82,6 +84,12 @@
             <ShellContent Route="MovesPage" ContentTemplate="{DataTemplate moves:MovesPage}" />
         </Tab>
 
+        <Tab Title="Coach Management" Icon="moves.png">
+            <ShellContent Title="Coach Management" ContentTemplate="{DataTemplate coach:CoachManagementPage}" />
+        </Tab>
+
+        
+
         <!-- User Profile Tab -->
         <ShellContent Title="Profile"
                Icon="profile_icon.png"
@@ -101,4 +109,5 @@
     <ShellContent Title="Show Event Page" Route="ShowEventPage" ContentTemplate="{DataTemplate events:ShowEventPage}" />
     <ShellContent Title="Update Event" Route="UpdateEventPage" ContentTemplate="{DataTemplate events:UpdateEventPage}" />
     <ShellContent Title="Create Event" Route="CreateEventPage" ContentTemplate="{DataTemplate events:CreateEventPage}" />
+    <ShellContent Title="Manage School" Route="ManageSchoolsPage" ContentTemplate="{DataTemplate schools:ManageSchoolsPage}" />
 </Shell>

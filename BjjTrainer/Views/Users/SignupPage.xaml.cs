@@ -1,4 +1,4 @@
-using BjjTrainer.Models.Users;
+using BjjTrainer.Models.Schools;
 using BjjTrainer.Services.Users;
 using Microsoft.Maui.Storage;
 

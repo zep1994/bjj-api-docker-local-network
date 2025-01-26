@@ -4,6 +4,7 @@ using BjjTrainer_API.Services_API.Calendars;
 using BjjTrainer_API.Services_API.Goals;
 using BjjTrainer_API.Services_API.Lessons;
 using BjjTrainer_API.Services_API.Moves;
+using BjjTrainer_API.Services_API.Schools;
 using BjjTrainer_API.Services_API.Trainings;
 using BjjTrainer_API.Services_API.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

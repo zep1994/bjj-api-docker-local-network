@@ -63,6 +63,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Remove="ViewModels\Schools\ManageSchoolsViewModel1.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Remove="Resources\Images\add.png" />
 	  <None Remove="Resources\Images\bjjlogo.png" />
 	  <None Remove="Resources\Images\calendar.png" />
@@ -109,6 +113,9 @@
 	  <MauiXaml Update="Controls\FlyoutHeader.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Coaches\CoachManagementPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Components\MoveSelectionModal.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -137,6 +144,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Moves\MovesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Schools\ManageSchoolsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\TrainingGoals\ShowTrainingGoalPage.xaml">
@@ -184,7 +194,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="Models\Coaches\" />
+	  <Folder Include="Models\DTO\Coaches\" />
+	  <Folder Include="Models\DTO\Schools\" />
 	  <Folder Include="Models\Training\" />
+	  <Folder Include="Services\Coaches\" />
 	</ItemGroup>
 
 	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionBjjTrainerHideInfoBar="True" XamarinHotReloadGenericExceptionInfoBarBjjTrainerHideInfoBar="True" XamarinHotReloadUnhandledDeviceExceptionBjjTrainerHideInfoBar="True" /></VisualStudio></ProjectExtensions>

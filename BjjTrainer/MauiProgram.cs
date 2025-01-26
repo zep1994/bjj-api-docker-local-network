@@ -2,21 +2,26 @@
 using BjjTrainer.Services.Events;
 using BjjTrainer.Services.Lessons;
 using BjjTrainer.Services.Moves;
+using BjjTrainer.Services.Schools;
 using BjjTrainer.Services.TrainingGoals;
 using BjjTrainer.Services.Trainings;
 using BjjTrainer.Services.Users;
 using BjjTrainer.ViewModels;
+using BjjTrainer.ViewModels.Coaches;
 using BjjTrainer.ViewModels.Components;
 using BjjTrainer.ViewModels.Events;
 using BjjTrainer.ViewModels.Lessons;
 using BjjTrainer.ViewModels.Moves;
+using BjjTrainer.ViewModels.Schools;
 using BjjTrainer.ViewModels.TrainingGoals;
 using BjjTrainer.ViewModels.TrainingLogs;
 using BjjTrainer.ViewModels.Users;
+using BjjTrainer.Views.Coaches;
 using BjjTrainer.Views.Components;
 using BjjTrainer.Views.Events;
 using BjjTrainer.Views.Lessons;
 using BjjTrainer.Views.Moves;
+using BjjTrainer.Views.Schools;
 using BjjTrainer.Views.Training;
 using BjjTrainer.Views.TrainingGoals;
 using BjjTrainer.Views.Users;
@@ -103,7 +108,16 @@ namespace BjjTrainer
             builder.Services.AddTransient<MovesPage>();
             builder.Services.AddTransient<MoveSelectionModal>();
             builder.Services.AddTransient<MoveSelectionViewModel>();
-           
+
+
+            //Coach
+            builder.Services.AddTransient<CoachManagementViewModel>();
+            builder.Services.AddTransient<CoachManagementPage>();
+            builder.Services.AddTransient<ManageSchoolsViewModel>();
+            builder.Services.AddTransient<ManageSchoolsPage>();
+            
+            //School
+            builder.Services.AddSingleton<SchoolService>();
 
 
 

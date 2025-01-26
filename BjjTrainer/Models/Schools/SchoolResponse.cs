@@ -1,4 +1,4 @@
-﻿namespace BjjTrainer.Models.Users
+﻿namespace BjjTrainer.Models.Schools
 {
     public class SchoolResponse
     {

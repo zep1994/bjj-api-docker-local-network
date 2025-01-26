@@ -2,6 +2,7 @@
 using BjjTrainer_API.Models.Goals;
 using BjjTrainer_API.Models.Lessons;
 using BjjTrainer_API.Models.Moves;
+using BjjTrainer_API.Models.Schools;
 using BjjTrainer_API.Models.Trainings;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
