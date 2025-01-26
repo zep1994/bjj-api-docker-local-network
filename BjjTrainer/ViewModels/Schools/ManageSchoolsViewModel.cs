@@ -1,8 +1,10 @@
-﻿using BjjTrainer.Models.Schools;
+﻿using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using BjjTrainer.Models.Schools;
 using BjjTrainer.Services.Schools;
 using MvvmHelpers;
-using System.Collections.ObjectModel;
 using System.Windows.Input;
+using BjjTrainer.Views.Schools;
 
 namespace BjjTrainer.ViewModels.Schools
 {
@@ -12,16 +14,16 @@ namespace BjjTrainer.ViewModels.Schools
 
         public ObservableCollection<School> Schools { get; set; } = new();
 
-        //public ICommand CreateSchoolCommand { get; }
-        //public ICommand EditSchoolCommand { get; }
+        public ICommand CreateSchoolCommand { get; }
+        public ICommand EditSchoolCommand { get; }
         public ICommand DeleteSchoolCommand { get; }
 
         public ManageSchoolsViewModel(SchoolService schoolService)
         {
             _schoolService = schoolService;
 
-            //CreateSchoolCommand = new Command(async () => await CreateSchool());
-            //EditSchoolCommand = new Command<School>(async (school) => await EditSchool(school));
+            CreateSchoolCommand = new Command(async () => await CreateSchool());
+            EditSchoolCommand = new Command<School>(async (school) => await EditSchool(school));
             DeleteSchoolCommand = new Command<School>(async (school) => await DeleteSchool(school));
 
             LoadSchools();
@@ -44,17 +46,15 @@ namespace BjjTrainer.ViewModels.Schools
             }
         }
 
-        //private async Task CreateSchool()
-        //{
-        //    // Navigate to create school page
-        //    await Shell.Current.GoToAsync(nameof(CreateSchoolPage));
-        //}
+        private async Task CreateSchool()
+        {
+            await Shell.Current.GoToAsync(nameof(CreateSchoolPage));
+        }
 
-        //private async Task EditSchool(School school)
-        //{
-        //    // Navigate to edit school page with school data
-        //    await Shell.Current.GoToAsync($"{nameof(EditSchoolPage)}?id={school.Id}");
-        //}
+        private async Task EditSchool(School school)
+        {
+            await Shell.Current.GoToAsync($"{nameof(UpdateSchoolPage)}?id={school.Id}");
+        }
 
         private async Task DeleteSchool(School school)
         {

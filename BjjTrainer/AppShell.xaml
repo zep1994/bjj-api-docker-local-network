@@ -110,4 +110,6 @@
     <ShellContent Title="Update Event" Route="UpdateEventPage" ContentTemplate="{DataTemplate events:UpdateEventPage}" />
     <ShellContent Title="Create Event" Route="CreateEventPage" ContentTemplate="{DataTemplate events:CreateEventPage}" />
     <ShellContent Title="Manage School" Route="ManageSchoolsPage" ContentTemplate="{DataTemplate schools:ManageSchoolsPage}" />
+    <ShellContent Title="Create School" Route="CreateSchoolPage" ContentTemplate="{DataTemplate schools:CreateSchoolPage}" />
+    <ShellContent Title="Update School" Route="UpdateSchoolPage" ContentTemplate="{DataTemplate schools:UpdateSchoolPage}" />
 </Shell>

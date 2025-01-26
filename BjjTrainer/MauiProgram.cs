@@ -115,7 +115,13 @@ namespace BjjTrainer
             builder.Services.AddTransient<CoachManagementPage>();
             builder.Services.AddTransient<ManageSchoolsViewModel>();
             builder.Services.AddTransient<ManageSchoolsPage>();
-            
+
+            builder.Services.AddTransient<CreateSchoolViewModel>();
+            builder.Services.AddTransient<UpdateSchoolViewModel>();
+            builder.Services.AddTransient<CreateSchoolPage>();
+            builder.Services.AddTransient<UpdateSchoolPage>();
+
+
             //School
             builder.Services.AddSingleton<SchoolService>();
 
