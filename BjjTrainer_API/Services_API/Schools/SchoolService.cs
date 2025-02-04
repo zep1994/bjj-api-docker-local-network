@@ -14,17 +14,20 @@ namespace BjjTrainer_API.Services_API.Schools
             _context = context;
         }
 
-        public async Task<School?> GetSchoolByIdAsync(string coachId, int schoolId)
+        public async Task<School?> GetSchoolByCoachIdAsync(string coachId)
         {
-            var coach = await _context.ApplicationUsers.Include(u => u.School)
+            // Find the coach and retrieve their school ID
+            var coach = await _context.ApplicationUsers
+                .Include(u => u.School) // Ensure the School relationship is loaded
                 .FirstOrDefaultAsync(u => u.Id == coachId && u.Role == UserRole.Coach);
 
-            if (coach == null || coach.SchoolId != schoolId)
+            if (coach == null || coach.SchoolId == null)
             {
-                return null; // Coach is not authorized or the school does not exist
+                return null; // Coach does not exist or is not assigned to a school
             }
 
-            return await _context.Schools.FirstOrDefaultAsync(s => s.Id == schoolId);
+            // Fetch and return the school details
+            return await _context.Schools.FirstOrDefaultAsync(s => s.Id == coach.SchoolId);
         }
 
         public async Task<string> CreateSchoolAndAddCoachAsync(string coachId, string schoolName, string schoolAddress, string schoolPhone)

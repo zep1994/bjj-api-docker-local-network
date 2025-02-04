@@ -1,4 +1,6 @@
-﻿using BjjTrainer.Views.Schools;
+﻿using BjjTrainer.Models.Schools;
+using BjjTrainer.Services.Schools;
+using BjjTrainer.Views.Schools;
 using MvvmHelpers;
 using System.Windows.Input;
 
@@ -6,24 +8,42 @@ namespace BjjTrainer.ViewModels.Coaches
 {
     public class CoachManagementViewModel : BaseViewModel
     {
-        public ICommand NavigateToManageSchoolsCommand { get; }
-        public ICommand NavigateToManageLessonsCommand { get; }
-        public ICommand NavigateToManageMovesCommand { get; }
-        public ICommand NavigateToManageEventsCommand { get; }
+        private readonly SchoolService _schoolService;
+        private School _coachSchool;
 
-        public CoachManagementViewModel()
+        public School CoachSchool
         {
-            NavigateToManageSchoolsCommand = new Command(async () =>
-                await Shell.Current.GoToAsync(nameof(ManageSchoolsPage)));
+            get => _coachSchool;
+            set
+            {
+                _coachSchool = value;
+                OnPropertyChanged(); // Notify UI
+                OnPropertyChanged(nameof(HasSchool));
+            }
+        }
+        public bool HasSchool => CoachSchool != null;
 
-            //NavigateToManageLessonsCommand = new Command(async () =>
-            //    await Shell.Current.GoToAsync(nameof(ManageLessonsPage)));
+        public CoachManagementViewModel(SchoolService schoolService)
+        {
+            _schoolService = schoolService;
+            LoadCoachSchool();
+        }
 
-            //NavigateToManageMovesCommand = new Command(async () =>
-            //    await Shell.Current.GoToAsync(nameof(ManageMovesPage)));
+        private async void LoadCoachSchool()
+        {
+            try
+            {
+                var userId = Preferences.Get("UserId", string.Empty);
+                if (string.IsNullOrEmpty(userId)) return;
 
-            //NavigateToManageEventsCommand = new Command(async () =>
-            //    await Shell.Current.GoToAsync(nameof(ManageEventsPage)));
+                CoachSchool = await _schoolService.GetSchoolByIdAsync(userId);
+                OnPropertyChanged(nameof(CoachSchool));
+                OnPropertyChanged(nameof(HasSchool));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading coach's school: {ex.Message}");
+            }
         }
     }
 }

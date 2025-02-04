@@ -24,7 +24,6 @@ namespace BjjTrainer.ViewModels.Schools
 
             CreateSchoolCommand = new Command(async () => await CreateSchool());
             EditSchoolCommand = new Command<School>(async (school) => await EditSchool(school));
-            DeleteSchoolCommand = new Command<School>(async (school) => await DeleteSchool(school));
 
             LoadSchools();
         }
@@ -56,7 +55,7 @@ namespace BjjTrainer.ViewModels.Schools
             await Shell.Current.GoToAsync($"{nameof(UpdateSchoolPage)}?id={school.Id}");
         }
 
-        private async Task DeleteSchool(School school)
+        public async Task DeleteSchoolAsync(School school)
         {
             try
             {

@@ -13,12 +13,29 @@ namespace BjjTrainer.Views.Schools
             BindingContext = viewModel;
         }
 
+        private async void OnBackButtonClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//CoachManagementPage");
+        }
+
         protected override async void OnAppearing()
         {
             base.OnAppearing();
             if (BindingContext is UpdateSchoolViewModel viewModel)
             {
                 await viewModel.LoadSchoolAsync(SchoolId);
+            }
+        }
+
+        public async void OnSaveClicked()
+        {
+            try
+            {
+                Console.WriteLine($"Test");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating school: {ex.Message}");
             }
         }
     }

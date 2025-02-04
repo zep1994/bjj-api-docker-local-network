@@ -26,25 +26,18 @@ namespace BjjTrainer_API.Controllers.Schools
             _httpContextAccessor = httpContextAccessor;
         }
 
-        [HttpGet("{id}")]
-        [Authorize]
-        public async Task<IActionResult> GetSchoolById(int id)
+        [HttpGet("{coachId}")]
+        public async Task<IActionResult> GetSchoolByCoach(string coachId)
         {
-            var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized("User not logged in.");
-            }
+            var school = await _schoolService.GetSchoolByCoachIdAsync(coachId);
 
-            var school = await _schoolService.GetSchoolByIdAsync(userId, id);
             if (school == null)
             {
-                return NotFound("School not found or you do not have access.");
+                return NotFound("School not found or coach is not assigned to a school.");
             }
 
             return Ok(school);
         }
-
 
         [HttpPost("create")]
         [Authorize]

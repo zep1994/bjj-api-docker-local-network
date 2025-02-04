@@ -20,7 +20,7 @@ namespace BjjTrainer.Services.Schools
         }
 
         // Get school by ID
-        public async Task<School> GetSchoolByIdAsync(int id)
+        public async Task<School> GetSchoolByIdAsync(string id)
         {
             try
             {

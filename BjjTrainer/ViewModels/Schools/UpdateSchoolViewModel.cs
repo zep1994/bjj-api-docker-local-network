@@ -23,7 +23,7 @@ namespace BjjTrainer.ViewModels.Schools
         {
             try
             {
-                School = await _schoolService.GetSchoolByIdAsync(schoolId);
+               // School = await _schoolService.GetSchoolByIdAsync(schoolId);
             }
             catch (Exception ex)
             {

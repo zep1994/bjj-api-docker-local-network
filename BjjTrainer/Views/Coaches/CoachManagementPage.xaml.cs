@@ -1,9 +1,25 @@
-namespace BjjTrainer.Views.Coaches;
+using BjjTrainer.ViewModels.Coaches;
+using BjjTrainer.Views.Schools;
 
-public partial class CoachManagementPage : ContentPage
+namespace BjjTrainer.Views.Coaches
 {
-	public CoachManagementPage()
-	{
-		InitializeComponent();
-	}
+    public partial class CoachManagementPage : ContentPage
+    {
+        private readonly CoachManagementViewModel _viewModel;
+
+        public CoachManagementPage(CoachManagementViewModel viewModel)
+        {
+            InitializeComponent();
+            BindingContext = viewModel;
+            _viewModel = viewModel;
+        }
+
+        private async void OnEditSchoolClicked(object sender, EventArgs e)
+        {
+            if (_viewModel.CoachSchool != null)
+            {
+                await Shell.Current.GoToAsync($"///UpdateSchoolPage?id={_viewModel.CoachSchool.Id}");
+            }
+        }
+    }
 }
