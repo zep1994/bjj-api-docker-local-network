@@ -16,10 +16,9 @@
                 <StackLayout Spacing="10">
                     <Label Text="Your School" FontSize="18" FontAttributes="Bold" />
 
-                    <!-- Fix the Binding for School Name -->
+                    <!-- Display School Name -->
                     <Label Text="{Binding CoachSchool.Name}" 
-                           FontSize="16" 
-
+                           FontSize="16"
                            IsVisible="{Binding HasSchool}" />
 
                     <Label Text="No school assigned." 
@@ -34,6 +33,29 @@
                             IsVisible="{Binding HasSchool}" />
                 </StackLayout>
             </Frame>
+
+            <!-- Navigation Buttons for Lessons, Moves, and Events -->
+            <Frame Padding="15" BackgroundColor="{StaticResource CardBackgroundColor}" CornerRadius="10" HasShadow="True">
+                <StackLayout Spacing="10">
+                    <Label Text="Manage Content" FontSize="18" FontAttributes="Bold" />
+
+                    <Button Text="View Lessons"
+                            BackgroundColor="MediumSeaGreen"
+                            TextColor="White"
+                            Clicked="OnViewLessonsClicked" />
+
+                    <Button Text="View Moves"
+                            BackgroundColor="SteelBlue"
+                            TextColor="White"
+                            Clicked="OnViewMovesClicked" />
+
+                    <Button Text="View Events"
+                            BackgroundColor="DarkOrange"
+                            TextColor="White"
+                            Clicked="OnViewEventsClicked" />
+                </StackLayout>
+            </Frame>
+
         </StackLayout>
     </ScrollView>
 </ContentPage>
