@@ -1,8 +1,8 @@
 ﻿using BjjTrainer.Models.Schools;
 using BjjTrainer.Services.Schools;
-using BjjTrainer.Views.Schools;
 using MvvmHelpers;
-using System.Windows.Input;
+using System.Threading.Tasks;
+using Microsoft.Maui.Storage; // Ensures Preferences is accessible
 
 namespace BjjTrainer.ViewModels.Coaches
 {
@@ -17,26 +17,44 @@ namespace BjjTrainer.ViewModels.Coaches
             set
             {
                 _coachSchool = value;
-                OnPropertyChanged(); // Notify UI
+                OnPropertyChanged();
                 OnPropertyChanged(nameof(HasSchool));
             }
         }
+
         public bool HasSchool => CoachSchool != null;
 
         public CoachManagementViewModel(SchoolService schoolService)
         {
             _schoolService = schoolService;
-            LoadCoachSchool();
+            Task.Run(async () => await LoadCoachSchool()); // Load data asynchronously
         }
 
-        private async void LoadCoachSchool()
+        private async Task LoadCoachSchool()
         {
             try
             {
                 var userId = Preferences.Get("UserId", string.Empty);
-                if (string.IsNullOrEmpty(userId)) return;
+                if (string.IsNullOrEmpty(userId))
+                {
+                    Console.WriteLine("Error: UserId is missing.");
+                    return;
+                }
 
-                CoachSchool = await _schoolService.GetSchoolByIdAsync(userId);
+                Console.WriteLine($"Fetching school for UserId: {userId}");
+                var schoolData = await _schoolService.GetSchoolByCoachIdAsync(userId);
+
+                if (schoolData != null)
+                {
+                    Console.WriteLine($"School Loaded: {schoolData.Name}");
+                    CoachSchool = schoolData;
+                }
+                else
+                {
+                    Console.WriteLine("Error: No school assigned to this coach.");
+                    CoachSchool = new School(); // Prevents null issues in UI binding
+                }
+
                 OnPropertyChanged(nameof(CoachSchool));
                 OnPropertyChanged(nameof(HasSchool));
             }

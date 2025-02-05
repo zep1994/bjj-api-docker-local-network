@@ -1,21 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.DataForm;assembly=Syncfusion.Maui.DataForm"
              x:Class="BjjTrainer.Views.Schools.UpdateSchoolPage"
+             Title="Update School"
              BackgroundColor="{StaticResource BackgroundColor}">
 
-    <ScrollView>
-        <StackLayout Padding="20" Spacing="15">
+    <ContentPage.Resources>
+        <Style x:Key="labelStyle"
+               TargetType="Label">
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="TextColor" Value="Black" />
+        </Style>
+    </ContentPage.Resources>
 
-            <Label Text="Update School" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
+    <ContentPage.Content>
+        <Grid RowDefinitions="Auto, *, Auto">
 
-            <Entry Placeholder="School Name" Text="{Binding School.Name}" />
-            <Entry Placeholder="Address" Text="{Binding School.Address}" />
-            <Entry Placeholder="Phone" Text="{Binding School.Phone}" />
+            <!-- Page Title -->
+            <Label Text="Update School Information" 
+                   FontSize="24" 
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Style="{StaticResource labelStyle}"
+                   Grid.Row="0" />
 
-            <Button Text="Save Changes"
-                    BackgroundColor="{StaticResource ButtonBackgroundColor}"
-                    TextColor="White"
-                    Clicked="OnSaveClicked" />
-        </StackLayout>
-    </ScrollView>
+            <!-- Syncfusion SfDataForm -->
+            <syncfusion:SfDataForm x:Name="dataForm"
+                                   AutoGenerateItems="False"
+                                   DataObject="{Binding School}"
+                                   ValidationMode="LostFocus"
+                                   CommitMode="LostFocus"
+                                   BackgroundColor="{StaticResource BackgroundColor}"
+                                   Padding="20"
+                                   Grid.Row="1">
+
+                <syncfusion:SfDataForm.Items>
+                    <syncfusion:DataFormTextItem FieldName="Name"
+                                                 LabelText="School Name"
+                                                 PlaceholderText="Enter school name"
+                                                 MaxLength="100" />
+
+                    <syncfusion:DataFormTextItem FieldName="Address"
+                                                 LabelText="Address"
+                                                 PlaceholderText="Enter address"
+                                                 MaxLength="200" />
+
+                    <syncfusion:DataFormTextItem FieldName="Phone"
+                                                 LabelText="Phone Number"
+                                                 PlaceholderText="Enter phone"
+                                                 Keyboard="Telephone"
+                                                 MaxLength="15" />
+                </syncfusion:SfDataForm.Items>
+            </syncfusion:SfDataForm>
+
+            <!-- Buttons -->
+            <VerticalStackLayout Grid.Row="2"
+                                 Spacing="10"
+                                 Padding="15">
+
+                <Button Text="Save Update"
+                        Clicked="OnSaveClicked"
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        FontSize="20"
+                        FontAttributes="Bold"
+                        CornerRadius="16"
+                        HeightRequest="45"
+                        HorizontalOptions="FillAndExpand" />
+
+                <Button Text="Back"
+                        Clicked="OnBackButtonClicked"
+                        BackgroundColor="Gray"
+                        TextColor="White"
+                        FontSize="20"
+                        FontAttributes="Bold"
+                        CornerRadius="16"
+                        HeightRequest="45"
+                        HorizontalOptions="FillAndExpand" />
+
+            </VerticalStackLayout>
+
+        </Grid>
+    </ContentPage.Content>
 </ContentPage>

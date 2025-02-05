@@ -1,42 +1,62 @@
+using BjjTrainer.Models.Schools;
 using BjjTrainer.ViewModels.Schools;
+using Newtonsoft.Json;
 
 namespace BjjTrainer.Views.Schools
 {
-    [QueryProperty(nameof(SchoolId), "id")]
+    [QueryProperty(nameof(SchoolJson), "schoolJson")]
     public partial class UpdateSchoolPage : ContentPage
     {
-        public int SchoolId { get; set; }
+        private readonly UpdateSchoolViewModel _viewModel;
+        private string _schoolJson;
+
+        public string SchoolJson
+        {
+            get => _schoolJson;
+            set
+            {
+                _schoolJson = value;
+                if (!string.IsNullOrEmpty(_schoolJson))
+                {
+                    Console.WriteLine($"Received School JSON: {_schoolJson}");
+                    var school = JsonConvert.DeserializeObject<School>(_schoolJson);
+                    LoadSchool(school);
+                }
+                else
+                {
+                    Console.WriteLine("Error: Failed to deserialize School JSON.");
+                }
+            }
+        }
 
         public UpdateSchoolPage(UpdateSchoolViewModel viewModel)
         {
             InitializeComponent();
-            BindingContext = viewModel;
+            BindingContext = _viewModel = viewModel;
+        }
+
+        private void LoadSchool(School school)
+        {
+            if (school != null)
+            {
+                _viewModel.SetSchool(school);
+            }
+            else
+            {
+                Console.WriteLine("Error: Invalid school data received.");
+            }
+        }
+
+        private async void OnSaveClicked(object sender, EventArgs e)
+        {
+            await _viewModel.SaveSchoolAsync();
+            await Shell.Current.GoToAsync("///CoachManagementPage");
+
         }
 
         private async void OnBackButtonClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("//CoachManagementPage");
-        }
-
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-            if (BindingContext is UpdateSchoolViewModel viewModel)
-            {
-                await viewModel.LoadSchoolAsync(SchoolId);
-            }
-        }
-
-        public async void OnSaveClicked()
-        {
-            try
-            {
-                Console.WriteLine($"Test");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error updating school: {ex.Message}");
-            }
+            await Shell.Current.GoToAsync("///CoachManagementPage");
         }
     }
 }

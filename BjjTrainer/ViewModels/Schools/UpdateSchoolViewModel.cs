@@ -1,4 +1,4 @@
-﻿using System.Windows.Input;
+﻿using System.Net.Http.Json;
 using BjjTrainer.Models.Schools;
 using BjjTrainer.Services.Schools;
 using MvvmHelpers;
@@ -8,35 +8,47 @@ namespace BjjTrainer.ViewModels.Schools
     public class UpdateSchoolViewModel : BaseViewModel
     {
         private readonly SchoolService _schoolService;
+        private School _school;
 
-        public School School { get; set; } = new School();
-
-        public ICommand SaveCommand { get; }
+        public School School
+        {
+            get => _school;
+            set
+            {
+                _school = value;
+                OnPropertyChanged();
+            }
+        }
 
         public UpdateSchoolViewModel(SchoolService schoolService)
         {
             _schoolService = schoolService;
-            SaveCommand = new Command(async () => await SaveSchool());
+            School = new School(); // Ensures object is initialized
         }
 
-        public async Task LoadSchoolAsync(int schoolId)
+        public void SetSchool(School school)
         {
-            try
+            if (school != null)
             {
-               // School = await _schoolService.GetSchoolByIdAsync(schoolId);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading school: {ex.Message}");
+                School = school;
+                OnPropertyChanged(nameof(School));
+                Console.WriteLine($"School Loaded: {School.Name}");
             }
         }
 
-        private async Task SaveSchool()
+        public async Task SaveSchoolAsync()
         {
             try
             {
-                await _schoolService.UpdateSchoolAsync(School.Id, School);
-                await Shell.Current.GoToAsync(".."); // Navigate back
+                if (School == null)
+                {
+                    Console.WriteLine("Error: Invalid school data.");
+                    return;
+                }
+
+                Console.WriteLine($"Updating school: {School.Name}");
+                await _schoolService.UpdateSchoolAsync(School);
+                await Shell.Current.GoToAsync("//CoachManagementPage");
             }
             catch (Exception ex)
             {

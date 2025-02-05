@@ -3,6 +3,7 @@ using BjjTrainer.Views.Events;
 using BjjTrainer.Views.Lessons;
 using BjjTrainer.Views.Moves;
 using BjjTrainer.Views.Schools;
+using Newtonsoft.Json;
 
 namespace BjjTrainer.Views.Coaches
 {
@@ -21,7 +22,12 @@ namespace BjjTrainer.Views.Coaches
         {
             if (_viewModel.CoachSchool != null)
             {
-                await Shell.Current.GoToAsync($"{nameof(UpdateSchoolPage)}?id={_viewModel.CoachSchool.Id}");
+                string schoolJson = JsonConvert.SerializeObject(_viewModel.CoachSchool);
+                await Shell.Current.GoToAsync($"///UpdateSchoolPage?schoolJson={Uri.EscapeDataString(schoolJson)}");
+            }
+            else
+            {
+                Console.WriteLine("Error: No school data available.");
             }
         }
 

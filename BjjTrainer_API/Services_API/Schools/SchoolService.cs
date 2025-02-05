@@ -64,20 +64,22 @@ namespace BjjTrainer_API.Services_API.Schools
             return $"School \"{schoolName}\" created and you have been added as a coach.";
         }
 
-        public async Task<bool> UpdateSchoolAsync(string coachId, int schoolId, string name, string address, string phone)
+        public async Task<bool> UpdateSchoolByCoachIdAsync(string coachId, string name, string address, string phone)
         {
             var coach = await _context.ApplicationUsers.Include(u => u.School)
                 .FirstOrDefaultAsync(u => u.Id == coachId && u.Role == UserRole.Coach);
 
-            if (coach == null || coach.SchoolId != schoolId)
+            if (coach == null || coach.SchoolId == null)
             {
-                return false; // Ensure the coach is authorized to manage this school
+                Console.WriteLine("Error: Coach is not assigned to a school.");
+                return false;
             }
 
-            var school = await _context.Schools.FindAsync(schoolId);
+            var school = await _context.Schools.FindAsync(coach.SchoolId);
             if (school == null)
             {
-                return false; // School does not exist
+                Console.WriteLine("Error: School not found.");
+                return false;
             }
 
             school.Name = name;

@@ -26,7 +26,7 @@ namespace BjjTrainer_API.Controllers.Schools
             _httpContextAccessor = httpContextAccessor;
         }
 
-        [HttpGet("{coachId}")]
+        [HttpGet("coach/{coachId}")]
         public async Task<IActionResult> GetSchoolByCoach(string coachId)
         {
             var school = await _schoolService.GetSchoolByCoachIdAsync(coachId);
@@ -60,9 +60,9 @@ namespace BjjTrainer_API.Controllers.Schools
             return Ok(result);
         }
 
-        [HttpPut("update/{id}")]
+        [HttpPut("update")]
         [Authorize]
-        public async Task<IActionResult> UpdateSchool(int id, [FromBody] SchoolUpdateRequest request)
+        public async Task<IActionResult> UpdateSchool([FromBody] SchoolUpdateRequest request)
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId))
@@ -70,7 +70,7 @@ namespace BjjTrainer_API.Controllers.Schools
                 return Unauthorized("User not logged in.");
             }
 
-            var success = await _schoolService.UpdateSchoolAsync(userId, id, request.Name, request.Address, request.Phone);
+            var success = await _schoolService.UpdateSchoolByCoachIdAsync(userId, request.Name, request.Address, request.Phone);
             if (!success)
             {
                 return BadRequest("Failed to update the school. Ensure you have the right permissions.");
