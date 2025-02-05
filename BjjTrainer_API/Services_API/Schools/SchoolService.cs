@@ -112,5 +112,30 @@ namespace BjjTrainer_API.Services_API.Schools
             return true;
         }
 
+        public async Task<List<ApplicationUser>> GetStudentsByCoachIdAsync(string coachId)
+        {
+            try
+            {
+                var coach = await _context.ApplicationUsers.Include(u => u.School)
+                    .FirstOrDefaultAsync(u => u.Id == coachId && u.Role == UserRole.Coach);
+
+                if (coach == null || coach.SchoolId == null)
+                {
+                    Console.WriteLine("Error: Coach is not assigned to a school.");
+                    return new List<ApplicationUser>();
+                }
+
+                var students = await _context.ApplicationUsers
+                    .Where(u => u.SchoolId == coach.SchoolId && u.Role == UserRole.Student)
+                    .ToListAsync();
+
+                return students;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching students: {ex.Message}");
+                throw;
+            }
+        }
     }
 }

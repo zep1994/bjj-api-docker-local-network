@@ -98,5 +98,23 @@ namespace BjjTrainer_API.Controllers.Schools
             return Ok("School deleted successfully.");
         }
 
+        [HttpGet("students")]
+        [Authorize]
+        public async Task<IActionResult> GetStudentsByCoach()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User not logged in.");
+            }
+
+            var students = await _schoolService.GetStudentsByCoachIdAsync(userId);
+            if (students == null || !students.Any())
+            {
+                return NotFound("No students found for this coach.");
+            }
+
+            return Ok(students);
+        }
     }
 }

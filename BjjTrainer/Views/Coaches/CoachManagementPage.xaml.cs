@@ -35,9 +35,9 @@ namespace BjjTrainer.Views.Coaches
             await Shell.Current.GoToAsync("///LessonsPage");
         }
 
-        private async void OnViewMovesClicked(object sender, EventArgs e)
+        private async void OnManageStudentsClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("///MovesPage");
+            await Shell.Current.GoToAsync("///ManageStudentsPage");
         }
 
         private async void OnViewEventsClicked(object sender, EventArgs e)

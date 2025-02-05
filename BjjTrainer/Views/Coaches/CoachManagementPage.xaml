@@ -39,18 +39,13 @@
                 <StackLayout Spacing="10">
                     <Label Text="Manage Content" FontSize="18" FontAttributes="Bold" />
 
-                    <Button Text="View Lessons"
-                            BackgroundColor="MediumSeaGreen"
-                            TextColor="White"
-                            Clicked="OnViewLessonsClicked" />
-
-                    <Button Text="View Moves"
+                    <Button Text="View Students"
                             BackgroundColor="SteelBlue"
                             TextColor="White"
-                            Clicked="OnViewMovesClicked" />
+                            Clicked="OnManageStudentsClicked" />
 
                     <Button Text="View Events"
-                            BackgroundColor="DarkOrange"
+                            BackgroundColor="MediumSeaGreen"
                             TextColor="White"
                             Clicked="OnViewEventsClicked" />
                 </StackLayout>

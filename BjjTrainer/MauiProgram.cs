@@ -13,6 +13,7 @@ using BjjTrainer.ViewModels.Events;
 using BjjTrainer.ViewModels.Lessons;
 using BjjTrainer.ViewModels.Moves;
 using BjjTrainer.ViewModels.Schools;
+using BjjTrainer.ViewModels.Students;
 using BjjTrainer.ViewModels.TrainingGoals;
 using BjjTrainer.ViewModels.TrainingLogs;
 using BjjTrainer.ViewModels.Users;
@@ -22,6 +23,7 @@ using BjjTrainer.Views.Events;
 using BjjTrainer.Views.Lessons;
 using BjjTrainer.Views.Moves;
 using BjjTrainer.Views.Schools;
+using BjjTrainer.Views.Students;
 using BjjTrainer.Views.Training;
 using BjjTrainer.Views.TrainingGoals;
 using BjjTrainer.Views.Users;
@@ -121,6 +123,8 @@ namespace BjjTrainer
             builder.Services.AddTransient<CreateSchoolPage>();
             builder.Services.AddTransient<UpdateSchoolPage>();
 
+            builder.Services.AddTransient<ManageStudentsViewModel>();
+            builder.Services.AddTransient<ManageStudentsPage>();
 
             //School
             builder.Services.AddSingleton<SchoolService>();

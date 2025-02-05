@@ -14,6 +14,7 @@
     xmlns:comp="clr-namespace:BjjTrainer.Views.Components"
     xmlns:coach="clr-namespace:BjjTrainer.Views.Coaches"
     xmlns:goals="clr-namespace:BjjTrainer.Views.TrainingGoals"
+    xmlns:students="clr-namespace:BjjTrainer.Views.Students"
     xmlns:viewModels="clr-namespace:BjjTrainer.ViewModels"
     Title="BjjTrainer"
     Shell.BackgroundColor="{StaticResource BackgroundColor}"
@@ -112,4 +113,5 @@
     <ShellContent Title="Manage School" Route="ManageSchoolsPage" ContentTemplate="{DataTemplate schools:ManageSchoolsPage}" />
     <ShellContent Title="Create School" Route="CreateSchoolPage" ContentTemplate="{DataTemplate schools:CreateSchoolPage}" />
     <ShellContent Title="Update School" Route="UpdateSchoolPage" ContentTemplate="{DataTemplate schools:UpdateSchoolPage}" />
+    <ShellContent Title="Manage Students" Route="ManageStudentsPage" ContentTemplate="{DataTemplate students:ManageStudentsPage}" />
 </Shell>

@@ -1,4 +1,5 @@
 ﻿using BjjTrainer.Models.Schools;
+using BjjTrainer.Models.Users;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
@@ -113,6 +114,30 @@ namespace BjjTrainer.Services.Schools
             catch (Exception ex)
             {
                 throw new Exception($"Error deleting school: {ex.Message}");
+            }
+        }
+
+        public async Task<List<User>> GetStudentsAsync()
+        {
+            try
+            {
+                // Attach Authorization Token
+                var token = Preferences.Get("AuthToken", string.Empty);
+                HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                var students = await HttpClient.GetFromJsonAsync<List<User>>("school/students");
+                if (students == null || students.Count == 0)
+                {
+                    Console.WriteLine("No students found.");
+                    return new List<User>();
+                }
+
+                return students;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching students: {ex.Message}");
+                return new List<User>();
             }
         }
     }

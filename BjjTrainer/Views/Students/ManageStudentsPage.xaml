@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BjjTrainer.Views.Students.ManageStudentsPage"
+             Title="ManageStudentsPage"
+             BackgroundColor="{StaticResource BackgroundColor}">
+    <StackLayout Padding="20">
+        <Label Text="Manage Students" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
+
+        <CollectionView ItemsSource="{Binding Students}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame CornerRadius="10" Padding="10" BackgroundColor="{StaticResource CardBackgroundColor}">
+                        <StackLayout>
+                            <Label Text="{Binding UserName}" FontSize="18" FontAttributes="Bold" />
+                            <Label Text="{Binding Email}" FontSize="14" />
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
+</ContentPage>
