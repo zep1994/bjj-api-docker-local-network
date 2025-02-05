@@ -2,7 +2,6 @@ using BjjTrainer.ViewModels.Coaches;
 using BjjTrainer.Views.Events;
 using BjjTrainer.Views.Lessons;
 using BjjTrainer.Views.Moves;
-using BjjTrainer.Views.Schools;
 using Newtonsoft.Json;
 
 namespace BjjTrainer.Views.Coaches
@@ -33,17 +32,17 @@ namespace BjjTrainer.Views.Coaches
 
         private async void OnViewLessonsClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync(nameof(LessonsPage));
+            await Shell.Current.GoToAsync("///LessonsPage");
         }
 
         private async void OnViewMovesClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync(nameof(MovesPage));
+            await Shell.Current.GoToAsync("///MovesPage");
         }
 
         private async void OnViewEventsClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync(nameof(CalendarPage));
+            await Shell.Current.GoToAsync("///CalendarPage");
         }
     }
 }
