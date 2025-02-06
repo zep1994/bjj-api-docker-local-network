@@ -1,7 +1,4 @@
 using BjjTrainer.ViewModels.Coaches;
-using BjjTrainer.Views.Events;
-using BjjTrainer.Views.Lessons;
-using BjjTrainer.Views.Moves;
 using Newtonsoft.Json;
 
 namespace BjjTrainer.Views.Coaches
