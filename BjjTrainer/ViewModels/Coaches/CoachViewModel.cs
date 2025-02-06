@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BjjTrainer.Models.DTO.Events;
+﻿using BjjTrainer.Models.DTO.Events;
 using BjjTrainer.Services.Coaches;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
 
 namespace BjjTrainer.ViewModels.Coaches
 {
@@ -21,10 +16,7 @@ namespace BjjTrainer.ViewModels.Coaches
         }
 
         [ObservableProperty]
-        private ObservableCollection<CalendarEventDto> pastEvents;
-
-        [ObservableProperty]
-        private ObservableCollection<UserCalendarEvent> eventCheckIns;
+        private ObservableCollection<PastEventDetails> pastEvents;
 
         [ObservableProperty]
         private CalendarEventDto selectedEvent;
@@ -32,15 +24,15 @@ namespace BjjTrainer.ViewModels.Coaches
         [RelayCommand]
         public async Task LoadPastEvents(int schoolId)
         {
-            var events = await _coachService.GetPastEventsAsync(schoolId);
-            PastEvents = new ObservableCollection<CalendarEventDto>(events);
-        }
-
-        [RelayCommand]
-        public async Task LoadEventCheckIns(int eventId)
-        {
-            var checkIns = await _coachService.GetEventCheckInsAsync(eventId);
-            EventCheckIns = new ObservableCollection<UserCalendarEvent>(checkIns);
+            try
+            {
+                var events = await _coachService.GetPastEventsWithDetailsAsync(schoolId);
+                PastEvents = new ObservableCollection<PastEventDetails>(events);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading past events: {ex.Message}");
+            }
         }
     }
 }

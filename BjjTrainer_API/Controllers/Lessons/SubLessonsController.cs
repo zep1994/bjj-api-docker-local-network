@@ -1,5 +1,4 @@
-﻿using BjjTrainer_API.Models.DTO;
-using BjjTrainer_API.Models.DTO.Lessons;
+﻿using BjjTrainer_API.Models.DTO.Lessons;
 using BjjTrainer_API.Models.Lessons;
 using BjjTrainer_API.Services_API.Lessons;
 using Microsoft.AspNetCore.Mvc;

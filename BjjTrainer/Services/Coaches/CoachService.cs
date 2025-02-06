@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using BjjTrainer.Models.DTO.Events;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
-using BjjTrainer.Models.DTO.Events;
 
 namespace BjjTrainer.Services.Coaches
 {
     public class CoachService : ApiService
     {
-        public async Task<List<CalendarEventDto>> GetPastEventsAsync(int schoolId)
+        public async Task<List<PastEventDetails>> GetPastEventsWithDetailsAsync(int schoolId)
         {
-            return await HttpClient.GetFromJsonAsync<List<CalendarEventDto>>($"coach/events/{schoolId}");
-        }
+            AttachAuthorizationHeader();
+            var response = await HttpClient.GetAsync($"coach/events/full/{schoolId}");
 
-        public async Task<List<UserCalendarEvent>> GetEventCheckInsAsync(int eventId)
-        {
-            return await HttpClient.GetFromJsonAsync<List<UserCalendarEvent>>($"coach/event-checkins/{eventId}");
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<List<PastEventDetails>>();
+            }
+
+            throw new Exception($"Failed to retrieve past events: {await response.Content.ReadAsStringAsync()}");
         }
     }
 }

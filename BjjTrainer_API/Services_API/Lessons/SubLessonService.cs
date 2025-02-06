@@ -1,5 +1,5 @@
 ﻿using BjjTrainer_API.Data;
-using BjjTrainer_API.Models.DTO;
+using BjjTrainer_API.Models.DTO.Lessons;
 using BjjTrainer_API.Models.Joins;
 using BjjTrainer_API.Models.Lessons;
 using BjjTrainer_API.Models.Moves;

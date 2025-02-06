@@ -1,7 +1,6 @@
 ﻿using BjjTrainer_API.Data;
 using BjjTrainer_API.Models.Calendars;
 using BjjTrainer_API.Models.DTO.Calendars;
-using BjjTrainer_API.Models.DTO.TrainingLogDTOs;
 using BjjTrainer_API.Models.Joins;
 using BjjTrainer_API.Models.Trainings;
 using BjjTrainer_API.Models.Users;
@@ -40,30 +39,6 @@ namespace BjjTrainer_API.Services_API.Calendars
 
             return calendarEvent;
         }
-
-
-        public async Task<TrainingLogDto> GetTrainingLogByEventIdAsync(int eventId)
-        {
-            var log = await _context.TrainingLogs
-                .Include(tl => tl.TrainingLogMoves)
-                .Where(tl => tl.CalendarEventId == eventId)
-                .FirstOrDefaultAsync();
-
-            if (log == null)
-                throw new Exception("Training log not found.");
-
-            return new TrainingLogDto
-            {
-                Id = log.Id,
-                Title = log.Title,
-                Date = log.Date,
-                ApplicationUserId = log.ApplicationUserId,
-                IsCoachLog = log.IsCoachLog,
-                CalendarEventId = log.CalendarEventId,
-                MoveIds = log.TrainingLogMoves.Select(m => m.MoveId).ToList()
-            };
-        }
-
 
         // ******************************** CREATE EVENT ****************************************
         public async Task<CalendarEvent> CreateEventAsync(string userId, CreateEventDto dto)

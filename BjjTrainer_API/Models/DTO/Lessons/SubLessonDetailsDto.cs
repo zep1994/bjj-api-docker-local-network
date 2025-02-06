@@ -1,6 +1,6 @@
 ﻿using BjjTrainer_API.Models.Moves;
 
-namespace BjjTrainer_API.Models.DTO
+namespace BjjTrainer_API.Models.DTO.Lessons
 {
     public class SubLessonDetailsDto
     {

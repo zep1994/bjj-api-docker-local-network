@@ -1,6 +1,7 @@
 using BjjTrainer_API.Data;
 using BjjTrainer_API.Models.Users;
 using BjjTrainer_API.Services_API.Calendars;
+using BjjTrainer_API.Services_API.Coaches;
 using BjjTrainer_API.Services_API.Goals;
 using BjjTrainer_API.Services_API.Lessons;
 using BjjTrainer_API.Services_API.Moves;
@@ -35,6 +36,8 @@ builder.Services.AddScoped<TrainingService>();
 builder.Services.AddScoped<TrainingGoalService>();
 builder.Services.AddScoped<CalendarService>();
 builder.Services.AddScoped<SchoolService>();
+builder.Services.AddScoped<CoachService>();
+
 
 // In Program.cs or wherever you configure JSON serialization
 builder.Services.AddControllers()

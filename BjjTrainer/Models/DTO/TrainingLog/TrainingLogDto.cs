@@ -13,7 +13,7 @@ namespace BjjTrainer.Models.DTO.TrainingLog
         public int Taps { get; set; }
         public string? Notes { get; set; }
         public string? SelfAssessment { get; set; }
-        public List<Move>? Moves { get; set; }
+        public List<LogMoveDto>? Moves { get; set; }
         public bool IsCoachLog { get; set; } = false;
         public List<int> MoveIds { get; set; } = [];
 

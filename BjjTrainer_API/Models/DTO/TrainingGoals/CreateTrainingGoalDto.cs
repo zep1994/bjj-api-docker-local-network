@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BjjTrainer_API.Models.DTO
+namespace BjjTrainer_API.Models.DTO.TrainingGoals
 {
     public class CreateTrainingGoalDto
     {

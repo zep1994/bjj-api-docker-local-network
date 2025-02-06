@@ -117,6 +117,9 @@
 	  <MauiXaml Update="ViewModels\Schools\CreateSchoolPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Coaches\CoachEventsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Coaches\CoachManagementPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -204,8 +207,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Models\Coaches\" />
-	  <Folder Include="Models\DTO\Coaches\" />
 	  <Folder Include="Models\DTO\Schools\" />
 	  <Folder Include="Models\Training\" />
 	  <Folder Include="Services\Coaches\" />
