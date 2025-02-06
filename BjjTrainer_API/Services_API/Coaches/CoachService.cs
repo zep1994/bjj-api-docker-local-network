@@ -1,6 +1,7 @@
 ﻿using BjjTrainer_API.Data;
 using BjjTrainer_API.Models.Calendars;
 using BjjTrainer_API.Models.DTO.Calendars;
+using BjjTrainer_API.Models.DTO.Coaches;
 using BjjTrainer_API.Models.DTO.Moves;
 using BjjTrainer_API.Models.DTO.TrainingLogDTOs;
 using BjjTrainer_API.Models.Users;
@@ -17,7 +18,7 @@ namespace BjjTrainer_API.Services_API.Coaches
             _context = context;
         }
 
-        public async Task<List<PastEventDetailsDto>> GetPastEventsWithLogs(string coachId, int schoolId)
+        public async Task<List<CoachEventDto>> GetPastEventsWithLogs(string coachId, int schoolId)
         {
             // Ensure only coaches can access this data
             var coach = await _context.ApplicationUsers
@@ -37,33 +38,27 @@ namespace BjjTrainer_API.Services_API.Coaches
                 .ThenInclude(ci => ci.User)
                 .ToListAsync();
 
-            var result = events.Select(ev => new PastEventDetailsDto
+            var result = events.Select(ev => new CoachEventDto
             {
-                Event = ev,
-                CheckIns = ev.CalendarEventCheckIns.Select(c => new CheckInDetailsDto
+                Id = ev.Id,
+                Title = ev.Title,
+                Description = ev.Description,
+                StartDate = ev.StartDate,
+                StartTime = ev.StartTime,
+                EndDate = ev.EndDate,
+                EndTime = ev.EndTime,
+                IsAllDay = ev.IsAllDay,
+                SchoolId = ev.SchoolId,
+                CheckIns = ev.CalendarEventCheckIns.Select(c => new CheckInDto
                 {
-                    Id = c.User.Id,
                     UserName = c.User.UserName,
                     CheckInTime = c.CheckInTime
                 }).ToList(),
-                TrainingLog = ev.TrainingLog != null ? new TrainingLogDto
+                Moves = ev.TrainingLog != null ? ev.TrainingLog.TrainingLogMoves.Select(tlm => new LogMoveDto
                 {
-                    Id = ev.TrainingLog.Id,
-                    ApplicationUserId = ev.TrainingLog.ApplicationUserId,
-                    Date = ev.TrainingLog.Date,
-                    TrainingTime = ev.TrainingLog.TrainingTime,
-                    RoundsRolled = ev.TrainingLog.RoundsRolled,
-                    Submissions = ev.TrainingLog.Submissions,
-                    Taps = ev.TrainingLog.Taps,
-                    Notes = ev.TrainingLog.Notes,
-                    SelfAssessment = ev.TrainingLog.SelfAssessment,
-                    IsCoachLog = ev.TrainingLog.IsCoachLog,
-                    Moves = ev.TrainingLog.TrainingLogMoves.Select(tlm => new LogMoveDto
-                    {
-                        Id = tlm.Move.Id,
-                        Name = tlm.Move.Name
-                    }).ToList()
-                } : null
+                    Id = tlm.Move.Id,
+                    Name = tlm.Move.Name
+                }).ToList() : new List<LogMoveDto>()
             }).ToList();
 
             return result;

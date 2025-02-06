@@ -1,4 +1,5 @@
 ﻿using BjjTrainer_API.Models.DTO.Calendars;
+using BjjTrainer_API.Models.DTO.Coaches;
 using BjjTrainer_API.Services_API.Coaches;
 using BjjTrainer_API.Services_API.Trainings;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ namespace BjjTrainer_API.Controllers.Coaches
         }
 
         [HttpGet("events/full/{schoolId}")]
-        public async Task<ActionResult<List<PastEventDetailsDto>>> GetPastEventsWithLogs(int schoolId)
+        public async Task<ActionResult<List<CoachEventDto>>> GetPastEventsWithLogs(int schoolId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId))
