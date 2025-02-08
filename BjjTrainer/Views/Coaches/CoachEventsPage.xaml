@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BjjTrainer.Views.Coaches.CoachEventsPage"
-             Title="CoachEventsPage">
+             Title="CoachEventsPage"
+             BackgroundColor="{StaticResource BackgroundColor}">
     <StackLayout Padding="10">
         <Label Text="Past Events" 
                FontSize="24" 
@@ -15,12 +16,12 @@
                         SelectionChanged="OnEventSelected">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame Padding="10" Margin="5" BackgroundColor="LightGray">
+                    <Frame Padding="10" Margin="5" BackgroundColor="{StaticResource CardBackgroundColor}">
                         <StackLayout>
-                            <Label Text="{Binding Event.Title}" FontSize="18" FontAttributes="Bold"/>
-                            <Label Text="{Binding Event.StartDate, StringFormat='Event Date: {0:MM/dd/yyyy}'}" FontSize="14"/>
+                            <Label Text="{Binding Title}" FontSize="18" FontAttributes="Bold"/>
+                            <Label Text="{Binding StartDate, StringFormat='Event Date: {0:MM/dd/yyyy}'}" FontSize="14"/>
                             <Label Text="{Binding CheckIns.Count, StringFormat='Attendees: {0}'}" FontSize="14"/>
-                            <Label Text="{Binding TrainingLog.Moves.Count, StringFormat='Moves Practiced: {0}'}" FontSize="14"/>
+                            <Label Text="{Binding Moves.Count, StringFormat='Moves Practiced: {0}'}" FontSize="14"/>
                         </StackLayout>
                     </Frame>
                 </DataTemplate>

@@ -1,4 +1,5 @@
 ﻿using BjjTrainer.Services;
+using BjjTrainer.Services.Coaches;
 using BjjTrainer.Services.Events;
 using BjjTrainer.Services.Lessons;
 using BjjTrainer.Services.Moves;
@@ -113,8 +114,12 @@ namespace BjjTrainer
 
 
             //Coach
-            builder.Services.AddTransient<CoachManagementViewModel>();
+            builder.Services.AddSingleton<CoachService>();
+            builder.Services.AddSingleton<CoachManagementViewModel>();
             builder.Services.AddTransient<CoachManagementPage>();
+            builder.Services.AddSingleton<ManageStudentsViewModel>();
+            builder.Services.AddSingleton<CoachViewModel>();
+            builder.Services.AddTransient<CoachEventsPage>();
             builder.Services.AddTransient<ManageSchoolsViewModel>();
             builder.Services.AddTransient<ManageSchoolsPage>();
 
@@ -122,12 +127,12 @@ namespace BjjTrainer
             builder.Services.AddTransient<UpdateSchoolViewModel>();
             builder.Services.AddTransient<CreateSchoolPage>();
             builder.Services.AddTransient<UpdateSchoolPage>();
+            builder.Services.AddSingleton<SchoolService>();
 
             builder.Services.AddTransient<ManageStudentsViewModel>();
             builder.Services.AddTransient<ManageStudentsPage>();
 
             //School
-            builder.Services.AddSingleton<SchoolService>();
 
 
 

@@ -1,4 +1,5 @@
 using BjjTrainer.Models.DTO.Events;
+using BjjTrainer.Services.Coaches;
 using BjjTrainer.ViewModels.Coaches;
 
 namespace BjjTrainer.Views.Coaches;
@@ -29,22 +30,22 @@ public partial class CoachEventsPage : ContentPage
         }
     }
 
+    // Fix: Add missing OnEventSelected EventHandler
     private async void OnEventSelected(object sender, SelectionChangedEventArgs e)
     {
         if (e.CurrentSelection.Count == 0) return;
 
-        var selectedEvent = (PastEventDetails)e.CurrentSelection.FirstOrDefault();
+        var selectedEvent = (CoachEventDto)e.CurrentSelection.FirstOrDefault();
         if (selectedEvent != null)
         {
             await DisplayAlert("Event Details",
-                $"Title: {selectedEvent.Event.Title}\n" +
-                $"Date: {selectedEvent.Event.StartDate.ToShortDateString()}\n" +
+                $"Title: {selectedEvent.Title}\n" +
+                $"Date: {selectedEvent.StartDate?.ToShortDateString()}\n" +
                 $"Attendees: {selectedEvent.CheckIns.Count}\n" +
-                $"Training Moves: {selectedEvent.TrainingLog?.Moves.Count ?? 0}",
+                $"Moves Practiced: {selectedEvent.Moves.Count}",
                 "OK");
         }
 
-        // Clear selection
         ((CollectionView)sender).SelectedItem = null;
     }
 }

@@ -105,8 +105,8 @@
     <ShellContent Title="Update Training Log" Route="UpdateTrainingLogPage" ContentTemplate="{DataTemplate train:UpdateTrainingLogPage}" />
     <ShellContent Title="Show Training Log" Route="ShowTrainingLogPage" ContentTemplate="{DataTemplate train:ShowTrainingLogPage}" />
     <ShellContent Title="Update Training Goal" Route="UpdateTrainingGoalPage" ContentTemplate="{DataTemplate goals:UpdateTrainingGoalPage}" />
-    <ShellContent Title="Moves Selection Modal" Route="MoveSelectionModal" ContentTemplate="{DataTemplate comp:MoveSelectionModal}" />
     <ShellContent Title="Show Training Goal" Route="ShowTrainingGoalPage" ContentTemplate="{DataTemplate goals:ShowTrainingGoalPage}" />
+    <ShellContent Title="Moves Selection Modal" Route="MoveSelectionModal" ContentTemplate="{DataTemplate comp:MoveSelectionModal}" />
     <ShellContent Title="Show Event Page" Route="ShowEventPage" ContentTemplate="{DataTemplate events:ShowEventPage}" />
     <ShellContent Title="Update Event" Route="UpdateEventPage" ContentTemplate="{DataTemplate events:UpdateEventPage}" />
     <ShellContent Title="Create Event" Route="CreateEventPage" ContentTemplate="{DataTemplate events:CreateEventPage}" />
@@ -114,4 +114,5 @@
     <ShellContent Title="Create School" Route="CreateSchoolPage" ContentTemplate="{DataTemplate schools:CreateSchoolPage}" />
     <ShellContent Title="Update School" Route="UpdateSchoolPage" ContentTemplate="{DataTemplate schools:UpdateSchoolPage}" />
     <ShellContent Title="Manage Students" Route="ManageStudentsPage" ContentTemplate="{DataTemplate students:ManageStudentsPage}" />
+    <ShellContent Title="Coaacg Evebts" Route="CoachEventsPage" ContentTemplate="{DataTemplate coach:CoachEventsPage}" />
 </Shell>

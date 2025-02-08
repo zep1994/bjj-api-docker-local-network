@@ -16,10 +16,7 @@ namespace BjjTrainer.ViewModels.Coaches
         }
 
         [ObservableProperty]
-        private ObservableCollection<PastEventDetails> pastEvents;
-
-        [ObservableProperty]
-        private CalendarEventDto selectedEvent;
+        private ObservableCollection<CoachEventDto> pastEvents;
 
         [RelayCommand]
         public async Task LoadPastEvents(int schoolId)
@@ -27,7 +24,7 @@ namespace BjjTrainer.ViewModels.Coaches
             try
             {
                 var events = await _coachService.GetPastEventsWithDetailsAsync(schoolId);
-                PastEvents = new ObservableCollection<PastEventDetails>(events);
+                PastEvents = new ObservableCollection<CoachEventDto>(events);
             }
             catch (Exception ex)
             {

@@ -7,11 +7,11 @@ namespace BjjTrainer.Views.Coaches
     {
         private readonly CoachManagementViewModel _viewModel;
 
+        // Proper constructor injection
         public CoachManagementPage(CoachManagementViewModel viewModel)
         {
             InitializeComponent();
-            BindingContext = viewModel;
-            _viewModel = viewModel;
+            BindingContext = _viewModel = viewModel;
         }
 
         private async void OnEditSchoolClicked(object sender, EventArgs e)
@@ -27,19 +27,14 @@ namespace BjjTrainer.Views.Coaches
             }
         }
 
-        private async void OnViewLessonsClicked(object sender, EventArgs e)
-        {
-            await Shell.Current.GoToAsync("///LessonsPage");
-        }
-
         private async void OnManageStudentsClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("///ManageStudentsPage");
+            await Shell.Current.GoToAsync("//ManageStudentsPage");
         }
 
         private async void OnViewEventsClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("///CalendarPage");
+            await Shell.Current.GoToAsync("//CoachEventsPage");
         }
     }
 }
