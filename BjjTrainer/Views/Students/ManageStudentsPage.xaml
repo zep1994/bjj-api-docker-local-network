@@ -19,5 +19,6 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+        <Button BackgroundColor="{StaticResource AccentBlue}" Text="Back" Clicked="OnBackButtonClicked"/>
     </StackLayout>
 </ContentPage>

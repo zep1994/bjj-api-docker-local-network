@@ -1,4 +1,5 @@
 using BjjTrainer.ViewModels.Students;
+using BjjTrainer.Views.Coaches;
 
 namespace BjjTrainer.Views.Students
 {
@@ -8,6 +9,11 @@ namespace BjjTrainer.Views.Students
         {
             InitializeComponent();
             BindingContext = viewModel;
+        }
+
+        private async void OnBackButtonClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync($"///{nameof(CoachManagementPage)}");
         }
     }
 }
