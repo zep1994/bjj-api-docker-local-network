@@ -9,9 +9,12 @@
     xmlns:users="clr-namespace:BjjTrainer.Views.Users"
     xmlns:moves="clr-namespace:BjjTrainer.Views.Moves"
     xmlns:events="clr-namespace:BjjTrainer.Views.Events"
+    xmlns:schools="clr-namespace:BjjTrainer.Views.Schools"
     xmlns:train="clr-namespace:BjjTrainer.Views.Training"
     xmlns:comp="clr-namespace:BjjTrainer.Views.Components"
+    xmlns:coach="clr-namespace:BjjTrainer.Views.Coaches"
     xmlns:goals="clr-namespace:BjjTrainer.Views.TrainingGoals"
+    xmlns:students="clr-namespace:BjjTrainer.Views.Students"
     xmlns:viewModels="clr-namespace:BjjTrainer.ViewModels"
     Title="BjjTrainer"
     Shell.BackgroundColor="{StaticResource BackgroundColor}"
@@ -82,6 +85,12 @@
             <ShellContent Route="MovesPage" ContentTemplate="{DataTemplate moves:MovesPage}" />
         </Tab>
 
+        <Tab Title="Coach Management" Icon="moves.png">
+            <ShellContent Title="Coach Management" ContentTemplate="{DataTemplate coach:CoachManagementPage}" />
+        </Tab>
+
+        
+
         <!-- User Profile Tab -->
         <ShellContent Title="Profile"
                Icon="profile_icon.png"
@@ -96,9 +105,16 @@
     <ShellContent Title="Update Training Log" Route="UpdateTrainingLogPage" ContentTemplate="{DataTemplate train:UpdateTrainingLogPage}" />
     <ShellContent Title="Show Training Log" Route="ShowTrainingLogPage" ContentTemplate="{DataTemplate train:ShowTrainingLogPage}" />
     <ShellContent Title="Update Training Goal" Route="UpdateTrainingGoalPage" ContentTemplate="{DataTemplate goals:UpdateTrainingGoalPage}" />
-    <ShellContent Title="Moves Selection Modal" Route="MoveSelectionModal" ContentTemplate="{DataTemplate comp:MoveSelectionModal}" />
     <ShellContent Title="Show Training Goal" Route="ShowTrainingGoalPage" ContentTemplate="{DataTemplate goals:ShowTrainingGoalPage}" />
+    <ShellContent Title="Moves Selection Modal" Route="MoveSelectionModal" ContentTemplate="{DataTemplate comp:MoveSelectionModal}" />
     <ShellContent Title="Show Event Page" Route="ShowEventPage" ContentTemplate="{DataTemplate events:ShowEventPage}" />
     <ShellContent Title="Update Event" Route="UpdateEventPage" ContentTemplate="{DataTemplate events:UpdateEventPage}" />
     <ShellContent Title="Create Event" Route="CreateEventPage" ContentTemplate="{DataTemplate events:CreateEventPage}" />
+    <ShellContent Title="Manage School" Route="ManageSchoolsPage" ContentTemplate="{DataTemplate schools:ManageSchoolsPage}" />
+    <ShellContent Title="Create School" Route="CreateSchoolPage" ContentTemplate="{DataTemplate schools:CreateSchoolPage}" />
+    <ShellContent Title="Update School" Route="UpdateSchoolPage" ContentTemplate="{DataTemplate schools:UpdateSchoolPage}" />
+    <ShellContent Title="Manage Students" Route="ManageStudentsPage" ContentTemplate="{DataTemplate students:ManageStudentsPage}" />
+    <ShellContent Title="Coach Events" Route="CoachEventsPage" ContentTemplate="{DataTemplate coach:CoachEventsPage}" />
+    <ShellContent Title="Coach Event Details" Route="CoachEventDetailPage" ContentTemplate="{DataTemplate coach:CoachEventDetailPage}" />
+    <ShellContent Title="Coach Management Page" Route="CoachManagementPage" ContentTemplate="{DataTemplate coach:CoachManagementPage}" />
 </Shell>

@@ -223,5 +223,11 @@ namespace BjjTrainer_API.Services_API.Users
             await _context.SaveChangesAsync();
             return tokens;
         }
+
+        private async Task<bool> IsUserCoach(string userId)
+        {
+            var user = await _context.ApplicationUsers.FirstOrDefaultAsync(u => u.Id == userId);
+            return user?.Role == UserRole.Coach;
+        }
     }
 }

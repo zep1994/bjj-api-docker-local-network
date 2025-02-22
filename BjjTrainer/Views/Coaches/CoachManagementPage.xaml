@@ -1,0 +1,56 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BjjTrainer.Views.Coaches.CoachManagementPage"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="20">
+
+            <Label Text="Coach Management" 
+                   FontSize="24" 
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <!-- School Information -->
+            <Frame Padding="15" BackgroundColor="{StaticResource CardBackgroundColor}" CornerRadius="10" HasShadow="True">
+                <StackLayout Spacing="10">
+                    <Label Text="Your School" FontSize="18" FontAttributes="Bold" />
+
+                    <!-- Display School Name -->
+                    <Label Text="{Binding CoachSchool.Name}" 
+                           FontSize="16"
+                           IsVisible="{Binding HasSchool}" />
+
+                    <Label Text="No school assigned." 
+                           FontSize="16" 
+                           TextColor="Gray"
+                           IsVisible="{Binding HasSchool, Converter={StaticResource InverseBooleanConverter}}" />
+
+                    <Button Text="Edit School"
+                            BackgroundColor="DodgerBlue"
+                            TextColor="White"
+                            Clicked="OnEditSchoolClicked"
+                            IsVisible="{Binding HasSchool}" />
+                </StackLayout>
+            </Frame>
+
+            <!-- Navigation Buttons for Lessons, Moves, and Events -->
+            <Frame Padding="15" BackgroundColor="{StaticResource CardBackgroundColor}" CornerRadius="10" HasShadow="True">
+                <StackLayout Spacing="10">
+                    <Label Text="Manage Content" FontSize="18" FontAttributes="Bold" />
+
+                    <Button Text="View Students"
+                            BackgroundColor="SteelBlue"
+                            TextColor="White"
+                            Clicked="OnManageStudentsClicked" />
+
+                    <Button Text="View Events"
+                            BackgroundColor="MediumSeaGreen"
+                            TextColor="White"
+                            Clicked="OnViewEventsClicked" />
+                </StackLayout>
+            </Frame>
+
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

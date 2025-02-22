@@ -1,22 +1,30 @@
 ﻿using BjjTrainer.Services;
+using BjjTrainer.Services.Coaches;
 using BjjTrainer.Services.Events;
 using BjjTrainer.Services.Lessons;
 using BjjTrainer.Services.Moves;
+using BjjTrainer.Services.Schools;
 using BjjTrainer.Services.TrainingGoals;
 using BjjTrainer.Services.Trainings;
 using BjjTrainer.Services.Users;
 using BjjTrainer.ViewModels;
+using BjjTrainer.ViewModels.Coaches;
 using BjjTrainer.ViewModels.Components;
 using BjjTrainer.ViewModels.Events;
 using BjjTrainer.ViewModels.Lessons;
 using BjjTrainer.ViewModels.Moves;
+using BjjTrainer.ViewModels.Schools;
+using BjjTrainer.ViewModels.Students;
 using BjjTrainer.ViewModels.TrainingGoals;
 using BjjTrainer.ViewModels.TrainingLogs;
 using BjjTrainer.ViewModels.Users;
+using BjjTrainer.Views.Coaches;
 using BjjTrainer.Views.Components;
 using BjjTrainer.Views.Events;
 using BjjTrainer.Views.Lessons;
 using BjjTrainer.Views.Moves;
+using BjjTrainer.Views.Schools;
+using BjjTrainer.Views.Students;
 using BjjTrainer.Views.Training;
 using BjjTrainer.Views.TrainingGoals;
 using BjjTrainer.Views.Users;
@@ -103,7 +111,30 @@ namespace BjjTrainer
             builder.Services.AddTransient<MovesPage>();
             builder.Services.AddTransient<MoveSelectionModal>();
             builder.Services.AddTransient<MoveSelectionViewModel>();
-           
+
+
+            //Coach
+            builder.Services.AddSingleton<CoachService>();
+            builder.Services.AddSingleton<CoachManagementViewModel>();
+            builder.Services.AddSingleton<CoachEventDetailViewModel>();
+            builder.Services.AddTransient<CoachManagementPage>();
+            builder.Services.AddSingleton<ManageStudentsViewModel>();
+            builder.Services.AddSingleton<CoachViewModel>();
+            builder.Services.AddTransient<CoachEventsPage>();
+            builder.Services.AddTransient<CoachEventDetailPage>();
+            builder.Services.AddTransient<ManageSchoolsViewModel>();
+            builder.Services.AddTransient<ManageSchoolsPage>();
+
+            builder.Services.AddTransient<CreateSchoolViewModel>();
+            builder.Services.AddTransient<UpdateSchoolViewModel>();
+            builder.Services.AddTransient<CreateSchoolPage>();
+            builder.Services.AddTransient<UpdateSchoolPage>();
+            builder.Services.AddSingleton<SchoolService>();
+
+            builder.Services.AddTransient<ManageStudentsViewModel>();
+            builder.Services.AddTransient<ManageStudentsPage>();
+
+            //School
 
 
 

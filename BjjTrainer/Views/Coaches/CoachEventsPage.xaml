@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BjjTrainer.Views.Coaches.CoachEventsPage"
+             Title="CoachEventsPage"
+             BackgroundColor="{StaticResource BackgroundColor}">
+    <StackLayout Padding="10">
+        <Label Text="Past Events"
+               FontSize="24"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               Margin="0,10,0,10"/>
+        <Button BackgroundColor="{StaticResource AccentBlue}" Text="Back" Clicked="OnBackButtonClicked"/>
+
+        <CollectionView ItemsSource="{Binding PastEvents}"
+                        SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10" Margin="5" BackgroundColor="{StaticResource CardBackgroundColor}">
+                        <StackLayout>
+                            <Label Text="{Binding Title}" FontSize="18" FontAttributes="Bold"/>
+                            <Label Text="{Binding StartDate, StringFormat='Event Date: {0:MM/dd/yyyy}'}" FontSize="14"/>
+                            <Label Text="{Binding CheckIns.Count, StringFormat='Attendees: {0}'}" FontSize="14"/>
+                            <Label Text="{Binding Moves.Count, StringFormat='Moves Practiced: {0}'}" FontSize="14"/>
+
+                            <!-- Navigation Button -->
+                            <Button BackgroundColor="{StaticResource AccentBlue}" Text="View Details" Clicked="OnEventClicked"/>
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
+</ContentPage>

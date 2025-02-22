@@ -54,7 +54,12 @@ namespace BjjTrainer_API.Services_API.Trainings
                     Taps = log.Taps,
                     Notes = log.Notes,
                     SelfAssessment = log.SelfAssessment,
-                    MoveIds = log.TrainingLogMoves.Select(tlm => tlm.Move.Id).ToList()
+                    IsCoachLog = log.IsCoachLog,
+                    Moves = log.TrainingLogMoves.Select(tlm => new LogMoveDto
+                    {
+                        Id = tlm.Move.Id,
+                        Name = tlm.Move.Name
+                    }).ToList()
                 }).FirstOrDefaultAsync();
         }
 
@@ -102,6 +107,27 @@ namespace BjjTrainer_API.Services_API.Trainings
             };
         }
 
+        public async Task<TrainingLogDto> GetTrainingLogByEventIdAsync(int eventId)
+        {
+            var log = await _context.TrainingLogs
+                .Include(tl => tl.TrainingLogMoves)
+                .Where(tl => tl.CalendarEventId == eventId)
+                .FirstOrDefaultAsync();
+
+            if (log == null)
+                throw new Exception("Training log not found.");
+
+            return new TrainingLogDto
+            {
+                Id = log.Id,
+                Title = log.Title,
+                Date = log.Date,
+                ApplicationUserId = log.ApplicationUserId,
+                IsCoachLog = log.IsCoachLog,
+                CalendarEventId = log.CalendarEventId,
+                MoveIds = log.TrainingLogMoves.Select(m => m.MoveId).ToList()
+            };
+        }
 
         // ******************************** GET MOVES BY IDS ********************************
         public async Task<List<MoveDto>> GetMovesByIdsAsync(List<int> moveIds)

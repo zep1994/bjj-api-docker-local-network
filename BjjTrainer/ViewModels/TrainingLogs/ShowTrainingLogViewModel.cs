@@ -17,7 +17,7 @@ public partial class ShowTrainingLogViewModel : BaseViewModel
     public int Taps { get; set; }
     public string Notes { get; set; } = string.Empty;
     public string SelfAssessment { get; set; } = string.Empty;
-    public ObservableCollection<Move> Moves { get; set; } = [];
+    public ObservableCollection<LogMoveDto> Moves { get; set; } = [];
     private bool isCoachLog;
     public bool IsCoachLog
     {

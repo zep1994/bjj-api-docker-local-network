@@ -3,6 +3,7 @@ using BjjTrainer_API.Models.Goals;
 using BjjTrainer_API.Models.Joins;
 using BjjTrainer_API.Models.Lessons;
 using BjjTrainer_API.Models.Moves;
+using BjjTrainer_API.Models.Schools;
 using BjjTrainer_API.Models.Trainings;
 using BjjTrainer_API.Models.Users;
 using Microsoft.EntityFrameworkCore;

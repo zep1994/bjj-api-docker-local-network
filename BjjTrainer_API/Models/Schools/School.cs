@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BjjTrainer_API.Models.Users;
+using System.ComponentModel.DataAnnotations;
 
-namespace BjjTrainer_API.Models.Users
+namespace BjjTrainer_API.Models.Schools
 {
     public class School
     {

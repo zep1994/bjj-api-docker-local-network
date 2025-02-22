@@ -1,4 +1,5 @@
 ﻿using BjjTrainer.Models.Lessons;
+using BjjTrainer.Models.Schools;
 using BjjTrainer.Models.Users;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Json;

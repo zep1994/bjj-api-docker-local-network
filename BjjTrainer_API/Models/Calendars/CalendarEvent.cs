@@ -1,5 +1,5 @@
-﻿using BjjTrainer_API.Models.Trainings;
-using BjjTrainer_API.Models.Users;
+﻿using BjjTrainer_API.Models.Schools;
+using BjjTrainer_API.Models.Trainings;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
