@@ -10,6 +10,7 @@
                FontAttributes="Bold"
                HorizontalOptions="Center"
                Margin="0,10,0,10"/>
+        <Button BackgroundColor="{StaticResource AccentBlue}" Text="Back" Clicked="OnBackButtonClicked"/>
 
         <CollectionView ItemsSource="{Binding PastEvents}"
                         SelectionMode="None">

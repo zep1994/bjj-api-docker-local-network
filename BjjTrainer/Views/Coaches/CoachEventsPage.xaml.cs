@@ -40,4 +40,9 @@ public partial class CoachEventsPage : ContentPage
             await Shell.Current.GoToAsync($"///{nameof(CoachEventDetailPage)}", parameters);
         }
     }
+    private async void OnBackButtonClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync($"///{nameof(CoachManagementPage)}");
+    }
+
 }
