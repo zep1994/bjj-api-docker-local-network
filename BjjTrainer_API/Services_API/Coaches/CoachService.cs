@@ -64,6 +64,52 @@ namespace BjjTrainer_API.Services_API.Coaches
             return result;
         }
 
+        public async Task<CoachEventDto?> GetEventDetailsAsync(int eventId, string coachId)
+        {
+            // Ensure only coaches can access this data
+            var coach = await _context.ApplicationUsers
+                .FirstOrDefaultAsync(u => u.Id == coachId && u.Role == UserRole.Coach);
+
+            if (coach == null)
+                throw new UnauthorizedAccessException("You are not authorized to access this event.");
+
+            var ev = await _context.CalendarEvents
+                .Where(e => e.Id == eventId)
+                .Include(e => e.TrainingLog)
+                .ThenInclude(tl => tl.TrainingLogMoves)
+                .ThenInclude(tlm => tlm.Move)
+                .Include(e => e.CalendarEventCheckIns)
+                .ThenInclude(ci => ci.User)
+                .FirstOrDefaultAsync();
+
+            if (ev == null)
+                return null;
+
+            return new CoachEventDto
+            {
+                Id = ev.Id,
+                Title = ev.Title,
+                Description = ev.Description,
+                StartDate = ev.StartDate,
+                StartTime = ev.StartTime,
+                EndDate = ev.EndDate,
+                EndTime = ev.EndTime,
+                IsAllDay = ev.IsAllDay,
+                SchoolId = ev.SchoolId,
+                CheckIns = ev.CalendarEventCheckIns.Select(c => new CheckInDto
+                {
+                    UserName = c.User.UserName,
+                    CheckInTime = c.CheckInTime
+                }).ToList(),
+                Moves = ev.TrainingLog != null ? ev.TrainingLog.TrainingLogMoves.Select(tlm => new LogMoveDto
+                {
+                    Id = tlm.Move.Id,
+                    Name = tlm.Move.Name
+                }).ToList() : new List<LogMoveDto>()
+            };
+        }
+
+
         public async Task<List<CalendarEventCheckIn>> GetCheckInsForEvent(int eventId)
         {
             return await _context.CalendarEventCheckIns

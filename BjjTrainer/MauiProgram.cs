@@ -116,10 +116,12 @@ namespace BjjTrainer
             //Coach
             builder.Services.AddSingleton<CoachService>();
             builder.Services.AddSingleton<CoachManagementViewModel>();
+            builder.Services.AddSingleton<CoachEventDetailViewModel>();
             builder.Services.AddTransient<CoachManagementPage>();
             builder.Services.AddSingleton<ManageStudentsViewModel>();
             builder.Services.AddSingleton<CoachViewModel>();
             builder.Services.AddTransient<CoachEventsPage>();
+            builder.Services.AddTransient<CoachEventDetailPage>();
             builder.Services.AddTransient<ManageSchoolsViewModel>();
             builder.Services.AddTransient<ManageSchoolsPage>();
 

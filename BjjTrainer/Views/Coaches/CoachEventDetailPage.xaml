@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BjjTrainer.Views.Coaches.CoachEventDetailPage"
+             Title="Event Details"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <StackLayout Padding="10">
+        <Label Text="{Binding SelectedEvent.Title}" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center"/>
+        <Label Text="{Binding SelectedEvent.Description}" FontSize="16" HorizontalOptions="Center"/>
+        <Label Text="{Binding SelectedEvent.StartDate, StringFormat='Event Date: {0:MM/dd/yyyy}'}" FontSize="14"/>
+        <Label Text="{Binding SelectedEvent.StartTime, StringFormat='Start Time: {0:hh\\:mm}'}" FontSize="14"/>
+        <Label Text="{Binding SelectedEvent.EndTime, StringFormat='End Time: {0:hh\\:mm}'}" FontSize="14"/>
+
+        <Label Text="Attendees:" FontSize="18" FontAttributes="Bold"/>
+        <CollectionView ItemsSource="{Binding SelectedEvent.CheckIns}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Label Text="{Binding UserName}" FontSize="14"/>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Label Text="Moves Practiced:" FontSize="18" FontAttributes="Bold"/>
+        <CollectionView ItemsSource="{Binding SelectedEvent.Moves}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Label Text="{Binding Name}" FontSize="14"/>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Button BackgroundColor="{StaticResource AccentBlue}" Text="Back" Clicked="OnBackButtonClicked"/>
+    </StackLayout>
+</ContentPage>

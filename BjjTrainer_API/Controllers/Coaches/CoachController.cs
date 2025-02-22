@@ -44,5 +44,31 @@ namespace BjjTrainer_API.Controllers.Coaches
                 return StatusCode(500, new { error = ex.Message });
             }
         }
+
+        [HttpGet("events/details/{eventId}")]
+        public async Task<ActionResult<CoachEventDto>> GetEventDetails(int eventId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized("User is not authenticated.");
+
+            try
+            {
+                var eventDetails = await _coachService.GetEventDetailsAsync(eventId, userId);
+                if (eventDetails == null)
+                    return NotFound("Event not found.");
+
+                return Ok(eventDetails);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
     }
 }

@@ -114,5 +114,6 @@
     <ShellContent Title="Create School" Route="CreateSchoolPage" ContentTemplate="{DataTemplate schools:CreateSchoolPage}" />
     <ShellContent Title="Update School" Route="UpdateSchoolPage" ContentTemplate="{DataTemplate schools:UpdateSchoolPage}" />
     <ShellContent Title="Manage Students" Route="ManageStudentsPage" ContentTemplate="{DataTemplate students:ManageStudentsPage}" />
-    <ShellContent Title="Coaacg Evebts" Route="CoachEventsPage" ContentTemplate="{DataTemplate coach:CoachEventsPage}" />
+    <ShellContent Title="Coach Events" Route="CoachEventsPage" ContentTemplate="{DataTemplate coach:CoachEventsPage}" />
+    <ShellContent Title="Coach Event Details" Route="CoachEventDetailPage" ContentTemplate="{DataTemplate coach:CoachEventDetailPage}" />
 </Shell>

@@ -1,7 +1,7 @@
 ﻿using BjjTrainer.Models.DTO.Events;
 using BjjTrainer.Models.Moves;
 
-namespace BjjTrainer.Services.Coaches
+namespace BjjTrainer.Models.DTO.Coaches
 {
     public class CoachEventDto
     {

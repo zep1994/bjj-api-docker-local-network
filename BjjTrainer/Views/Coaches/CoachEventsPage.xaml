@@ -5,15 +5,14 @@
              Title="CoachEventsPage"
              BackgroundColor="{StaticResource BackgroundColor}">
     <StackLayout Padding="10">
-        <Label Text="Past Events" 
-               FontSize="24" 
+        <Label Text="Past Events"
+               FontSize="24"
                FontAttributes="Bold"
                HorizontalOptions="Center"
                Margin="0,10,0,10"/>
 
         <CollectionView ItemsSource="{Binding PastEvents}"
-                        SelectionMode="Single"
-                        SelectionChanged="OnEventSelected">
+                        SelectionMode="None">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame Padding="10" Margin="5" BackgroundColor="{StaticResource CardBackgroundColor}">
@@ -22,6 +21,9 @@
                             <Label Text="{Binding StartDate, StringFormat='Event Date: {0:MM/dd/yyyy}'}" FontSize="14"/>
                             <Label Text="{Binding CheckIns.Count, StringFormat='Attendees: {0}'}" FontSize="14"/>
                             <Label Text="{Binding Moves.Count, StringFormat='Moves Practiced: {0}'}" FontSize="14"/>
+
+                            <!-- Navigation Button -->
+                            <Button BackgroundColor="{StaticResource AccentBlue}" Text="View Details" Clicked="OnEventClicked"/>
                         </StackLayout>
                     </Frame>
                 </DataTemplate>

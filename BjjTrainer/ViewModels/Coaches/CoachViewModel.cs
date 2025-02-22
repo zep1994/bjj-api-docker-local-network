@@ -1,4 +1,4 @@
-﻿using BjjTrainer.Models.DTO.Events;
+﻿using BjjTrainer.Models.DTO.Coaches;
 using BjjTrainer.Services.Coaches;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
