@@ -2,18 +2,19 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-# Copy csproj and restore dependencies
-COPY *.csproj ./
-RUN dotnet restore
+# Copy the API project file and restore dependencies
+COPY BjjTrainer_API/*.csproj BjjTrainer_API/
+RUN dotnet restore BjjTrainer_API/BjjTrainer_API.csproj
 
-# Copy the rest of the source code and build
+# Copy the entire solution into the container
 COPY . .
-RUN dotnet publish -c Release -o /app/publish
+
+# Build and publish the API project
+RUN dotnet run --project=BjjTrainer_API/
 
 # Use the .NET 9 ASP.NET runtime image for the final stage
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
 COPY --from=build /app/publish .
-# Ensure the API listens on all network interfaces
-ENV ASPNETCORE_URLS=http://*:80
-ENTRYPOINT ["dotnet", "BjjTrainer_API.dll"]
+
+ENTRYPOINT ["dotnet", "run"]
