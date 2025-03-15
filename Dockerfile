@@ -1,6 +1,6 @@
 # Use the .NET 9 SDK image for build stage
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-WORKDIR /src
+WORKDIR /
 
 # Copy the API project file and restore dependencies
 COPY BjjTrainer_API/*.csproj BjjTrainer_API/
