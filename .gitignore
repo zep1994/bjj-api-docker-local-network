@@ -13,9 +13,8 @@
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
-
 BjjTrainer_API/appsettings.json
-BjjTrainer_API/appsettings.*.json
+BjjTrainer_API/*.json
 
 *.yml
 
