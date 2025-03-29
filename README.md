@@ -1,5 +1,3 @@
-Sure! Here is the full README in one file for easy copying:
-
 ```markdown
 # BJJ API Docker Local Network
 
