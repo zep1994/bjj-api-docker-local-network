@@ -15,7 +15,7 @@
 *.userprefs
 BjjTrainer_API/appsettings.json
 BjjTrainer_API/*.json
-
+.env
 *.yml
 
 # Mono auto generated files
